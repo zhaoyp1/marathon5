@@ -305,6 +305,7 @@ public abstract class ProductSpecification {
      */
     public void addCost(Money cost, TimePeriod validFor) {
         ProductSpecificationCost productSpecCost = new ProductSpecificationCost(cost, validFor);
+        if(productSpecificationCost==null)productSpecificationCost=new ArrayList<ProductSpecificationCost>();
         productSpecificationCost.add(productSpecCost);
     }
 
