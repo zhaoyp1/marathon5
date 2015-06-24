@@ -55,8 +55,10 @@ public class ProdSpecCharValueRelationship {
      * @param validFor
      */
     public ProdSpecCharValueRelationship(ProductSpecCharacteristicValue srcProdSpecCharValue, ProductSpecCharacteristicValue targetProdSpecCharValue, String relationType, TimePeriod validFor) {
-        // TODO - implement ProdSpecCharValueRelationship.ProdSpecCharValueRelationship
-        throw new UnsupportedOperationException();
+    	this.srcCharValue=srcProdSpecCharValue;
+    	this.targetCharValue=targetProdSpecCharValue;
+    	this.charValueRelationshipType=relationType;
+    	this.validFor=validFor;
     }
 
 }

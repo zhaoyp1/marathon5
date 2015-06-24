@@ -3,6 +3,7 @@ package com.asiainfo.baas.marathon.specification;
 import java.util.*;
 import java.util.Date;
 
+import com.asiainfo.baas.common.DateUtils;
 import com.asiainfo.baas.marathon.baseType.*;
 import com.asiainfo.baas.marathon.dateType.*;
 
@@ -171,8 +172,8 @@ public class ProductSpecCharacteristicValue {
      * @param value
      */
     public void setValue(String unitOfMeasure, String value) {
-        // TODO - implement ProductSpecCharacteristicValue.setValue
-        throw new UnsupportedOperationException();
+    	this.unitOfMeasure=unitOfMeasure;
+    	this.value=value;
     }
 
     /**
@@ -183,8 +184,10 @@ public class ProductSpecCharacteristicValue {
      * @param rangeInterval
      */
     public void setValue(String unitOfMeasure, String valueFrom, String valueTo, String rangeInterval) {
-        // TODO - implement ProductSpecCharacteristicValue.setValue
-        throw new UnsupportedOperationException();
+    	this.unitOfMeasure=unitOfMeasure;
+    	this.valueFrom=valueFrom;
+    	this.valueTo=valueTo;
+    	this.rangeInterval=rangeInterval;
     }
 
     /**
@@ -194,8 +197,9 @@ public class ProductSpecCharacteristicValue {
      * @param validFor
      */
     public void addRelatedCharValue(ProductSpecCharacteristicValue charValue, String relationType, TimePeriod validFor) {
-        // TODO - implement ProductSpecCharacteristicValue.addRelatedCharValue
-        throw new UnsupportedOperationException();
+    	if(this.prodSpecCharValueRelationship==null) prodSpecCharValueRelationship=new ArrayList<ProdSpecCharValueRelationship>();
+    	ProdSpecCharValueRelationship relationShip=new ProdSpecCharValueRelationship(this,charValue,relationType,validFor); 
+    	prodSpecCharValueRelationship.add(relationShip);
     }
 
     /**
@@ -203,8 +207,11 @@ public class ProductSpecCharacteristicValue {
      * @param charValue
      */
     public void removeRelatedCharValue(ProductSpecCharacteristicValue charValue) {
-        // TODO - implement ProductSpecCharacteristicValue.removeRelatedCharValue
-        throw new UnsupportedOperationException();
+    	
+    	if(prodSpecCharValueRelationship != null){
+        	prodSpecCharValueRelationship.remove(charValue);
+    	}
+    	
     }
 
    
@@ -215,8 +222,20 @@ public class ProductSpecCharacteristicValue {
      * @param time
      */
     public ProductSpecCharacteristicValue[] queryRelatedCharValue(String type, Date time) {
-        // TODO - implement ProductSpecCharacteristicValue.queryRelatedCharValue
-        throw new UnsupportedOperationException();
+    	
+    	List<ProductSpecCharacteristicValue> prodSpecCharValues=null;
+    	if(this.prodSpecCharValueRelationship != null && prodSpecCharValueRelationship.size() > 0){
+    		prodSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
+    		for (ProdSpecCharValueRelationship relationship : prodSpecCharValueRelationship) {
+    			if(relationship.getCharValueRelationshipType() != null && type.equals(relationship.getCharValueRelationshipType()) && DateUtils.isInPeriod(time, relationship.getValidFor())){
+    				prodSpecCharValues.add(relationship.getTargetCharValue());
+    			}
+			}
+    		return (ProductSpecCharacteristicValue[])prodSpecCharValues.toArray(new ProductSpecCharacteristicValue[prodSpecCharValues.size()]);
+    	}else{
+    		return null;
+    	}
+    	
     }
 
     public boolean equals(ProductSpecCharacteristicValue value){
