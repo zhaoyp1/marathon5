@@ -131,15 +131,6 @@ public class ProductSpecCharUse {
     public void setExtensible(boolean extensible) {
         this.extensible = extensible;
     }
-    /**
-     * 
-     * @param minCardinality
-     * @param maxCardinality
-     */
-    public void setCardinality(int minCardinality, int maxCardinality) {
-        // TODO - implement ProductSpecCharUse.setCardinality
-        throw new UnsupportedOperationException();
-    }
 
     public TimePeriod getValidFor() {
         return this.validFor;
@@ -157,7 +148,10 @@ public class ProductSpecCharUse {
      * @param validFor
      */
     public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage, TimePeriod validFor) {
-
+    	this.prodSpecChar = charSpec;
+    	this.canBeOveridden = canBeOveridden;
+    	this.isPackage = isPackage;
+    	this.validFor = validFor;
     }
 
     /**
@@ -174,7 +168,16 @@ public class ProductSpecCharUse {
      * @param description
      */
     public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage, TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality, boolean extensible, String description) {
-
+    	this.prodSpecChar = charSpec;
+    	this.canBeOveridden = canBeOveridden;
+    	this.isPackage = isPackage;
+    	this.validFor = validFor;
+    	this.name = name;
+    	this.unique = unique;
+    	this.minCardinality = minCardinality;
+    	this.maxCardinality = maxCardinality;
+    	this.extensible = extensible;
+    	this.description = description;
     }
 
     /**
@@ -184,8 +187,8 @@ public class ProductSpecCharUse {
      * @param validFor
      */
     public void addValue(ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
-        // TODO - implement ProductSpecCharUse.addValue
-        throw new UnsupportedOperationException();
+    	ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue,isDefault,validFor);
+    	prodSpecCharValueUse.add(charValueUse);
     }
 
     /**
@@ -202,8 +205,25 @@ public class ProductSpecCharUse {
      * @param defaultValue
      */
     public void specifyDefaultCharacteristicValue(ProductSpecCharacteristicValue defaultValue) {
-        // TODO - implement ProductSpecCharUse.specifyDefaultCharacteristicValue
-        throw new UnsupportedOperationException();
+    	for(int i = 0 ; i < prodSpecCharValueUse.size() ; i++){
+    		ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
+    		if(valueUse.isIsDefault() && !valueUse.getProdSpecCharValue().equals(defaultValue)){
+    			valueUse.setIsDefault(false);
+    		}
+    		if(valueUse.getProdSpecCharValue().equals(defaultValue)){
+    			valueUse.setIsDefault(true);
+    		}
+    	}
+    }
+
+    /**
+     * 
+     * @param minCardinality
+     * @param maxCardinality
+     */
+    public void setCardinality(int minCardinality, int maxCardinality) {
+    	this.minCardinality = minCardinality;
+    	this.maxCardinality = maxCardinality;
     }
 
 }
