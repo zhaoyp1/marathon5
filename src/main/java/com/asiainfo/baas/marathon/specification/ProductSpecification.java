@@ -220,7 +220,7 @@ public abstract class ProductSpecification {
      * @param description
      * @param revisionDate
      */
-    public String upgradeMajorVersion(String version, String description, Date revisionDate) {
+    public String upgradeMajorVersion(String majorVersion, String description, Date revisionDate) {
         // TODO - implement ProductSpecification.upgradeMajorVersion
         throw new UnsupportedOperationException();
     }
@@ -231,7 +231,7 @@ public abstract class ProductSpecification {
      * @param description
      * @param revisionDate
      */
-    public String upgradeMinorVersion(String version, String description, Date revisionDate) {
+    public String upgradeMinorVersion(String minorVersion, String description, Date revisionDate) {
         // TODO - implement ProductSpecification.upgradeMinorVersion
         throw new UnsupportedOperationException();
     }
@@ -242,7 +242,7 @@ public abstract class ProductSpecification {
      * @param description
      * @param revisionDate
      */
-    public String upgradePatchVersion(String version, String description, Date revisionDate) {
+    public String upgradePatchVersion(String patchVersion, String description, Date revisionDate) {
         // TODO - implement ProductSpecification.upgradePatchVersion
         throw new UnsupportedOperationException();
     }
