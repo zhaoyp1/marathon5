@@ -26,5 +26,10 @@
 		<version>2.4</version>  
 		<classifier>jdk15</classifier><!--指定jdk版本-->  
 	</dependency>
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.11</version>
+	</dependency>
   </dependencies>
 </project>

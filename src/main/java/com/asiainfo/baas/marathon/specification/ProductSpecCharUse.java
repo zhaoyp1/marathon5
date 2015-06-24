@@ -42,6 +42,7 @@ public class ProductSpecCharUse {
      * An indicator that specifies that the values for the characteristic can be extended by adding new values when instantiating a characteristic for a Service.
      */
     private boolean extensible;
+    private TimePeriod validFor;
 
     public ProductSpecification getProdSpec() {
         return this.prodSpec;
@@ -130,24 +131,40 @@ public class ProductSpecCharUse {
     public void setExtensible(boolean extensible) {
         this.extensible = extensible;
     }
-
     /**
      * 
-     * @param charSpec
-     * @param canBeOveridden
-     * @param packageFlg
-     * @param validFor
+     * @param minCardinality
+     * @param maxCardinality
      */
-    public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean packageFlg, TimePeriod validFor) {
-        // TODO - implement ProductSpecCharUse.ProductSpecCharUse
+    public void setCardinality(int minCardinality, int maxCardinality) {
+        // TODO - implement ProductSpecCharUse.setCardinality
         throw new UnsupportedOperationException();
+    }
+
+    public TimePeriod getValidFor() {
+        return this.validFor;
+    }
+
+    public void setValidFor(TimePeriod validFor) {
+        this.validFor = validFor;
     }
 
     /**
      * 
      * @param charSpec
      * @param canBeOveridden
-     * @param packageFlg
+     * @param isPackage
+     * @param validFor
+     */
+    public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage, TimePeriod validFor) {
+
+    }
+
+    /**
+     * 
+     * @param charSpec
+     * @param canBeOveridden
+     * @param isPackage
      * @param validFor
      * @param name
      * @param unique
@@ -156,9 +173,8 @@ public class ProductSpecCharUse {
      * @param extensible
      * @param description
      */
-    public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean packageFlg, TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality, boolean extensible, String description) {
-        // TODO - implement ProductSpecCharUse.ProductSpecCharUse
-        throw new UnsupportedOperationException();
+    public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage, TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality, boolean extensible, String description) {
+
     }
 
     /**
@@ -187,16 +203,6 @@ public class ProductSpecCharUse {
      */
     public void specifyDefaultCharacteristicValue(ProductSpecCharacteristicValue defaultValue) {
         // TODO - implement ProductSpecCharUse.specifyDefaultCharacteristicValue
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * 
-     * @param minCardinality
-     * @param maxCardinality
-     */
-    public void setCardinality(int minCardinality, int maxCardinality) {
-        // TODO - implement ProductSpecCharUse.setCardinality
         throw new UnsupportedOperationException();
     }
 

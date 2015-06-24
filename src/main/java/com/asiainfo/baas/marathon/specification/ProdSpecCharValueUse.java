@@ -50,7 +50,7 @@ public class ProdSpecCharValueUse {
         this.validFor = validFor;
     }
 
-   
+    
 
     /**
      * 
@@ -58,7 +58,7 @@ public class ProdSpecCharValueUse {
      * @param defaultFlg
      * @param validFor
      */
-    public ProdSpecCharValueUse(ProductSpecCharacteristicValue prodSpecCharVal, boolean defaultFlg, TimePeriod validFor) {
+    public ProdSpecCharValueUse(ProductSpecCharacteristicValue prodSpecCharVal, boolean isDefault, TimePeriod validFor) {
         // TODO - implement ProdSpecCharValueUse.ProdSpecCharValueUse
         throw new UnsupportedOperationException();
     }
