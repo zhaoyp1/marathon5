@@ -3,14 +3,16 @@ package com.asiainfo.baas.marathon.specification;
 import com.asiainfo.baas.marathon.baseType.*;
 
 /**
- * A migration, substitution, dependency, or exclusivity relationship between/among ProductSpecifications.
+ * A migration, substitution, dependency, or exclusivity relationship
+ * between/among ProductSpecifications.
  */
 public class ProductSpecificationRelationship {
 
     private ProductSpecification targetProdSpec;
     private ProductSpecification srcProdSpec;
     /**
-     * A categorization of the relationship, such as migration, substitution, dependency, exclusivity.
+     * A categorization of the relationship, such as migration, substitution,
+     * dependency, exclusivity.
      */
     private String type;
     /**
@@ -41,9 +43,12 @@ public class ProductSpecificationRelationship {
      * @param type
      * @param validFor
      */
-    public ProductSpecificationRelationship(ProductSpecification srcSpec, ProductSpecification targetSpec, String type, TimePeriod validFor) {
-        // TODO - implement ProductSpecificationRelationship.ProductSpecificationRelationship
-        throw new UnsupportedOperationException();
+    public ProductSpecificationRelationship(ProductSpecification srcSpec, ProductSpecification targetSpec, String type,
+            TimePeriod validFor) {
+        this.srcProdSpec = srcSpec;
+        this.targetProdSpec = targetSpec;
+        this.type = type;
+        this.validFor = validFor;
     }
 
     public String getType() {

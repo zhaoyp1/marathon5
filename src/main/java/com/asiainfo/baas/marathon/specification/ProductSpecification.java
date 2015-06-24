@@ -330,13 +330,13 @@ public abstract class ProductSpecification {
             }
 
         }
-        if(validProdSpecCost!=null && validProdSpecCost.size()>0){
-        	 return (ProductSpecificationCost[]) validProdSpecCost.toArray(new ProductSpecificationCost[validProdSpecCost
-        	                                                                                            .size()]);
-        }else{
-        	return null;
+        if (validProdSpecCost != null && validProdSpecCost.size() > 0) {
+            return (ProductSpecificationCost[]) validProdSpecCost
+                    .toArray(new ProductSpecificationCost[validProdSpecCost.size()]);
+        } else {
+            return null;
         }
-       
+
     }
 
     /**
@@ -359,8 +359,7 @@ public abstract class ProductSpecification {
      * @param prodSpec
      */
     public void removeRelatedProdSpec(ProductSpecification prodSpec) {
-        // TODO - implement ProductSpecification.removeRelatedProdSpec
-        throw new UnsupportedOperationException();
+        this.prodSpecRelationship.remove(prodSpec);
     }
 
     /**
@@ -368,8 +367,14 @@ public abstract class ProductSpecification {
      * @param type
      */
     public ProductSpecification[] queryRelatedProdSpec(String type) {
-        // TODO - implement ProductSpecification.queryRelatedProdSpec
-        throw new UnsupportedOperationException();
+        List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
+        int len = this.prodSpecRelationship.size();
+        for (int i = 0; i < len; i++) {
+            if (type.equals(this.prodSpecRelationship.get(i).getType())) {
+                productSpecifications.add(this.prodSpecRelationship.get(i).getTargetProdSpec());
+            }
+        }
+        return productSpecifications.toArray(new ProductSpecification[0]);
     }
 
     /**

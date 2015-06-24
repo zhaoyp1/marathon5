@@ -16,7 +16,6 @@ public class AtomicProductSpecification extends ProductSpecification {
      */
     public AtomicProductSpecification(String productNumber, String name, String brand, String lifecycleStatus) {
         super(productNumber, name, brand, lifecycleStatus);
-    	throw new UnsupportedOperationException();
     }
 
     /**
@@ -30,7 +29,6 @@ public class AtomicProductSpecification extends ProductSpecification {
      */
     public AtomicProductSpecification(String productNumber, String name, String brand, String lifecycleStatus, String description, TimePeriod validFor) {
         super(productNumber, name, brand, lifecycleStatus, description, validFor);
-    	throw new UnsupportedOperationException();
     }
 
 }

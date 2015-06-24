@@ -1,10 +1,14 @@
 package com.asiainfo.baas.marathon.specification;
 
-import java.util.*;
-import com.asiainfo.baas.marathon.baseType.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
 
 /**
- * A type of ProductSpecification that is formed by aggregating other ProductSpecifications, which may be Composite or Atomic ProductSpecifications.
+ * A type of ProductSpecification that is formed by aggregating other
+ * ProductSpecifications, which may be Composite or Atomic
+ * ProductSpecifications.
  */
 public class CompositeProductSpecification extends ProductSpecification {
 
@@ -26,8 +30,7 @@ public class CompositeProductSpecification extends ProductSpecification {
      * @param lifecycleStatus
      */
     public CompositeProductSpecification(String productNumber, String name, String brand, String lifecycleStatus) {
-    	super(productNumber, name, brand, lifecycleStatus);
-    	throw new UnsupportedOperationException();
+        super(productNumber, name, brand, lifecycleStatus);
     }
 
     /**
@@ -39,9 +42,9 @@ public class CompositeProductSpecification extends ProductSpecification {
      * @param description
      * @param validFor
      */
-    public CompositeProductSpecification(String productNumber, String name, String brand, String lifecycleStatus, String description, TimePeriod validFor) {
-    	super(productNumber, name, brand, lifecycleStatus, description, validFor);
-    	throw new UnsupportedOperationException();
+    public CompositeProductSpecification(String productNumber, String name, String brand, String lifecycleStatus,
+            String description, TimePeriod validFor) {
+        super(productNumber, name, brand, lifecycleStatus, description, validFor);
     }
 
     /**
@@ -49,8 +52,10 @@ public class CompositeProductSpecification extends ProductSpecification {
      * @param prodSpec
      */
     public void addSubProdSpec(ProductSpecification prodSpec) {
-        // TODO - implement CompositeProductSpecification.addSubProdSpec
-        throw new UnsupportedOperationException();
+        if (this.prodSpec == null) {
+            this.prodSpec = new ArrayList<ProductSpecification>();
+        }
+        this.prodSpec.add(prodSpec);
     }
 
 }
