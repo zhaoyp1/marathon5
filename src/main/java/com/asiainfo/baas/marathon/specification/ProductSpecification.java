@@ -233,7 +233,7 @@ public abstract class ProductSpecification {
         int len = this.productSpecificationVersion.size();
         for (int i = 0; i < len; i++) {
             ProductSpecificationVersion version = this.productSpecificationVersion.get(i);
-            if (version.getValidFor()) {
+            if (version.getValidFor().startDateTime == 0 && version.getValidFor().endDateTime == 0) {
                 
             }
         }
@@ -258,7 +258,7 @@ public abstract class ProductSpecification {
      * @param description
      * @param revisionDate
      */
-    public String upgradeMajorVersion(String version, String description, Date revisionDate) {
+    public String upgradeMajorVersion(String majorVersion, String description, Date revisionDate) {
         // TODO - implement ProductSpecification.upgradeMajorVersion
         throw new UnsupportedOperationException();
     }
@@ -269,7 +269,7 @@ public abstract class ProductSpecification {
      * @param description
      * @param revisionDate
      */
-    public String upgradeMinorVersion(String version, String description, Date revisionDate) {
+    public String upgradeMinorVersion(String minorVersion, String description, Date revisionDate) {
         // TODO - implement ProductSpecification.upgradeMinorVersion
         throw new UnsupportedOperationException();
     }
@@ -280,7 +280,7 @@ public abstract class ProductSpecification {
      * @param description
      * @param revisionDate
      */
-    public String upgradePatchVersion(String version, String description, Date revisionDate) {
+    public String upgradePatchVersion(String patchVersion, String description, Date revisionDate) {
         // TODO - implement ProductSpecification.upgradePatchVersion
         throw new UnsupportedOperationException();
     }
@@ -543,5 +543,6 @@ public abstract class ProductSpecification {
         // TODO - implement ProductSpecification.setCardinality
         throw new UnsupportedOperationException();
     }
+
 
 }
