@@ -62,8 +62,9 @@ public class BundledProdOfferOption {
      * @param upperLimit
      */
     public BundledProdOfferOption(ProductOffering offering, int lowerLimit, int upperLimit) {
-        // TODO - implement BundledProdOfferOption.BundledProdOfferOption
-        throw new UnsupportedOperationException();
+    	this.productOffering = offering;
+    	this.numberRelOfferLowerLimit = lowerLimit;
+    	this.numberRelOfferUpperLimit = upperLimit;
     }
 
 }

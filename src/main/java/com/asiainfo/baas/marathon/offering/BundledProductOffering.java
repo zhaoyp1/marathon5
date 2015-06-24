@@ -25,7 +25,6 @@ public class BundledProductOffering extends ProductOffering {
      */
     public BundledProductOffering(String id, String name, TimePeriod validFor, String status, String description) {
     	super(id, name, status, description, validFor);
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -33,8 +32,11 @@ public class BundledProductOffering extends ProductOffering {
      * @param offering
      */
     public void addSubOffering(ProductOffering offering) {
-        // TODO - implement BundledProductOffering.addSubOffering
-        throw new UnsupportedOperationException();
+    	BundledProdOfferOption option = new BundledProdOfferOption(offering,0,-1);
+    	if(bundledProdOfferOption == null){
+    		bundledProdOfferOption = new ArrayList<BundledProdOfferOption>();
+    	}
+    	bundledProdOfferOption.add(option);
     }
 
     /**
@@ -44,8 +46,11 @@ public class BundledProductOffering extends ProductOffering {
      * @param upperLimit
      */
     public void addSubOffering(ProductOffering offering, int lowerLimit, int upperLimit) {
-        // TODO - implement BundledProductOffering.addSubOffering
-        throw new UnsupportedOperationException();
+    	BundledProdOfferOption option = new BundledProdOfferOption(offering,lowerLimit,upperLimit);
+    	if(bundledProdOfferOption == null){
+    		bundledProdOfferOption = new ArrayList<BundledProdOfferOption>();
+    	}
+    	bundledProdOfferOption.add(option);
     }
 
     /**
@@ -60,8 +65,15 @@ public class BundledProductOffering extends ProductOffering {
     }
 
     public ProductOffering[] getSubOffering() {
-        // TODO - implement BundledProductOffering.getSubOffering
-        throw new UnsupportedOperationException();
+    	ProductOffering[] offering = null;
+    	if(bundledProdOfferOption != null){
+    		offering = new ProductOffering[bundledProdOfferOption.size()];
+    		for(int i = 0 ; i < bundledProdOfferOption.size() ; i++){
+    			BundledProdOfferOption offerOption = bundledProdOfferOption.get(i);
+    			offering[i] = offerOption.getProductOffering();
+    		}
+    	}
+    	return offering;
     }
 
 }
