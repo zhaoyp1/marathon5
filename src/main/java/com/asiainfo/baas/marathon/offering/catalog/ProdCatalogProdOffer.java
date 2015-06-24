@@ -13,7 +13,8 @@ public class ProdCatalogProdOffer {
     private ProductOffering prodOffering;
     private List<ProductOfferingPrice> productOfferingPrice;
     /**
-     * The period during which the ProductOffering appears in the ProductCatalog.
+     * The period during which the ProductOffering appears in the
+     * ProductCatalog.
      */
     private TimePeriod validFor;
     private ProductCatalog productCatalog;
@@ -57,7 +58,9 @@ public class ProdCatalogProdOffer {
      * @param validFor
      */
     public ProdCatalogProdOffer(ProductCatalog catalog, ProductOffering offering, TimePeriod validFor) {
-        throw new UnsupportedOperationException();
+        this.productCatalog = catalog;
+        this.prodOffering = offering;
+        this.validFor = validFor;
     }
 
     /**
@@ -67,11 +70,12 @@ public class ProdCatalogProdOffer {
      * @param validFor
      * @param price
      */
-    public ProdCatalogProdOffer(ProductCatalog catalog, ProductOffering offering, TimePeriod validFor, ProductOfferingPrice[] price) {
-        // TODO - implement ProdCatalogProdOffer.ProdCatalogProdOffer
-        throw new UnsupportedOperationException();
+    public ProdCatalogProdOffer(ProductCatalog catalog, ProductOffering offering, TimePeriod validFor,
+            ProductOfferingPrice[] price) {
+        this.productCatalog = catalog;
+        this.prodOffering = offering;
+        this.validFor = validFor;
+        this.productOfferingPrice = Arrays.asList(price);
     }
-
-    
 
 }
