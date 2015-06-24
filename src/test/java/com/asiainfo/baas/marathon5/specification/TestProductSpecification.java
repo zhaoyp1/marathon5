@@ -19,7 +19,7 @@ public class TestProductSpecification {
 		cost.amount=11;
 		cost.units="mine";
 		TimePeriod timePeriod=new TimePeriod();
-		SimpleDateFormat format=new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		try {
 			timePeriod.startDateTime=format.parse("2015-02-03 12:00:00");
 			timePeriod.endDateTime=format.parse("2015-07-21 23:59:59");
