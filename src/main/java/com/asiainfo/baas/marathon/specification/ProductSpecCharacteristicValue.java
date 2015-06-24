@@ -211,4 +211,29 @@ public class ProductSpecCharacteristicValue {
         throw new UnsupportedOperationException();
     }
 
+    public boolean equals(ProductSpecCharacteristicValue value){
+    	if(this == value) return true;
+    	if(! (value instanceof ProductSpecCharacteristicValue)) return false;
+    	final ProductSpecCharacteristicValue newValue = value;
+    	if(!newValue.getValue().isEmpty() && !this.getValue().isEmpty()){
+    		if(newValue.getValue().equals(this.getValue())) 
+    			return true;
+    		else
+    			return false;
+    	}
+    	if(!newValue.getValueFrom().isEmpty() && !this.getValueFrom().isEmpty()){
+    		if(!newValue.getValueTo().isEmpty() && !this.getValueTo().isEmpty()){
+    			if(newValue.getValueFrom().equals(this.getValueFrom()) && newValue.getValueTo().equals(this.getValueTo())) 
+        			return true;
+        		else
+        			return false;
+    		}else{
+	    		if(newValue.getValueFrom().equals(this.getValueFrom())) 
+	    			return true;
+	    		else
+	    			return false;
+    		}
+    	}
+    	return false;
+    }
 }
