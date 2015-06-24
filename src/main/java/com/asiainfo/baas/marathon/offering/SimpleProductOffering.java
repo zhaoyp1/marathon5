@@ -29,7 +29,6 @@ public class SimpleProductOffering extends ProductOffering {
      */
     public SimpleProductOffering(String id, String name, TimePeriod validFor, String status, ProductSpecification prodSpec, String description) {
     	super(id, name, status, description, validFor);
-    	throw new UnsupportedOperationException();
     }
 
 }

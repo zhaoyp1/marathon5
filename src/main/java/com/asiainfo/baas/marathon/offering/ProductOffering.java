@@ -106,8 +106,11 @@ public abstract class ProductOffering {
      * @param validFor
      */
     public ProductOffering(String id, String name, String status, String description, TimePeriod validFor) {
-        // TODO - implement ProductOffering.ProductOffering
-        throw new UnsupportedOperationException();
+    	this.id = id;
+    	this.name = name;
+    	this.status = status;
+    	this.description = description;
+    	this.validFor = validFor;
     }
 
     /**
@@ -117,7 +120,6 @@ public abstract class ProductOffering {
      * @param validFor
      */
     public void addRelatedOffering(ProductOffering offering, String relationType, TimePeriod validFor) {
-        // TODO - implement ProductOffering.addRelatedOffering
         throw new UnsupportedOperationException();
     }
 
