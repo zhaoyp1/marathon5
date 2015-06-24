@@ -188,6 +188,9 @@ public class ProductSpecCharUse {
      */
     public void addValue(ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
     	ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue,isDefault,validFor);
+    	if(prodSpecCharValueUse == null){
+    		prodSpecCharValueUse = new ArrayList<ProdSpecCharValueUse>();
+    	}
     	prodSpecCharValueUse.add(charValueUse);
     }
 
@@ -205,13 +208,15 @@ public class ProductSpecCharUse {
      * @param defaultValue
      */
     public void specifyDefaultCharacteristicValue(ProductSpecCharacteristicValue defaultValue) {
-    	for(int i = 0 ; i < prodSpecCharValueUse.size() ; i++){
-    		ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
-    		if(valueUse.isIsDefault() && !valueUse.getProdSpecCharValue().equals(defaultValue)){
-    			valueUse.setIsDefault(false);
-    		}
-    		if(valueUse.getProdSpecCharValue().equals(defaultValue)){
-    			valueUse.setIsDefault(true);
+    	if(prodSpecCharValueUse != null){
+    		for(int i = 0 ; i < prodSpecCharValueUse.size() ; i++){
+    			ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
+    			if(valueUse.isIsDefault() && !valueUse.getProdSpecCharValue().equals(defaultValue)){
+    				valueUse.setIsDefault(false);
+    			}
+    			if(valueUse.getProdSpecCharValue().equals(defaultValue)){
+    				valueUse.setIsDefault(true);
+    			}
     		}
     	}
     }
