@@ -304,8 +304,8 @@ public abstract class ProductSpecification {
      * @param validFor
      */
     public void addCost(Money cost, TimePeriod validFor) {
-        // TODO - implement ProductSpecification.addCost
-        throw new UnsupportedOperationException();
+        ProductSpecificationCost productSpecCost = new ProductSpecificationCost(cost, validFor);
+        productSpecificationCost.add(productSpecCost);
     }
 
     /**
@@ -314,8 +314,7 @@ public abstract class ProductSpecification {
      * @param validFor
      */
     public void updateCostPeriod(ProductSpecificationCost oldCost, TimePeriod validFor) {
-        // TODO - implement ProductSpecification.updateCostPeriod
-        throw new UnsupportedOperationException();
+        oldCost.setValidFor(validFor);
     }
 
     /**
@@ -323,8 +322,17 @@ public abstract class ProductSpecification {
      * @param time
      */
     public ProductSpecificationCost[] queryCost(Date time) {
-        // TODO - implement ProductSpecification.queryCost
-        throw new UnsupportedOperationException();
+        List validProdSpecCost = new ArrayList();
+        for (int i = 0; i < productSpecificationCost.size(); i++) {
+            ProductSpecificationCost cost = productSpecificationCost.get(i);
+            if (DateUtils.isInPeriod(time, cost.getValidFor())) {
+                validProdSpecCost.add(productSpecificationCost.get(i));
+            }
+
+        }
+        // if(validPro)
+        return (ProductSpecificationCost[]) validProdSpecCost.toArray(new ProductSpecificationCost[validProdSpecCost
+                .size()]);
     }
 
     /**

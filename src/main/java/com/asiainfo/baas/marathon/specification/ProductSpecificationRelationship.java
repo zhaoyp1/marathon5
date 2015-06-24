@@ -46,4 +46,20 @@ public class ProductSpecificationRelationship {
         throw new UnsupportedOperationException();
     }
 
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public TimePeriod getValidFor() {
+        return this.validFor;
+    }
+
+    public void setValidFor(TimePeriod validFor) {
+        this.validFor = validFor;
+    }
+
 }
