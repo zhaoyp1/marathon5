@@ -8,7 +8,7 @@ import com.asiainfo.baas.marathon.baseType.*;
 public class ProductOfferingRelationship {
 
     private ProductOffering targetOffering;
-    private ProductOffering sourceOffering;
+    private ProductOffering srcOffering;
     /**
      * A categorization of the relationship, such as supplier/partner equivalent, alternate, and so forth.
      */
@@ -26,12 +26,12 @@ public class ProductOfferingRelationship {
         this.targetOffering = targetOffering;
     }
 
-    public ProductOffering getSourceOffering() {
-        return this.sourceOffering;
+    public ProductOffering getSrcOffering() {
+        return this.srcOffering;
     }
 
-    public void setSourceOffering(ProductOffering sourceOffering) {
-        this.sourceOffering = sourceOffering;
+    public void setSrcOffering(ProductOffering sourceOffering) {
+        this.srcOffering = sourceOffering;
     }
 
     public String getTypeRelationship() {
@@ -52,12 +52,12 @@ public class ProductOfferingRelationship {
 
     /**
      * 
-     * @param source
-     * @param target
+     * @param srcProdOffering
+     * @param targetProdOffering
      * @param type
      * @param validFor
      */
-    public ProductOfferingRelationship(ProductOffering source, ProductOffering target, String type, TimePeriod validFor) {
+    public ProductOfferingRelationship(ProductOffering srcProdOffering, ProductOffering targetProdOffering, String type, TimePeriod validFor) {
         // TODO - implement ProductOfferingRelationship.ProductOfferingRelationship
         throw new UnsupportedOperationException();
     }
