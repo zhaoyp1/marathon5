@@ -1,9 +1,11 @@
 package com.asiainfo.baas.marathon.specification;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A classification that groups ProductSpecifications that share common characteristics.
+ * A classification that groups ProductSpecifications that share common
+ * characteristics.
  */
 public abstract class ProductSpecificationType {
 
@@ -47,8 +49,8 @@ public abstract class ProductSpecificationType {
      * @param description
      */
     public ProductSpecificationType(String type, String description) {
-        // TODO - implement ProductSpecificationType.ProductSpecificationType
-        throw new UnsupportedOperationException();
+        this.type = type;
+        this.description = description;
     }
 
     /**
@@ -56,8 +58,10 @@ public abstract class ProductSpecificationType {
      * @param prodSpec
      */
     public void addProdSpec(ProductSpecification prodSpec) {
-        // TODO - implement ProductSpecificationType.addProdSpec
-        throw new UnsupportedOperationException();
+        if (this.prodSpec == null) {
+            this.prodSpec = new ArrayList<ProductSpecification>();
+        }
+        this.prodSpec.add(prodSpec);
     }
 
     /**
@@ -65,8 +69,9 @@ public abstract class ProductSpecificationType {
      * @param prodSpec
      */
     public void removeProdSpec(ProductSpecification prodSpec) {
-        // TODO - implement ProductSpecificationType.removeProdSpec
-        throw new UnsupportedOperationException();
+        if (this.prodSpec != null) {
+            this.prodSpec.remove(prodSpec);
+        }
     }
 
 }

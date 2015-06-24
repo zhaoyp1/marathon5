@@ -138,8 +138,11 @@ public class ProductSpecCharacteristicValue {
      * @param value
      */
     public ProductSpecCharacteristicValue(String valueType, boolean isDefault, String unitOfMeasure, TimePeriod validFor, String value) {
-        // TODO - implement ProductSpecCharacteristicValue.ProductSpecCharacteristicValue
-        throw new UnsupportedOperationException();
+    	this.valueType=valueType;
+    	this.isDefault=isDefault;
+    	this.unitOfMeasure=unitOfMeasure;
+    	this.validFor=validFor;
+    	this.value=value;
     }
 
     /**
@@ -153,8 +156,13 @@ public class ProductSpecCharacteristicValue {
      * @param rangeInterval
      */
     public ProductSpecCharacteristicValue(String valueType, boolean isDefault, String unitOfMeasure, TimePeriod validFor, String valueFrom, String valueTo, String rangeInterval) {
-        // TODO - implement ProductSpecCharacteristicValue.ProductSpecCharacteristicValue
-        throw new UnsupportedOperationException();
+    	this.valueType=valueType;
+    	this.isDefault=isDefault;
+    	this.unitOfMeasure=unitOfMeasure;
+    	this.validFor=validFor;
+    	this.valueFrom=valueFrom;
+    	this.valueTo=valueTo;
+    	this.rangeInterval=rangeInterval;
     }
 
     /**
@@ -236,4 +244,12 @@ public class ProductSpecCharacteristicValue {
     	}
     	return false;
     }
+
+	public ProductSpecCharacteristic getProductSpecCharacteristic() {
+		return productSpecCharacteristic;
+	}
+
+	public void setProductSpecCharacteristic(ProductSpecCharacteristic productSpecCharacteristic) {
+		this.productSpecCharacteristic = productSpecCharacteristic;
+	}
 }

@@ -287,4 +287,13 @@ public class ProductSpecCharacteristic {
         throw new UnsupportedOperationException();
     }
 
+	public List<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
+		return productSpecCharacteristicValue;
+	}
+
+	public void setProductSpecCharacteristicValue(
+			List<ProductSpecCharacteristicValue> productSpecCharacteristicValue) {
+		this.productSpecCharacteristicValue = productSpecCharacteristicValue;
+	}
+
 }
