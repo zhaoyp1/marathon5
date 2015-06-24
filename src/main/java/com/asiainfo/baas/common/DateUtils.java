@@ -1,5 +1,6 @@
 package com.asiainfo.baas.common;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
@@ -32,6 +33,7 @@ public class DateUtils {
         if (validFor.startDateTime != null && compareDate(targetDate, validFor.startDateTime) < 0) {
             return false;
         }
+
         if (validFor.endDateTime != null && compareDate(targetDate, validFor.endDateTime) > 0) {
             return false;
         }

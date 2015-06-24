@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.asiainfo.baas.common.DateUtils;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
@@ -217,7 +219,7 @@ public abstract class ProductSpecification {
      */
     public void setVersion(String version, String description, Date revisionDate, TimePeriod validFor) throws Exception {
 
-        String versionNumbers[] = version.split(".");
+        String versionNumbers[] = version.split("\\.");
         String versionTypes[] = { "1", "2", "3" };
 
         if (versionNumbers == null || versionNumbers.length != 3) {
@@ -250,12 +252,11 @@ public abstract class ProductSpecification {
 
         if (currentVersions != null && currentVersions.length > 0) {
             for (ProductSpecificationVersion currentVersion : currentVersions) {
-                versionString = versionString + "," + currentVersion.getProdSpecRevisionNumber();
+                versionString = versionString + "." + currentVersion.getProdSpecRevisionNumber();
             }
         }
-
-        if (versionString.length() > 0) {
-            versionString = versionString.substring(0, versionString.length() - 1);
+        if (StringUtils.isNotEmpty(versionString)) {
+            versionString = versionString.substring(1, versionString.length());
         }
         return versionString;
     }
@@ -305,7 +306,8 @@ public abstract class ProductSpecification {
      */
     public void addCost(Money cost, TimePeriod validFor) {
         ProductSpecificationCost productSpecCost = new ProductSpecificationCost(cost, validFor);
-        if(productSpecificationCost==null)productSpecificationCost=new ArrayList<ProductSpecificationCost>();
+        if (productSpecificationCost == null)
+            productSpecificationCost = new ArrayList<ProductSpecificationCost>();
         productSpecificationCost.add(productSpecCost);
     }
 
@@ -360,7 +362,9 @@ public abstract class ProductSpecification {
      * @param prodSpec
      */
     public void removeRelatedProdSpec(ProductSpecification prodSpec) {
-        this.prodSpecRelationship.remove(prodSpec);
+        if (this.prodSpecRelationship != null) {
+            this.prodSpecRelationship.remove(prodSpec);
+        }
     }
 
     /**

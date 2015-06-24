@@ -58,8 +58,11 @@ public class ProductOfferingRelationship {
      * @param validFor
      */
     public ProductOfferingRelationship(ProductOffering srcProdOffering, ProductOffering targetProdOffering, String type, TimePeriod validFor) {
-        // TODO - implement ProductOfferingRelationship.ProductOfferingRelationship
-        throw new UnsupportedOperationException();
+    	this.srcOffering = srcProdOffering;
+    	this.targetOffering = targetProdOffering;
+    	this.typeRelationship = type;
+    	this.validFor = validFor;
+    	
     }
 
 }
