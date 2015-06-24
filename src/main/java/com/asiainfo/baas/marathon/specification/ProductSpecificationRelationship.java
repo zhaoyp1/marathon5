@@ -8,7 +8,7 @@ import com.asiainfo.baas.marathon.baseType.*;
 public class ProductSpecificationRelationship {
 
     private ProductSpecification targetProdSpec;
-    private ProductSpecification sourceSpec;
+    private ProductSpecification srcProdSpec;
     /**
      * A categorization of the relationship, such as migration, substitution, dependency, exclusivity.
      */
@@ -26,22 +26,22 @@ public class ProductSpecificationRelationship {
         this.targetProdSpec = targetProdSpec;
     }
 
-    public ProductSpecification getSourceSpec() {
-        return this.sourceSpec;
+    public ProductSpecification getSrcProdSpec() {
+        return this.srcProdSpec;
     }
 
-    public void setSourceSpec(ProductSpecification sourceSpec) {
-        this.sourceSpec = sourceSpec;
+    public void setSrcProdSpec(ProductSpecification srcSpec) {
+        this.srcProdSpec = srcSpec;
     }
 
     /**
      * 
-     * @param sourceSpec
+     * @param srcSpec
      * @param targetSpec
      * @param type
      * @param validFor
      */
-    public ProductSpecificationRelationship(ProductSpecification sourceSpec, ProductSpecification targetSpec, String type, TimePeriod validFor) {
+    public ProductSpecificationRelationship(ProductSpecification srcSpec, ProductSpecification targetSpec, String type, TimePeriod validFor) {
         // TODO - implement ProductSpecificationRelationship.ProductSpecificationRelationship
         throw new UnsupportedOperationException();
     }

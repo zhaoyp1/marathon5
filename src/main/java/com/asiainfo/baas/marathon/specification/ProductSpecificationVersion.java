@@ -38,6 +38,46 @@ public class ProductSpecificationVersion {
         this.productSpecification = productSpecification;
     }
 
+    public String getProdSpecRevisionType() {
+        return this.prodSpecRevisionType;
+    }
+
+    public void setProdSpecRevisionType(String prodSpecRevisionType) {
+        this.prodSpecRevisionType = prodSpecRevisionType;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getProdSpecRevisionNumber() {
+        return this.prodSpecRevisionNumber;
+    }
+
+    public void setProdSpecRevisionNumber(String prodSpecRevisionNumber) {
+        this.prodSpecRevisionNumber = prodSpecRevisionNumber;
+    }
+
+    public Date getProdSpecRevisionDate() {
+        return this.prodSpecRevisionDate;
+    }
+
+    public void setProdSpecRevisionDate(Date prodSpecRevisionDate) {
+        this.prodSpecRevisionDate = prodSpecRevisionDate;
+    }
+
+    public TimePeriod getValidFor() {
+        return this.validFor;
+    }
+
+    public void setValidFor(TimePeriod validFor) {
+        this.validFor = validFor;
+    }
+
     /**
      * 
      * @param revisionType

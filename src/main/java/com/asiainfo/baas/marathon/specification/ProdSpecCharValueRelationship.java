@@ -5,7 +5,7 @@ import com.asiainfo.baas.marathon.baseType.*;
 public class ProdSpecCharValueRelationship {
 
     private ProductSpecCharacteristicValue targetCharValue;
-    private ProductSpecCharacteristicValue sourceCharValue;
+    private ProductSpecCharacteristicValue srcCharValue;
     /**
      * A categorization of the relationship between values, such as aggregation, migration, substitution, dependency, exclusivity.
      */
@@ -23,12 +23,12 @@ public class ProdSpecCharValueRelationship {
         this.targetCharValue = targetCharValue;
     }
 
-    public ProductSpecCharacteristicValue getSourceCharValue() {
-        return this.sourceCharValue;
+    public ProductSpecCharacteristicValue getSrcCharValue() {
+        return this.srcCharValue;
     }
 
-    public void setSourceCharValue(ProductSpecCharacteristicValue sourceCharValue) {
-        this.sourceCharValue = sourceCharValue;
+    public void setSrcCharValue(ProductSpecCharacteristicValue sourceCharValue) {
+        this.srcCharValue = sourceCharValue;
     }
 
     public String getCharValueRelationshipType() {

@@ -8,7 +8,7 @@ import com.asiainfo.baas.marathon.baseType.*;
 public class ProductSpecCharRelationship {
 
     private ProductSpecCharacteristic targetProdSpecChar;
-    private ProductSpecCharacteristic sourceProdSpecChar;
+    private ProductSpecCharacteristic srcProdSpecChar;
     /**
      * A categorization of the relationship, such as aggregation, migration, substitution, dependency, exclusivity.
      */
@@ -32,12 +32,12 @@ public class ProductSpecCharRelationship {
         this.targetProdSpecChar = targetProdSpecChar;
     }
 
-    public ProductSpecCharacteristic getSourceProdSpecChar() {
-        return this.sourceProdSpecChar;
+    public ProductSpecCharacteristic getSrcProdSpecChar() {
+        return this.srcProdSpecChar;
     }
 
-    public void setSourceProdSpecChar(ProductSpecCharacteristic sourceProdSpecChar) {
-        this.sourceProdSpecChar = sourceProdSpecChar;
+    public void setSrcProdSpecChar(ProductSpecCharacteristic sourceProdSpecChar) {
+        this.srcProdSpecChar = sourceProdSpecChar;
     }
 
     public String getCharRelationshipType() {
