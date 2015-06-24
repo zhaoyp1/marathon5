@@ -5,7 +5,10 @@ import com.asiainfo.baas.marathon.offering.*;
 import com.asiainfo.baas.marathon.baseType.*;
 
 /**
- * An amount, usually of money, that is asked for or allowed when a ProductOffering is bought, rented, or leased. The price is valid for a defined period of time and may not represent the actual price paid by a customer.
+ * An amount, usually of money, that is asked for or allowed when a
+ * ProductOffering is bought, rented, or leased. The price is valid for a
+ * defined period of time and may not represent the actual price paid by a
+ * customer.
  */
 public abstract class ProductOfferingPrice {
 
@@ -61,8 +64,8 @@ public abstract class ProductOfferingPrice {
      * @param validFor
      */
     public ProductOfferingPrice(String name, TimePeriod validFor) {
-        // TODO - implement ProductOfferingPrice.ProductOfferingPrice
-        throw new UnsupportedOperationException();
+        this.name = name;
+        this.validFor = validFor;
     }
 
 }
