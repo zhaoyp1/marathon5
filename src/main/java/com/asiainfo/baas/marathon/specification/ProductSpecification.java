@@ -165,7 +165,6 @@ public abstract class ProductSpecification {
      * @param lifecycleStatus
      */
     public ProductSpecification(String productNumber, String name, String brand, String lifecycleStatus) {
-
         this.productNumber = productNumber;
         this.name = name;
         this.brand = brand;
@@ -230,22 +229,35 @@ public abstract class ProductSpecification {
     }
 
     public ProductSpecificationVersion[] getCurrentVersion() {
+
+        List<ProductSpecificationVersion> currentVersions = new ArrayList<ProductSpecificationVersion>();
         Date now = new Date();
         int len = this.productSpecificationVersion.size();
         for (int i = 0; i < len; i++) {
             ProductSpecificationVersion version = this.productSpecificationVersion.get(i);
-            if (version.getValidFor().startDateTime == null && version.getValidFor().endDateTime == null) {
-                
+            if (DateUtils.isInPeriod(now, version.getValidFor())) {
+                currentVersions.add(version);
             }
         }
-        
-        
-        return this.productSpecificationVersion.toArray(new ProductSpecificationVersion[0]);
+
+        return currentVersions.toArray(new ProductSpecificationVersion[0]);
     }
 
     public String getCurrentVersionString() {
-        // TODO - implement ProductSpecification.getCurrentVersionString
-        throw new UnsupportedOperationException();
+
+        String versionString = "";
+        ProductSpecificationVersion[] currentVersions = getCurrentVersion();
+
+        if (currentVersions != null && currentVersions.length > 0) {
+            for (ProductSpecificationVersion currentVersion : currentVersions) {
+                versionString = versionString + "," + currentVersion.getProdSpecRevisionNumber();
+            }
+        }
+
+        if (versionString.length() > 0) {
+            versionString = versionString.substring(0, versionString.length() - 1);
+        }
+        return versionString;
     }
 
     public ProductSpecificationVersion[] getHistoryVersion() {
@@ -292,8 +304,8 @@ public abstract class ProductSpecification {
      * @param validFor
      */
     public void addCost(Money cost, TimePeriod validFor) {
-    	ProductSpecificationCost productSpecCost=new ProductSpecificationCost(cost, validFor);
-    	productSpecificationCost.add(productSpecCost);
+        ProductSpecificationCost productSpecCost = new ProductSpecificationCost(cost, validFor);
+        productSpecificationCost.add(productSpecCost);
     }
 
     /**
@@ -302,7 +314,7 @@ public abstract class ProductSpecification {
      * @param validFor
      */
     public void updateCostPeriod(ProductSpecificationCost oldCost, TimePeriod validFor) {
-    	oldCost.setValidFor(validFor);
+        oldCost.setValidFor(validFor);
     }
 
     /**
@@ -310,18 +322,21 @@ public abstract class ProductSpecification {
      * @param time
      */
     public ProductSpecificationCost[] queryCost(Date time) {
-    	List<ProductSpecificationCost> validProdSpecCost=new ArrayList<ProductSpecificationCost>();
-    	for (int i = 0; i < productSpecificationCost.size(); i++) {
-    		ProductSpecificationCost cost=productSpecificationCost.get(i);
-    		if(DateUtils.isInPeriod(time, cost.getValidFor())){
-    			validProdSpecCost.add(productSpecificationCost.get(i));
-    		}
-		}
-    	if(validProdSpecCost!=null&&validProdSpecCost.size()>0){
-        	return (ProductSpecificationCost[]) validProdSpecCost.toArray(new ProductSpecificationCost[validProdSpecCost.size()]);
-    	}else{
-    		return null;
-    	}
+        List<ProductSpecificationCost> validProdSpecCost = new ArrayList<ProductSpecificationCost>();
+        for (int i = 0; i < productSpecificationCost.size(); i++) {
+            ProductSpecificationCost cost = productSpecificationCost.get(i);
+            if (DateUtils.isInPeriod(time, cost.getValidFor())) {
+                validProdSpecCost.add(productSpecificationCost.get(i));
+            }
+
+        }
+        if(validProdSpecCost!=null && validProdSpecCost.size()>0){
+        	 return (ProductSpecificationCost[]) validProdSpecCost.toArray(new ProductSpecificationCost[validProdSpecCost
+        	                                                                                            .size()]);
+        }else{
+        	return null;
+        }
+       
     }
 
     /**
@@ -331,8 +346,12 @@ public abstract class ProductSpecification {
      * @param validFor
      */
     public void addRelatedProdSpec(ProductSpecification prodSpec, String type, TimePeriod validFor) {
-        // TODO - implement ProductSpecification.addRelatedProdSpec
-        throw new UnsupportedOperationException();
+        if (this.prodSpecRelationship == null) {
+            this.prodSpecRelationship = new ArrayList<ProductSpecificationRelationship>();
+        }
+        ProductSpecificationRelationship productSpecificationRelationship = new ProductSpecificationRelationship(this,
+                prodSpec, type, validFor);
+        this.prodSpecRelationship.add(productSpecificationRelationship);
     }
 
     /**
@@ -554,8 +573,4 @@ public abstract class ProductSpecification {
         throw new UnsupportedOperationException();
     }
 
-
-
-
 }
- 
