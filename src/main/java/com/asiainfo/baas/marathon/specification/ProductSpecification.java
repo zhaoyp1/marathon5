@@ -310,16 +310,18 @@ public abstract class ProductSpecification {
      * @param time
      */
     public ProductSpecificationCost[] queryCost(Date time) {
-    	List validProdSpecCost=new ArrayList();
+    	List<ProductSpecificationCost> validProdSpecCost=new ArrayList<ProductSpecificationCost>();
     	for (int i = 0; i < productSpecificationCost.size(); i++) {
     		ProductSpecificationCost cost=productSpecificationCost.get(i);
     		if(DateUtils.isInPeriod(time, cost.getValidFor())){
     			validProdSpecCost.add(productSpecificationCost.get(i));
     		}
-    		
 		}
-    	//if(validPro)
-    	return (ProductSpecificationCost[]) validProdSpecCost.toArray(new ProductSpecificationCost[validProdSpecCost.size()]);
+    	if(validProdSpecCost!=null&&validProdSpecCost.size()>0){
+        	return (ProductSpecificationCost[]) validProdSpecCost.toArray(new ProductSpecificationCost[validProdSpecCost.size()]);
+    	}else{
+    		return null;
+    	}
     }
 
     /**
