@@ -4,10 +4,11 @@ import java.util.Date;
 
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 
-
-
 /**
- * A particular form or variety of a ProductSpecification that is different from others or from the original. The form represents differences in properties that characterize a ProductSpecification, that are not enough to warrant creating a new ProductSpecification.
+ * A particular form or variety of a ProductSpecification that is different from
+ * others or from the original. The form represents differences in properties
+ * that characterize a ProductSpecification, that are not enough to warrant
+ * creating a new ProductSpecification.
  */
 public class ProductSpecificationVersion {
 
@@ -21,7 +22,8 @@ public class ProductSpecificationVersion {
      */
     private String description;
     /**
-     * A number that represents the occurrence of the version in the sequence of versions.
+     * A number that represents the occurrence of the version in the sequence of
+     * versions.
      */
     private String prodSpecRevisionNumber;
     /**
@@ -89,9 +91,13 @@ public class ProductSpecificationVersion {
      * @param revisionDate
      * @param validFor
      */
-    public ProductSpecificationVersion(String revisionType, String description, String revisionNumber, Date revisionDate, TimePeriod validFor) {
-        // TODO - implement ProductSpecificationVersion.ProductSpecificationVersion
-        throw new UnsupportedOperationException();
+    public ProductSpecificationVersion(String revisionType, String description, String revisionNumber,
+            Date revisionDate, TimePeriod validFor) {
+        this.prodSpecRevisionType = revisionType;
+        this.description = description;
+        this.prodSpecRevisionNumber = revisionNumber;
+        this.prodSpecRevisionDate = revisionDate;
+        this.validFor = validFor;
     }
 
 }

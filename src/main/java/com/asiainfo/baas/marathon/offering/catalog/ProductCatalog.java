@@ -1,22 +1,31 @@
 package com.asiainfo.baas.marathon.offering.catalog;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import com.asiainfo.baas.marathon.baseType.*;
-import com.asiainfo.baas.marathon.offering.*;
-import com.asiainfo.baas.marathon.offering.offeringPrice.*;
-import com.asiainfo.baas.marathon.dateType.*;
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
+import com.asiainfo.baas.marathon.offering.ProductOffering;
+import com.asiainfo.baas.marathon.offering.offeringPrice.ProductOfferingPrice;
 
 /**
- * A list of ProductOfferings for sale, with prices and illustrations, for example in book form or on the web. ProductCatalogs can be used by Customers during a self-care ordering process and may be used across one or more DistributionChannels.
- *  
- * A list of ProductOfferings for sale, with prices and illustrations, for example in book form or on the web. ProductCatalogs can be used by Customers during a self-care ordering process and may be used across one or more DistributionChannels.
- * ? 
- * A list of ProductOfferings for sale, with prices and illustrations, for example in book form or on the web. ProductCatalogs can be used by Customers during a self-care ordering process and may be used across one or more DistributionChannels.
- *  
- * A list of ProductOfferings for sale, with prices and illustrations, for example in book form or on the web. ProductCatalogs can be used by Customers during a self-care ordering process and may be used across one or more DistributionChannels.
- * ? ?
+ * A list of ProductOfferings for sale, with prices and illustrations, for
+ * example in book form or on the web. ProductCatalogs can be used by Customers
+ * during a self-care ordering process and may be used across one or more
+ * DistributionChannels.
+ * 
+ * A list of ProductOfferings for sale, with prices and illustrations, for
+ * example in book form or on the web. ProductCatalogs can be used by Customers
+ * during a self-care ordering process and may be used across one or more
+ * DistributionChannels. ? A list of ProductOfferings for sale, with prices and
+ * illustrations, for example in book form or on the web. ProductCatalogs can be
+ * used by Customers during a self-care ordering process and may be used across
+ * one or more DistributionChannels.
+ * 
+ * A list of ProductOfferings for sale, with prices and illustrations, for
+ * example in book form or on the web. ProductCatalogs can be used by Customers
+ * during a self-care ordering process and may be used across one or more
+ * DistributionChannels. ? ?
  */
 public class ProductCatalog {
 
@@ -70,8 +79,10 @@ public class ProductCatalog {
      * @param validFor
      */
     public ProductCatalog(String id, String name, String type, TimePeriod validFor) {
-        // TODO - implement ProductCatalog.ProductCatalog
-        throw new UnsupportedOperationException();
+        this.ID = id;
+        this.name = name;
+        this.type = type;
+        this.validFor = validFor;
     }
 
     /**
@@ -80,8 +91,11 @@ public class ProductCatalog {
      * @param validFor
      */
     public void publishOffering(ProductOffering offering, TimePeriod validFor) {
-        // TODO - implement ProductCatalog.publishOffering
-        throw new UnsupportedOperationException();
+        if (this.prodCatalogProdOffers == null) {
+            this.prodCatalogProdOffers = new ArrayList<ProdCatalogProdOffer>();
+        }
+        ProdCatalogProdOffer prodCatalogProdOffer = new ProdCatalogProdOffer(this, offering, validFor);
+        this.prodCatalogProdOffers.add(prodCatalogProdOffer);
     }
 
     /**
@@ -91,8 +105,18 @@ public class ProductCatalog {
      * @param price
      */
     public void publishOffering(ProductOffering offering, TimePeriod validFor, ProductOfferingPrice[] price) {
-        // TODO - implement ProductCatalog.publishOffering
-        throw new UnsupportedOperationException();
+        if (this.prodCatalogProdOffers == null) {
+            this.prodCatalogProdOffers = new ArrayList<ProdCatalogProdOffer>();
+        }
+
+        ProdCatalogProdOffer prodCatalogProdOffer = null;
+        if (price == null) {
+            prodCatalogProdOffer = new ProdCatalogProdOffer(this, offering, validFor);
+        } else {
+            prodCatalogProdOffer = new ProdCatalogProdOffer(this, offering, validFor, price);
+        }
+
+        this.prodCatalogProdOffers.add(prodCatalogProdOffer);
     }
 
     /**
@@ -103,8 +127,6 @@ public class ProductCatalog {
         // TODO - implement ProductCatalog.cancelPublishedOffering
         throw new UnsupportedOperationException();
     }
-
-   
 
     /**
      * 
