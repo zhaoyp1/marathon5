@@ -399,8 +399,11 @@ public abstract class ProductSpecification {
      */
     public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean packageFlg,
             TimePeriod validFor) {
-        // TODO - implement ProductSpecification.addCharacteristic
-        throw new UnsupportedOperationException();
+    	ProductSpecCharUse charUse = new ProductSpecCharUse(characteristic,canBeOveridden,packageFlg,validFor);
+    	if(prodSpecCharUse == null){
+    		prodSpecCharUse = new ArrayList<ProductSpecCharUse>();
+    	}
+    	prodSpecCharUse.add(charUse);
     }
 
     /**
@@ -440,8 +443,12 @@ public abstract class ProductSpecification {
     public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean packageFlg,
             TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality,
             boolean extensible, String description) {
-        // TODO - implement ProductSpecification.addCharacteristic
-        throw new UnsupportedOperationException();
+    	ProductSpecCharUse charUse = new ProductSpecCharUse(characteristic,canBeOveridden,packageFlg,validFor,name,
+    										unique,minCardinality,maxCardinality,extensible,description);
+    	if(prodSpecCharUse == null){
+    		prodSpecCharUse = new ArrayList<ProductSpecCharUse>();
+    	}
+    	prodSpecCharUse.add(charUse);
     }
 
     /**
@@ -511,8 +518,13 @@ public abstract class ProductSpecification {
      */
     public void attachCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
-        // TODO - implement ProductSpecification.attachCharacteristicValue
-        throw new UnsupportedOperationException();
+    	if(prodSpecCharUse != null){
+    		for(int i = 0 ; i < prodSpecCharUse.size() ; i++ ){
+    			ProductSpecCharUse charUse = prodSpecCharUse.get(i);
+    			if(characteristic.getID().equals(charUse.getProdSpecChar().getID()))
+    				charUse.addValue(charValue, isDefault, validFor);
+    		}
+    	}
     }
 
     /**
@@ -533,9 +545,13 @@ public abstract class ProductSpecification {
      */
     public void specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-        // TODO - implement
-        // ProductSpecification.specifyDefaultCharacteristicValue
-        throw new UnsupportedOperationException();
+    	if(prodSpecCharUse != null){
+    		for(int i = 0 ; i < prodSpecCharUse.size() ; i++ ){
+    			ProductSpecCharUse charUse = prodSpecCharUse.get(i);
+    			if(characteristic.getID().equals(charUse.getProdSpecChar().getID()))
+    				charUse.specifyDefaultCharacteristicValue(defaultValue);
+    		}
+    	}
     }
 
     /**
@@ -543,8 +559,17 @@ public abstract class ProductSpecification {
      * @param time
      */
     public ProductSpecCharUse[] retrieveCharacteristic(Date time) {
-        // TODO - implement ProductSpecification.retrieveCharacteristic
-        throw new UnsupportedOperationException();
+    	List<ProductSpecCharUse> charUseList = null;
+    	if(prodSpecCharUse != null){
+    		charUseList = new ArrayList<ProductSpecCharUse>();
+    		for(int i = 0 ; i < prodSpecCharUse.size() ; i++ ){
+    			ProductSpecCharUse charUse = prodSpecCharUse.get(i);
+    			if(DateUtils.isInPeriod(time, charUse.getValidFor()))
+    				charUseList.add(charUse);
+    		}
+    		return (ProductSpecCharUse[])charUseList.toArray(new ProductSpecCharUse[charUseList.size()]);
+    	}
+    	return null;
     }
 
     /**
@@ -553,13 +578,36 @@ public abstract class ProductSpecification {
      * @param time
      */
     public ProdSpecCharValueUse[] retrieveCharacteristicValue(ProductSpecCharacteristic characteristic, Date time) {
-        // TODO - implement ProductSpecification.retrieveCharacteristicValue
-        throw new UnsupportedOperationException();
+    	List<ProdSpecCharValueUse> charValueUseList = null;
+		charValueUseList = new ArrayList<ProdSpecCharValueUse>();
+		ProductSpecCharUse charUse = getProdSpecCharUse(characteristic);
+		List<ProdSpecCharValueUse> valueUseAllList = new ArrayList<ProdSpecCharValueUse>();
+		valueUseAllList = charUse.getProdSpecCharValueUse();
+		if(valueUseAllList != null){
+			for(int j = 0 ; j < valueUseAllList.size() ; j++){
+				ProdSpecCharValueUse valueUse = valueUseAllList.get(j);
+				if(DateUtils.isInPeriod(time, valueUse.getValidFor()))
+					charValueUseList.add(valueUse);
+			}
+			return (ProdSpecCharValueUse[])charValueUseList.toArray(new ProdSpecCharValueUse[charValueUseList.size()]);
+		}
+    	return null;
+    }
+    
+    private ProductSpecCharUse getProdSpecCharUse(ProductSpecCharacteristic characteristic){
+    	if(prodSpecCharUse != null){
+    		for(int i = 0 ; i < prodSpecCharUse.size() ; i++ ){
+    			ProductSpecCharUse charUse = prodSpecCharUse.get(i);
+    			if(characteristic.getID().equals(charUse.getProdSpecChar().getID())){
+    				return charUse;
+    			}
+    		}
+    	}
+    	return null;
     }
 
     public ProductSpecCharUse[] getRootCharacteristic() {
-        // TODO - implement ProductSpecification.getRootCharacteristic
-        throw new UnsupportedOperationException();
+    	return null;
     }
 
     /**
@@ -568,8 +616,11 @@ public abstract class ProductSpecification {
      * @param time
      */
     public ProductSpecCharUse[] getLeafCharacteristic(ProductSpecCharacteristic characteristic, Date time) {
-        // TODO - implement ProductSpecification.getLeafCharacteristic
-        throw new UnsupportedOperationException();
+    	for(int i = 0 ; i < prodSpecRelationship.size() ; i++){
+    		ProductSpecificationRelationship relatedSpec = prodSpecRelationship.get(i);
+    		characteristic.getRelatedCharacteristic("dd");
+    	}
+    	return null;
     }
 
     /**
@@ -579,8 +630,11 @@ public abstract class ProductSpecification {
      * @param maxCardinality
      */
     public void setCardinality(ProductSpecCharacteristic characteristic, int minCardinality, int maxCardinality) {
-        // TODO - implement ProductSpecification.setCardinality
-        throw new UnsupportedOperationException();
+    	for(int i = 0 ; i < prodSpecCharUse.size() ; i++){
+    		ProductSpecCharUse charUse = prodSpecCharUse.get(i);
+    		if(characteristic.getID().equals(charUse.getProdSpecChar().getID()))
+    			charUse.setCardinality(minCardinality, maxCardinality);
+    	}
     }
 
 }
