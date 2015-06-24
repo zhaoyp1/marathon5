@@ -3,6 +3,7 @@ package com.asiainfo.baas.marathon.specification;
 import java.util.*;
 import java.util.Date;
 
+import com.asiainfo.baas.common.DateUtils;
 import com.asiainfo.baas.marathon.baseType.*;
 import com.asiainfo.baas.marathon.dateType.*;
 
@@ -161,8 +162,13 @@ public class ProductSpecCharacteristic {
      * @param maxCardinality
      */
     public ProductSpecCharacteristic(String id, String name, String valueType, TimePeriod validFor, String unique, int minCardinality, int maxCardinality) {
-        // TODO - implement ProductSpecCharacteristic.ProductSpecCharacteristic
-        throw new UnsupportedOperationException();
+       this.ID=id;
+       this.name=name;
+       this.valueType=valueType;
+       this.validFor=validFor;
+       this.unique=unique;
+       this.maxCardinality=maxCardinality;
+       this.minCardinality=minCardinality;
     }
 
     /**
@@ -179,8 +185,16 @@ public class ProductSpecCharacteristic {
      * @param derivationFormula
      */
     public ProductSpecCharacteristic(String id, String name, String valueType, TimePeriod validFor, String unique, int minCardinality, int maxCardinality, boolean extensible, String description, String derivationFormula) {
-        // TODO - implement ProductSpecCharacteristic.ProductSpecCharacteristic
-        throw new UnsupportedOperationException();
+    	 this.ID=id;
+         this.name=name;
+         this.valueType=valueType;
+         this.validFor=validFor;
+         this.unique=unique;
+         this.maxCardinality=maxCardinality;
+         this.minCardinality=minCardinality;
+         this.extensible=extensible;
+         this.derivationFormula=derivationFormula;
+         this.description=description;
     }
 
     /**
@@ -188,8 +202,8 @@ public class ProductSpecCharacteristic {
      * @param value
      */
     public void addValue(ProductSpecCharacteristicValue value) {
-        // TODO - implement ProductSpecCharacteristic.addValue
-        throw new UnsupportedOperationException();
+    	if(this.productSpecCharacteristicValue==null) this.productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
+    	productSpecCharacteristicValue.add(value);
     }
 
     /**
@@ -197,8 +211,7 @@ public class ProductSpecCharacteristic {
      * @param value
      */
     public void removeValue(ProductSpecCharacteristicValue value) {
-        // TODO - implement ProductSpecCharacteristic.removeValue
-        throw new UnsupportedOperationException();
+    	
     }
 
     /**
@@ -206,8 +219,17 @@ public class ProductSpecCharacteristic {
      * @param time
      */
     public ProductSpecCharacteristicValue[] getValue(Date time) {
-        
-    	throw new UnsupportedOperationException();
+    	List<ProductSpecCharacteristicValue> productSpecCharValues=null;
+    	if(this.productSpecCharacteristicValue!=null){
+    		productSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
+    		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+    			if(DateUtils.isInPeriod(time, validFor)){
+        			productSpecCharValues.add(charValue);
+    			}
+			}
+    		return (ProductSpecCharacteristicValue[])productSpecCharValues.toArray(new ProductSpecCharacteristicValue[productSpecCharValues.size()]);
+    	}
+    	return null;
     }
 
     /**
@@ -215,22 +237,38 @@ public class ProductSpecCharacteristic {
      * @param charVal
      */
     public void setDefaultValue(ProductSpecCharacteristicValue charVal) {
-        // TODO - implement ProductSpecCharacteristic.setDefaultValue
-        throw new UnsupportedOperationException();
+    	
+    	if(this.productSpecCharacteristicValue!=null){
+    		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+    			if(charValue.isIsDefault()){
+    				charValue.setIsDefault(false);
+    			}
+			}
+    		charVal.setIsDefault(true);
+    	}
     }
 
     public ProductSpecCharacteristicValue getDefaultValue() {
-        // TODO - implement ProductSpecCharacteristic.getDefaultValue
-        throw new UnsupportedOperationException();
+    	if(this.productSpecCharacteristicValue!=null){
+    		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+    			if(charValue.isIsDefault()){
+    				 return charValue;
+    			}
+			}
+    	}
+    	return null;
+    	
     }
 
     /**
      * 
      * @param characteristic
      */
-    public void addLeafCharacteristic(ProductSpecCharacteristic characteristic) {
-        // TODO - implement ProductSpecCharacteristic.addLeafCharacteristic
-        throw new UnsupportedOperationException();
+    public void addLeafCharacteristic(ProductSpecCharacteristic characteristic,TimePeriod validFor) {
+    	
+    	ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic, "aggregation", validFor);
+    	this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
+    	
     }
 
     /**
@@ -238,13 +276,23 @@ public class ProductSpecCharacteristic {
      * @param characteristic
      */
     public void removeLeafCharacteristic(ProductSpecCharacteristic characteristic) {
-        // TODO - implement ProductSpecCharacteristic.removeLeafCharacteristic
-        throw new UnsupportedOperationException();
+    	ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic, "aggregation", validFor);
+    	this.prodSpecCharRelationship.remove(productSpecCharValueRelationShip);
+    	 
     }
 
     public ProductSpecCharacteristic[] getLeafCharacteristic() {
-        // TODO - implement ProductSpecCharacteristic.getLeafCharacteristic
-        throw new UnsupportedOperationException();
+    	List<ProductSpecCharacteristic>  leafCharacteristic=new ArrayList<ProductSpecCharacteristic>();
+    	if(prodSpecCharRelationship!=null){
+    		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
+        		if("aggregation".equals(productSpecCharRelationship.getCharRelationshipType())){
+        			leafCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        		}
+    		}
+    		return (ProductSpecCharacteristic[])leafCharacteristic.toArray(new ProductSpecCharacteristic[leafCharacteristic.size()]);
+    	}
+    	return null;
+    	
     }
 
     /**
@@ -255,7 +303,6 @@ public class ProductSpecCharacteristic {
      * @param validFor
      */
     public void addRelatedCharacteristic(ProductSpecCharacteristic characteristic, String type, int charSpecSeq, TimePeriod validFor) {
-        // TODO - implement ProductSpecCharacteristic.addRelatedCharacteristic
         throw new UnsupportedOperationException();
     }
 
@@ -264,7 +311,6 @@ public class ProductSpecCharacteristic {
      * @param characteristic
      */
     public void removeRelatedCharacteristic(ProductSpecCharacteristic characteristic) {
-        // TODO - implement ProductSpecCharacteristic.removeRelatedCharacteristic
         throw new UnsupportedOperationException();
     }
 
@@ -273,7 +319,6 @@ public class ProductSpecCharacteristic {
      * @param type
      */
     public ProductSpecCharacteristic[] getRelatedCharacteristic(String type) {
-        // TODO - implement ProductSpecCharacteristic.getRelatedCharacteristic
         throw new UnsupportedOperationException();
     }
 
@@ -283,7 +328,6 @@ public class ProductSpecCharacteristic {
      * @param maxCardinality
      */
     public void setCardinality(int minCardinality, int maxCardinality) {
-        // TODO - implement ProductSpecCharacteristic.setCardinality
         throw new UnsupportedOperationException();
     }
 
