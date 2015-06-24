@@ -233,7 +233,7 @@ public abstract class ProductSpecification {
         int len = this.productSpecificationVersion.size();
         for (int i = 0; i < len; i++) {
             ProductSpecificationVersion version = this.productSpecificationVersion.get(i);
-            if (version.getValidFor().startDateTime == 0 && version.getValidFor().endDateTime == 0) {
+            if (version.getValidFor().startDateTime == null && version.getValidFor().endDateTime == null) {
                 
             }
         }
