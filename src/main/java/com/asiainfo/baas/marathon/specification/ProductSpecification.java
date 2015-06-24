@@ -1,14 +1,22 @@
 package com.asiainfo.baas.marathon.specification;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import com.asiainfo.baas.marathon.offering.*;
-import com.asiainfo.baas.marathon.baseType.*;
-import com.asiainfo.baas.marathon.dateType.*;
+import com.asiainfo.baas.common.DateUtils;
+import com.asiainfo.baas.marathon.baseType.Money;
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
+import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
 
 /**
- * A detailed description of a tangible or intangible object made available externally in the form of a ProductOffering to Customers or other Parties playing a PartyRole. A ProductSpecification may consist of other ProductSpecifications supplied together as a collection. Members of the collection may be offered in their own right. ProductSpecifications may also exist within groupings, such as ProductCategories, ProductLines, and ProductTypes.
+ * A detailed description of a tangible or intangible object made available
+ * externally in the form of a ProductOffering to Customers or other Parties
+ * playing a PartyRole. A ProductSpecification may consist of other
+ * ProductSpecifications supplied together as a collection. Members of the
+ * collection may be offered in their own right. ProductSpecifications may also
+ * exist within groupings, such as ProductCategories, ProductLines, and
+ * ProductTypes.
  */
 public abstract class ProductSpecification {
 
@@ -40,7 +48,8 @@ public abstract class ProductSpecification {
      */
     private TimePeriod validFor;
     /**
-     * The condition of the product specification, such as active, inactive, planned.
+     * The condition of the product specification, such as active, inactive,
+     * planned.
      */
     private String lifecycleStatus;
 
@@ -156,8 +165,11 @@ public abstract class ProductSpecification {
      * @param lifecycleStatus
      */
     public ProductSpecification(String productNumber, String name, String brand, String lifecycleStatus) {
-        // TODO - implement ProductSpecification.ProductSpecification
-        throw new UnsupportedOperationException();
+
+        this.productNumber = productNumber;
+        this.name = name;
+        this.brand = brand;
+        this.lifecycleStatus = lifecycleStatus;
     }
 
     /**
@@ -169,9 +181,14 @@ public abstract class ProductSpecification {
      * @param description
      * @param validFor
      */
-    public ProductSpecification(String productNumber, String name, String brand, String lifecycleStatus, String description, TimePeriod validFor) {
-        // TODO - implement ProductSpecification.ProductSpecification
-        throw new UnsupportedOperationException();
+    public ProductSpecification(String productNumber, String name, String brand, String lifecycleStatus,
+            String description, TimePeriod validFor) {
+        this.productNumber = productNumber;
+        this.name = name;
+        this.brand = brand;
+        this.lifecycleStatus = lifecycleStatus;
+        this.description = description;
+        this.validFor = validFor;
     }
 
     /**
@@ -183,8 +200,12 @@ public abstract class ProductSpecification {
      * @param validFor
      */
     private void setVersion(String verType, String version, String description, Date revisionDate, TimePeriod validFor) {
-        // TODO - implement ProductSpecification.setVersion
-        throw new UnsupportedOperationException();
+        ProductSpecificationVersion prodSpecversion = new ProductSpecificationVersion(verType, description, version,
+                revisionDate, validFor);
+        if (productSpecificationVersion == null) {
+            productSpecificationVersion = new ArrayList<ProductSpecificationVersion>();
+        }
+        this.productSpecificationVersion.add(prodSpecversion);
     }
 
     /**
@@ -193,15 +214,33 @@ public abstract class ProductSpecification {
      * @param description
      * @param revisionDate
      * @param validFor
+     * @throws Exception
      */
-    public void setVersion(String version, String description, Date revisionDate, TimePeriod validFor) {
-        // TODO - implement ProductSpecification.setVersion
-        throw new UnsupportedOperationException();
+    public void setVersion(String version, String description, Date revisionDate, TimePeriod validFor) throws Exception {
+
+        String versionNumbers[] = version.split(".");
+        String versionTypes[] = { "1", "2", "3" };
+
+        if (versionNumbers == null || versionNumbers.length != 3) {
+            throw new Exception("Incorrect Version Format! Please check the version type.");
+        }
+        for (int i = 0; i < versionNumbers.length; i++) {
+            this.setVersion(versionTypes[i], versionNumbers[i], description, revisionDate, validFor);
+        }
     }
 
     public ProductSpecificationVersion[] getCurrentVersion() {
-        // TODO - implement ProductSpecification.getCurrentVersion
-        throw new UnsupportedOperationException();
+        Date now = new Date();
+        int len = this.productSpecificationVersion.size();
+        for (int i = 0; i < len; i++) {
+            ProductSpecificationVersion version = this.productSpecificationVersion.get(i);
+            if (version.getValidFor().startDateTime == null && version.getValidFor().endDateTime == null) {
+                
+            }
+        }
+        
+        
+        return this.productSpecificationVersion.toArray(new ProductSpecificationVersion[0]);
     }
 
     public String getCurrentVersionString() {
@@ -273,7 +312,11 @@ public abstract class ProductSpecification {
     public ProductSpecificationCost[] queryCost(Date time) {
     	List validProdSpecCost=new ArrayList();
     	for (int i = 0; i < productSpecificationCost.size(); i++) {
-    		validProdSpecCost.add(productSpecificationCost.get(i));
+    		ProductSpecificationCost cost=productSpecificationCost.get(i);
+    		if(DateUtils.isInPeriod(time, cost.getValidFor())){
+    			validProdSpecCost.add(productSpecificationCost.get(i));
+    		}
+    		
 		}
     	//if(validPro)
     	return (ProductSpecificationCost[]) validProdSpecCost.toArray(new ProductSpecificationCost[validProdSpecCost.size()]);
@@ -310,37 +353,71 @@ public abstract class ProductSpecification {
 
     /**
      * 
-     * @param characteristic A characteristic quality or distinctive feature of a ProductSpecification. The object must exist in the system
-     * @param canBeOveridden An indicator that specifies that the CharacteristicSpecValues associated with the CharacteristicSpec cannot be changed when instantiating a ServiceCharacteristicValue. For example, a bandwidth of 64 MB cannot be changed.
-     * @param packageFlg An indicator that specifies if the associated CharacteristicSpecification is a composite. true£ºis a composite one
-     * @param validFor The period of time for which the use of the CharacteristicSpecification is applicable.
+     * @param characteristic A characteristic quality or distinctive feature of
+     *            a ProductSpecification. The object must exist in the system
+     * @param canBeOveridden An indicator that specifies that the
+     *            CharacteristicSpecValues associated with the
+     *            CharacteristicSpec cannot be changed when instantiating a
+     *            ServiceCharacteristicValue. For example, a bandwidth of 64 MB
+     *            cannot be changed.
+     * @param packageFlg An indicator that specifies if the associated
+     *            CharacteristicSpecification is a composite. true£ºis a
+     *            composite one
+     * @param validFor The period of time for which the use of the
+     *            CharacteristicSpecification is applicable.
      */
-    public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean packageFlg, TimePeriod validFor) {
+    public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean packageFlg,
+            TimePeriod validFor) {
         // TODO - implement ProductSpecification.addCharacteristic
         throw new UnsupportedOperationException();
     }
 
     /**
      * 
-     * @param characteristic A characteristic quality or distinctive feature of a ProductSpecification. The object must exist in the system
-     * @param canBeOveridden An indicator that specifies that the CharacteristicSpecValues associated with the CharacteristicSpec cannot be changed when instantiating a ServiceCharacteristicValue. For example, a bandwidth of 64 MB cannot be changed.
-     * @param packageFlg An indicator that specifies if the associated CharacteristicSpecification is a composite.
-     * @param validFor The period of time for which the use of the CharacteristicSpecification is applicable.
-     * @param name A word, term, or phrase by which the CharacteristicSpecification is known and distinguished from other CharacteristicSpecifications.
-     * @param unique An indicator that specifies if a value is unique for the specification. Possible values are: "unique while value is in effect" and "unique whether value is in effect or not"
-     * @param minCardinality The minimum number of instances a CharacteristicValue can take on. For example, zero to five phone numbers in a group calling plan, where zero is the value for the minCardinality.
-     * @param maxCardinality The maximum number of instances a CharacteristicValue can take on. For example, zero to five phone numbers in a group calling plan, where five is the value for the maxCardinality.
-     * @param extensible An indicator that specifies that the values for the characteristic can be extended by adding new values when instantiating a characteristic for a Service.
-     * @param description A narrative that explains the CharacteristicSpecification.
+     * @param characteristic A characteristic quality or distinctive feature of
+     *            a ProductSpecification. The object must exist in the system
+     * @param canBeOveridden An indicator that specifies that the
+     *            CharacteristicSpecValues associated with the
+     *            CharacteristicSpec cannot be changed when instantiating a
+     *            ServiceCharacteristicValue. For example, a bandwidth of 64 MB
+     *            cannot be changed.
+     * @param packageFlg An indicator that specifies if the associated
+     *            CharacteristicSpecification is a composite.
+     * @param validFor The period of time for which the use of the
+     *            CharacteristicSpecification is applicable.
+     * @param name A word, term, or phrase by which the
+     *            CharacteristicSpecification is known and distinguished from
+     *            other CharacteristicSpecifications.
+     * @param unique An indicator that specifies if a value is unique for the
+     *            specification. Possible values are:
+     *            "unique while value is in effect" and
+     *            "unique whether value is in effect or not"
+     * @param minCardinality The minimum number of instances a
+     *            CharacteristicValue can take on. For example, zero to five
+     *            phone numbers in a group calling plan, where zero is the value
+     *            for the minCardinality.
+     * @param maxCardinality The maximum number of instances a
+     *            CharacteristicValue can take on. For example, zero to five
+     *            phone numbers in a group calling plan, where five is the value
+     *            for the maxCardinality.
+     * @param extensible An indicator that specifies that the values for the
+     *            characteristic can be extended by adding new values when
+     *            instantiating a characteristic for a Service.
+     * @param description A narrative that explains the
+     *            CharacteristicSpecification.
      */
-    public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean packageFlg, TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality, boolean extensible, String description) {
+    public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean packageFlg,
+            TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality,
+            boolean extensible, String description) {
         // TODO - implement ProductSpecification.addCharacteristic
         throw new UnsupportedOperationException();
     }
 
     /**
      * 
-     * @param characteristic A characteristic quality or distinctive feature of a ProductSpecification. The {@code ProductSpecification} must have the Characteristic before.
+     * @param characteristic A characteristic quality or distinctive feature of
+     *            a ProductSpecification. The {@code ProductSpecification} must
+     *            have the Characteristic before.
      */
     public void removeCharacteristic(ProductSpecCharacteristic characteristic) {
         // TODO - implement ProductSpecification.removeCharacteristic
@@ -349,30 +426,60 @@ public abstract class ProductSpecification {
 
     /**
      * 
-     * @param characteristic A characteristic quality or distinctive feature of a ProductSpecification. The {@code ProductSpecification} must have the Characteristic.
-     * @param canBeOveridden An indicator that specifies that the CharacteristicSpecValues associated with the CharacteristicSpec cannot be changed when instantiating a ServiceCharacteristicValue. For example, a bandwidth of 64 MB cannot be changed.
-     * @param packageFlg An indicator that specifies if the associated CharacteristicSpecification is a composite.
-     * @param validFor The period of time for which the use of the CharacteristicSpecification is applicable.
-     * @param name A word, term, or phrase by which the CharacteristicSpecification is known and distinguished from other CharacteristicSpecifications.
-     * @param unique An indicator that specifies if a value is unique for the specification. Possible values are: "unique while value is in effect" and "unique whether value is in effect or not"
-     * @param minCardinality The minimum number of instances a CharacteristicValue can take on. For example, zero to five phone numbers in a group calling plan, where zero is the value for the minCardinality.
-     * @param maxCardinality The maximum number of instances a CharacteristicValue can take on. For example, zero to five phone numbers in a group calling plan, where five is the value for the maxCardinality.
-     * @param extensible An indicator that specifies that the values for the characteristic can be extended by adding new values when instantiating a characteristic for a Service.
-     * @param description A narrative that explains the CharacteristicSpecification.
+     * @param characteristic A characteristic quality or distinctive feature of
+     *            a ProductSpecification. The {@code ProductSpecification} must
+     *            have the Characteristic.
+     * @param canBeOveridden An indicator that specifies that the
+     *            CharacteristicSpecValues associated with the
+     *            CharacteristicSpec cannot be changed when instantiating a
+     *            ServiceCharacteristicValue. For example, a bandwidth of 64 MB
+     *            cannot be changed.
+     * @param packageFlg An indicator that specifies if the associated
+     *            CharacteristicSpecification is a composite.
+     * @param validFor The period of time for which the use of the
+     *            CharacteristicSpecification is applicable.
+     * @param name A word, term, or phrase by which the
+     *            CharacteristicSpecification is known and distinguished from
+     *            other CharacteristicSpecifications.
+     * @param unique An indicator that specifies if a value is unique for the
+     *            specification. Possible values are:
+     *            "unique while value is in effect" and
+     *            "unique whether value is in effect or not"
+     * @param minCardinality The minimum number of instances a
+     *            CharacteristicValue can take on. For example, zero to five
+     *            phone numbers in a group calling plan, where zero is the value
+     *            for the minCardinality.
+     * @param maxCardinality The maximum number of instances a
+     *            CharacteristicValue can take on. For example, zero to five
+     *            phone numbers in a group calling plan, where five is the value
+     *            for the maxCardinality.
+     * @param extensible An indicator that specifies that the values for the
+     *            characteristic can be extended by adding new values when
+     *            instantiating a characteristic for a Service.
+     * @param description A narrative that explains the
+     *            CharacteristicSpecification.
      */
-    public void modifyCharacteristicInfo(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean packageFlg, TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality, boolean extensible, String description) {
+    public void modifyCharacteristicInfo(ProductSpecCharacteristic characteristic, boolean canBeOveridden,
+            boolean packageFlg, TimePeriod validFor, String name, String unique, int minCardinality,
+            int maxCardinality, boolean extensible, String description) {
         // TODO - implement ProductSpecification.modifyCharacteristicInfo
         throw new UnsupportedOperationException();
     }
 
     /**
      * 
-     * @param characteristic A characteristic quality or distinctive feature of a ProductSpecification. The object must exist in the system
-     * @param charValue A number or text that be assigned to a ProductSpecCharacteristic. The value must be in the characterisc's values.
-     * @param isDefault Indicates if the value is the default value for a characteristic. true£ºis default value
-     * @param validFor The period of time for which the use of the CharacteristicValue is applicable.
+     * @param characteristic A characteristic quality or distinctive feature of
+     *            a ProductSpecification. The object must exist in the system
+     * @param charValue A number or text that be assigned to a
+     *            ProductSpecCharacteristic. The value must be in the
+     *            characterisc's values.
+     * @param isDefault Indicates if the value is the default value for a
+     *            characteristic. true£ºis default value
+     * @param validFor The period of time for which the use of the
+     *            CharacteristicValue is applicable.
      */
-    public void attachCharacteristicValue(ProductSpecCharacteristic characteristic, ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
+    public void attachCharacteristicValue(ProductSpecCharacteristic characteristic,
+            ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
         // TODO - implement ProductSpecification.attachCharacteristicValue
         throw new UnsupportedOperationException();
     }
@@ -382,7 +489,8 @@ public abstract class ProductSpecification {
      * @param characteristic
      * @param charValue
      */
-    public void detachCharacteristicValue(ProductSpecCharacteristic characteristic, ProductSpecCharacteristicValue charValue) {
+    public void detachCharacteristicValue(ProductSpecCharacteristic characteristic,
+            ProductSpecCharacteristicValue charValue) {
         // TODO - implement ProductSpecification.detachCharacteristicValue
         throw new UnsupportedOperationException();
     }
@@ -392,8 +500,10 @@ public abstract class ProductSpecification {
      * @param characteristic
      * @param defaultValue
      */
-    public void specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic, ProductSpecCharacteristicValue defaultValue) {
-        // TODO - implement ProductSpecification.specifyDefaultCharacteristicValue
+    public void specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
+            ProductSpecCharacteristicValue defaultValue) {
+        // TODO - implement
+        // ProductSpecification.specifyDefaultCharacteristicValue
         throw new UnsupportedOperationException();
     }
 
@@ -442,4 +552,8 @@ public abstract class ProductSpecification {
         throw new UnsupportedOperationException();
     }
 
+
+
+
 }
+ 

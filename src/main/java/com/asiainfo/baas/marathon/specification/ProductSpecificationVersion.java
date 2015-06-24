@@ -1,7 +1,10 @@
 package com.asiainfo.baas.marathon.specification;
 
-import com.asiainfo.baas.marathon.baseType.*;
-import com.asiainfo.baas.marathon.dateType.*;
+import java.util.Date;
+
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
+
+
 
 /**
  * A particular form or variety of a ProductSpecification that is different from others or from the original. The form represents differences in properties that characterize a ProductSpecification, that are not enough to warrant creating a new ProductSpecification.
