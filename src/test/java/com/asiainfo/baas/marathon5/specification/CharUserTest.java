@@ -36,7 +36,7 @@ public class CharUserTest {
 			String unitOfMeasure = "";
 			String value = "ºì";
 			ProductSpecCharacteristicValue defaultValue = new ProductSpecCharacteristicValue(valueType,isDefault,unitOfMeasure,validFor,value);
-			charUse.specifyDefaultCharacteristicValue(defaultValue);
+			charUse.specifyDefaultCharacteristicValueUse(defaultValue);
 			CommonUtils.printProperty(null, null,charUse);
 		} catch (ParseException e) {
 			e.printStackTrace();
