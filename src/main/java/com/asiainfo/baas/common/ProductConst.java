@@ -3,13 +3,13 @@ package com.asiainfo.baas.common;
 public class ProductConst {
 
     /** 依赖 **/
-    public static final String RELATIONSHIP_TYPE_DEPENDENCY = "1";
+    public static final String RELATIONSHIP_TYPE_DEPENDENCY = "DEPENDENCY";
     /** 互斥 **/
-    public static final String RELATIONSHIP_TYPE_EXCLUSIVITY = "2";
+    public static final String RELATIONSHIP_TYPE_EXCLUSIVITY = "EXCLUSIVITY";
     /** 置换 **/
-    public static final String RELATIONSHIP_TYPE_SUBSTITUTION = "3";
+    public static final String RELATIONSHIP_TYPE_SUBSTITUTION = "SUBSTITUTION";
     /** 聚合 **/
-    public static final String RELATIONSHIP_TYPE_AGGREGATION = "4";
+    public static final String RELATIONSHIP_TYPE_AGGREGATION = "AGGREGATION ";
 
     /** 产品目录类型 ----手机 **/
     public static final String PRODUCT_CATALOG_TYPE_MOBILEPHONE = "1";
