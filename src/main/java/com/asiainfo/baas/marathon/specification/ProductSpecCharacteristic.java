@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.Date;
 
 import com.asiainfo.baas.common.DateUtils;
+import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.*;
 import com.asiainfo.baas.marathon.dateType.*;
 
@@ -269,7 +270,7 @@ public class ProductSpecCharacteristic {
      */
     public void addLeafCharacteristic(ProductSpecCharacteristic characteristic,TimePeriod validFor) {
     	
-    	ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic, "aggregation", validFor);
+    	ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic, ProductConst.RELATIONSHIP_TYPE_DEPENDENCY, validFor);
     	if(this.prodSpecCharRelationship==null) prodSpecCharRelationship=new ArrayList<ProductSpecCharRelationship>();
     	this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
     	
@@ -287,7 +288,7 @@ public class ProductSpecCharacteristic {
     	List<ProductSpecCharacteristic>  leafCharacteristic=new ArrayList<ProductSpecCharacteristic>();
     	if(prodSpecCharRelationship!=null){
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-        		if("aggregation".equals(productSpecCharRelationship.getCharRelationshipType())){
+        		if(ProductConst.RELATIONSHIP_TYPE_DEPENDENCY.equals(productSpecCharRelationship.getCharRelationshipType())){
         			leafCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
         		}
     		}

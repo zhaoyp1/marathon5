@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 
 import org.junit.Test;
 
+import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
@@ -114,7 +115,7 @@ public class TestProductSpecCharacteristic {
 			for (ProductSpecCharacteristic subProdSpecChar : subProdSpecChars) {
 				System.out.println(subProdSpecChar.getName());
 			}
-			ProductSpecCharacteristic[] relatedProdSpecChars=productSpecCharacteristic.getRelatedCharacteristic("aggregation");
+			ProductSpecCharacteristic[] relatedProdSpecChars=productSpecCharacteristic.getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_DEPENDENCY);
 			for (ProductSpecCharacteristic relatedProdSpecChar : relatedProdSpecChars) {
 				System.out.println(relatedProdSpecChar.getName());
 			}
@@ -138,7 +139,7 @@ public class TestProductSpecCharacteristic {
 			productSpecCharacteristic.addLeafCharacteristic(subProductSpecCharLength, validFor);
 			productSpecCharacteristic.addLeafCharacteristic(subproductSpecCharWidth, validFor);
 			 
-			ProductSpecCharacteristic[] relatedProdSpecChars=productSpecCharacteristic.getRelatedCharacteristic("aggregation");
+			ProductSpecCharacteristic[] relatedProdSpecChars=productSpecCharacteristic.getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_DEPENDENCY);
 			for (ProductSpecCharacteristic relatedProdSpecChar : relatedProdSpecChars) {
 				System.out.println(relatedProdSpecChar.getName());
 			}
