@@ -398,9 +398,9 @@ public abstract class ProductSpecification {
      * @param validFor The period of time for which the use of the
      *            CharacteristicSpecification is applicable.
      */
-    public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean packageFlg,
+    public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean isPackage,
             TimePeriod validFor) {
-        ProductSpecCharUse charUse = new ProductSpecCharUse(characteristic, canBeOveridden, packageFlg, validFor);
+        ProductSpecCharUse charUse = new ProductSpecCharUse(characteristic, canBeOveridden, isPackage, validFor);
         if (prodSpecCharUse == null) {
             prodSpecCharUse = new ArrayList<ProductSpecCharUse>();
         }
@@ -441,10 +441,10 @@ public abstract class ProductSpecification {
      * @param description A narrative that explains the
      *            CharacteristicSpecification.
      */
-    public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean packageFlg,
+    public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean isPackage,
             TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality,
             boolean extensible, String description) {
-        ProductSpecCharUse charUse = new ProductSpecCharUse(characteristic, canBeOveridden, packageFlg, validFor, name,
+        ProductSpecCharUse charUse = new ProductSpecCharUse(characteristic, canBeOveridden, isPackage, validFor, name,
                 unique, minCardinality, maxCardinality, extensible, description);
         if (prodSpecCharUse == null) {
             prodSpecCharUse = new ArrayList<ProductSpecCharUse>();
@@ -499,7 +499,7 @@ public abstract class ProductSpecification {
      *            CharacteristicSpecification.
      */
     public void modifyCharacteristicInfo(ProductSpecCharacteristic characteristic, boolean canBeOveridden,
-            boolean packageFlg, TimePeriod validFor, String name, String unique, int minCardinality,
+            boolean isPackage, TimePeriod validFor, String name, String unique, int minCardinality,
             int maxCardinality, boolean extensible, String description) {
         // TODO - implement ProductSpecification.modifyCharacteristicInfo
         throw new UnsupportedOperationException();
@@ -517,15 +517,20 @@ public abstract class ProductSpecification {
      * @param validFor The period of time for which the use of the
      *            CharacteristicValue is applicable.
      */
-    public void attachCharacteristicValue(ProductSpecCharacteristic characteristic,
+    public boolean attachCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
         if (prodSpecCharUse != null) {
             for (int i = 0; i < prodSpecCharUse.size(); i++) {
                 ProductSpecCharUse charUse = prodSpecCharUse.get(i);
-                if (characteristic.getID().equals(charUse.getProdSpecChar().getID()))
+                if (characteristic.getID().equals(charUse.getProdSpecChar().getID())){
                     charUse.addValue(charValue, isDefault, validFor);
+                    return true;
+                }
             }
+        }else{
+        	return false;
         }
+        return false;
     }
 
     /**
@@ -544,15 +549,20 @@ public abstract class ProductSpecification {
      * @param characteristic
      * @param defaultValue
      */
-    public void specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
+    public boolean specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
         if (prodSpecCharUse != null) {
             for (int i = 0; i < prodSpecCharUse.size(); i++) {
                 ProductSpecCharUse charUse = prodSpecCharUse.get(i);
-                if (characteristic.getID().equals(charUse.getProdSpecChar().getID()))
-                    charUse.specifyDefaultCharacteristicValueUse(defaultValue);
+                if (characteristic.getID().equals(charUse.getProdSpecChar().getID())){
+                	charUse.specifyDefaultCharacteristicValueUse(defaultValue);
+                	return true;
+                }
             }
+        }else{
+        	return false;
         }
+        return false;
     }
 
     /**
