@@ -303,7 +303,8 @@ public class ProductSpecCharacteristic {
      * @param validFor
      */
     public void addRelatedCharacteristic(ProductSpecCharacteristic characteristic, String type, int charSpecSeq, TimePeriod validFor) {
-        throw new UnsupportedOperationException();
+    	ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic,type, validFor,charSpecSeq);
+    	this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
     }
 
     /**
@@ -311,7 +312,8 @@ public class ProductSpecCharacteristic {
      * @param characteristic
      */
     public void removeRelatedCharacteristic(ProductSpecCharacteristic characteristic) {
-        throw new UnsupportedOperationException();
+    	//ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic);
+    	//this.prodSpecCharRelationship.remove(productSpecCharValueRelationShip);
     }
 
     /**
@@ -319,7 +321,16 @@ public class ProductSpecCharacteristic {
      * @param type
      */
     public ProductSpecCharacteristic[] getRelatedCharacteristic(String type) {
-        throw new UnsupportedOperationException();
+    	List<ProductSpecCharacteristic>  leafCharacteristic=new ArrayList<ProductSpecCharacteristic>();
+    	if(prodSpecCharRelationship!=null){
+    		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
+        		if(type.equals(productSpecCharRelationship.getCharRelationshipType())){
+        			leafCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        		}
+    		}
+    		return (ProductSpecCharacteristic[])leafCharacteristic.toArray(new ProductSpecCharacteristic[leafCharacteristic.size()]);
+    	}
+    	return null;
     }
 
     /**
@@ -328,7 +339,8 @@ public class ProductSpecCharacteristic {
      * @param maxCardinality
      */
     public void setCardinality(int minCardinality, int maxCardinality) {
-        throw new UnsupportedOperationException();
+    	this.setMinCardinality(minCardinality);
+    	this.setMaxCardinality(maxCardinality);
     }
 
 	public List<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
