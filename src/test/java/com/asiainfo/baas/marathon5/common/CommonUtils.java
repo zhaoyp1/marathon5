@@ -8,12 +8,15 @@ import org.apache.commons.beanutils.BeanUtils;
 
 public class CommonUtils {
 
-    public static void printProperty(Object[] beanArray, List<Object> printBeanList) {
+    public static void printProperty(Object[] beanArray, List<Object> printBeanList, Object beanObject) {
 
         List<Object> beanList = printBeanList;
         StringBuilder outText = new StringBuilder();
         if (beanArray != null) {
             beanList = Arrays.asList(beanArray);
+        }
+        if (beanObject != null) {
+            beanList.add(beanObject);
         }
         try {
             if (beanList != null && beanList.size() > 0) {
@@ -28,7 +31,7 @@ public class CommonUtils {
                         outText.append(BeanUtils.getProperty(bean, fieldArray[i].getName()));
                         outText.append("    ");
                     }
-                    
+
                     for (int i = 0; i < superFieldArray.length; i++) {
                         outText.append(superFieldArray[i].getName());
                         outText.append("£º");
