@@ -1,12 +1,10 @@
 package com.asiainfo.baas.marathon5.offering;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import org.junit.Test;
 
 import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
+import com.asiainfo.baas.marathon.offering.ProductOffering;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
 import com.asiainfo.baas.marathon.offering.catalog.ProductCatalog;
 import com.asiainfo.baas.marathon.specification.AtomicProductSpecification;
@@ -17,21 +15,12 @@ public class TestProductCatalog {
     @Test
     public void testPublishOffering() {
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
         String productNumber = "5S";
         String name = "iPhone5S";
         String brand = "Apple iPhone";
         String lifecycleStatus = "1";
 
-        TimePeriod validFor5S = new TimePeriod();
-        try {
-            validFor5S.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor5S.endDateTime = format.parse("2015-09-21 23:59:59");
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        TimePeriod validFor5S = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
 
         AtomicProductSpecification iPhone5SSpecification = new AtomicProductSpecification(productNumber, name, brand,
                 lifecycleStatus);
@@ -41,14 +30,7 @@ public class TestProductCatalog {
         String offeringName = "iPhone5S Offering";
         String offeringDescription = "iPhone5S Offering";
         String status = "1";
-        TimePeriod validForOffering = new TimePeriod();
-        try {
-            validForOffering.startDateTime = format.parse("2015-02-03 12:00:00");
-            validForOffering.endDateTime = format.parse("2015-09-21 23:59:59");
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        TimePeriod validForOffering = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
 
         SimpleProductOffering offering = new SimpleProductOffering(id, offeringName, validForOffering, status,
                 iPhone5SSpecification, offeringDescription);
@@ -56,25 +38,11 @@ public class TestProductCatalog {
         String catalogId = "1";
         String catalogName = "手机";
         String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_MOBILEPHONE;
-        TimePeriod validForCatalog = new TimePeriod();
-        try {
-            validForOffering.startDateTime = format.parse("2015-02-03 12:00:00");
-            validForOffering.endDateTime = format.parse("2015-09-21 23:59:59");
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        TimePeriod validForCatalog = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
 
         ProductCatalog catalog = new ProductCatalog(catalogId, catalogName, catalogType, validForCatalog);
 
-        TimePeriod publishTimePeriod = new TimePeriod();
-        try {
-            publishTimePeriod.startDateTime = format.parse("2015-02-03 12:00:00");
-            publishTimePeriod.endDateTime = format.parse("2015-09-21 23:59:59");
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        TimePeriod publishTimePeriod = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
         catalog.publishOffering(offering, publishTimePeriod);
 
         System.out.println("catalog ：");
@@ -83,5 +51,46 @@ public class TestProductCatalog {
         CommonUtils.printProperty(null, catalog.getProdCatalogProdOffers(), null);
         System.out.println("catalog.prodCatalogProdOffers.getProdOffering ：");
         CommonUtils.printProperty(null, null, catalog.getProdCatalogProdOffers().get(0).getProdOffering());
+    }
+
+    @Test
+    public void testGetProductOffering() {
+
+        String productNumber = "5S";
+        String name = "iPhone5S";
+        String brand = "Apple iPhone";
+        String lifecycleStatus = "1";
+
+        TimePeriod validFor5S = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
+
+        AtomicProductSpecification iPhone5SSpecification = new AtomicProductSpecification(productNumber, name, brand,
+                lifecycleStatus);
+        iPhone5SSpecification.setValidFor(validFor5S);
+
+        String id = "1";
+        String offeringName = "iPhone5S Offering";
+        String offeringDescription = "iPhone5S Offering";
+        String status = "1";
+        TimePeriod validForOffering = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
+
+        SimpleProductOffering offering = new SimpleProductOffering(id, offeringName, validForOffering, status,
+                iPhone5SSpecification, offeringDescription);
+
+        String catalogId = "1";
+        String catalogName = "手机";
+        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_MOBILEPHONE;
+        TimePeriod validForCatalog = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
+
+        ProductCatalog catalog = new ProductCatalog(catalogId, catalogName, catalogType, validForCatalog);
+
+        TimePeriod publishTimePeriod = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
+        catalog.publishOffering(offering, publishTimePeriod);
+
+        ProductOffering[] productOfferings = catalog.getProductOffering("1");
+
+        System.out.println("catalog ：");
+        CommonUtils.printProperty(null, null, catalog);
+        System.out.println("catalog.getProductOffering(1)：");
+        CommonUtils.printProperty(productOfferings, null, null);
     }
 }

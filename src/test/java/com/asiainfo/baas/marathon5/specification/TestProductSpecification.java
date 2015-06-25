@@ -23,14 +23,7 @@ public class TestProductSpecification {
         Money cost = new Money();
         cost.amount = 11;
         cost.units = "mine";
-        TimePeriod timePeriod = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        try {
-            timePeriod.startDateTime = format.parse("2015-02-03 12:00:00");
-            timePeriod.endDateTime = format.parse("2015-07-21 23:59:59");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        TimePeriod timePeriod = new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59");
         AtomicProductSpecification prodSpec = new AtomicProductSpecification("1342", "343", "", "");
         prodSpec.addCost(cost, timePeriod);
     }
@@ -40,14 +33,8 @@ public class TestProductSpecification {
         Money cost = new Money();
         cost.amount = 11;
         cost.units = "mine";
-        TimePeriod timePeriod = new TimePeriod();
+        TimePeriod timePeriod = new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        try {
-            timePeriod.startDateTime = format.parse("2015-02-03 12:00:00");
-            timePeriod.endDateTime = format.parse("2015-07-21 23:59:59");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         AtomicProductSpecification prodSpec = new AtomicProductSpecification("1342", "343", "", "");
         prodSpec.addCost(cost, timePeriod);
         try {
@@ -76,14 +63,7 @@ public class TestProductSpecification {
         String version = "1.0.0";
         String description = "Available in silver, gold, and space gray, iPhone 6 features an A8 chip, Touch ID, faster LTE wireless, a new 8MP iSight camera with Focus Pixels, and iOS 8";
         Date revisionDate = new Date();
-        TimePeriod validFor = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-07-21 23:59:59");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59");
         try {
             atomicProductSpecification.setVersion(version, description, revisionDate, validFor);
         } catch (Exception e) {
@@ -105,15 +85,9 @@ public class TestProductSpecification {
         String version = "1.0.0";
         String description = "Available in silver, gold, and space gray, iPhone 6 features an A8 chip, Touch ID, faster LTE wireless, a new 8MP iSight camera with Focus Pixels, and iOS 8";
         Date revisionDate = new Date();
-        TimePeriod validFor = new TimePeriod();
+        TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-09-21 23:59:59");
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         try {
             atomicProductSpecification.setVersion(version, description, revisionDate, validFor);
         } catch (Exception e) {
@@ -154,15 +128,7 @@ public class TestProductSpecification {
         String version = "1.0.0";
         String description = "Available in silver, gold, and space gray, iPhone 6 features an A8 chip, Touch ID, faster LTE wireless, a new 8MP iSight camera with Focus Pixels, and iOS 8";
         Date revisionDate = new Date();
-        TimePeriod validFor = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-09-21 23:59:59");
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
         try {
             atomicProductSpecification.setVersion(version, description, revisionDate, validFor);
         } catch (Exception e) {
@@ -195,15 +161,7 @@ public class TestProductSpecification {
 
         // type:1=“¿¿µ 2=ª•≥‚
         String type = ProductConst.RELATIONSHIP_TYPE_DEPENDENCY;
-        TimePeriod validFor = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-09-21 23:59:59");
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
         try {
             iPhone5SSpecification.addRelatedProdSpec(appleCareSpecification, type, validFor);
         } catch (Exception e) {
@@ -232,15 +190,7 @@ public class TestProductSpecification {
 
         // type:1=“¿¿µ 2=ª•≥‚
         String type = ProductConst.RELATIONSHIP_TYPE_EXCLUSIVITY;
-        TimePeriod validFor = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-09-21 23:59:59");
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
         try {
             iPhone5SSpecification.addRelatedProdSpec(appleCareSpecification, type, validFor);
         } catch (Exception e) {
