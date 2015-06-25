@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.junit.Test;
 
+import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.specification.AtomicProductSpecification;
@@ -192,7 +193,7 @@ public class TestProductSpecification {
                 brand1, lifecycleStatus1);
 
         // type:1=“¿¿µ 2=ª•≥‚
-        String type = "1";
+        String type = ProductConst.RELATIONSHIP_TYPE_DEPENDENCY;
         TimePeriod validFor = new TimePeriod();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
@@ -229,7 +230,7 @@ public class TestProductSpecification {
                 brand1, lifecycleStatus1);
 
         // type:1=“¿¿µ 2=ª•≥‚
-        String type = "1";
+        String type = ProductConst.RELATIONSHIP_TYPE_EXCLUSIVITY;
         TimePeriod validFor = new TimePeriod();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
@@ -245,7 +246,7 @@ public class TestProductSpecification {
             e.printStackTrace();
         }
 
-        ProductSpecification[] productSpecification = iPhone5SSpecification.queryRelatedProdSpec("1");
+        ProductSpecification[] productSpecification = iPhone5SSpecification.queryRelatedProdSpec(type);
         CommonUtils.printProperty(productSpecification, null, null);
 
     }
