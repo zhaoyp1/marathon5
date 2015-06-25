@@ -286,6 +286,5 @@ public class TestProductSpecification {
         CommonUtils.printProperty(null, null, compositeProductSpecification);
         System.out.println("SubSpecification £º");
         CommonUtils.printProperty(null, compositeProductSpecification.getProdSpec(), null);
-
     }
 }
