@@ -16,14 +16,7 @@ public class TestProductSpecCharacteristic {
 
 	@Test
 	public void  addValue(){
-		 TimePeriod validFor = new TimePeriod();
-	        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-	        try {
-	            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-	            validFor.endDateTime = format.parse("2015-07-21 23:59:59");
-	        } catch (ParseException e) {
-	            e.printStackTrace();
-	        }
+		 TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
 		 ProductSpecCharacteristic productSpecification=new ProductSpecCharacteristic("1","颜色", "",validFor , "",1,6,true, "", "");
 		 ProductSpecCharacteristicValue value=new ProductSpecCharacteristicValue("",true,"",validFor,"黑色");
 		 productSpecification.addValue(value);
@@ -31,12 +24,9 @@ public class TestProductSpecCharacteristic {
 	
 	@Test
 	public void getValue(){
-		TimePeriod validFor = new TimePeriod();
+		TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        
         try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-07-21 23:59:59");
 			ProductSpecCharacteristic productSpecCharacteristic=new ProductSpecCharacteristic("1","颜色", "",validFor , "",1,6,true, "", "");
 			ProductSpecCharacteristicValue value=new ProductSpecCharacteristicValue("",true,"",validFor,"黑色");
 			productSpecCharacteristic.addValue(value);
@@ -48,63 +38,40 @@ public class TestProductSpecCharacteristic {
 	}
 	@Test
 	public void setDefaultValue(){
-		TimePeriod validFor = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
         
-        try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-07-21 23:59:59");
 			ProductSpecCharacteristic productSpecCharacteristic=new ProductSpecCharacteristic("1","颜色", "",validFor , "",1,6,true, "", "");
 			ProductSpecCharacteristicValue value=new ProductSpecCharacteristicValue("",true,"",validFor,"黑色");
 			productSpecCharacteristic.setDefaultValue(value);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+         
 	}
 	@Test
 	public void getDefaultValue(){
-		TimePeriod validFor = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        
-        try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-07-21 23:59:59");
+		TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
+         
 			ProductSpecCharacteristic productSpecCharacteristic=new ProductSpecCharacteristic("1","颜色", "",validFor , "",1,6,true, "", "");
 			ProductSpecCharacteristicValue value=new ProductSpecCharacteristicValue("",true,"",validFor,"黑色");
 			productSpecCharacteristic.setDefaultValue(value);
 			ProductSpecCharacteristicValue defaultValue=productSpecCharacteristic.getDefaultValue();
 			System.out.println(defaultValue.getValue());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+         
 	}
 	public void setLeafValue(){
-		TimePeriod validFor = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
         
-        try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-07-21 23:59:59");
 			ProductSpecCharacteristic productSpecCharacteristic=new ProductSpecCharacteristic("1","尺寸", "",validFor , "",1,6,true, "", "");
 			ProductSpecCharacteristic subProductSpecCharLength=new ProductSpecCharacteristic("1","长", "",validFor , "",1,6,true, "", "");
 			ProductSpecCharacteristic subproductSpecCharWidth=new ProductSpecCharacteristic("1","宽", "",validFor , "",1,6,true, "", "");
 
 			productSpecCharacteristic.addLeafCharacteristic(subProductSpecCharLength, validFor);
 			productSpecCharacteristic.addLeafCharacteristic(subproductSpecCharWidth, validFor);
-			 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+         
 	}
 	
 	@Test
 	public void getLeafValue(){
-		TimePeriod validFor = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
         
-        try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-07-21 23:59:59");
 			ProductSpecCharacteristic productSpecCharacteristic=new ProductSpecCharacteristic("1","尺寸", "",validFor , "",1,6,true, "", "");
 			ProductSpecCharacteristic subProductSpecCharLength=new ProductSpecCharacteristic("1","长", "",validFor , "",1,6,true, "", "");
 			ProductSpecCharacteristic subproductSpecCharWidth=new ProductSpecCharacteristic("1","宽", "",validFor , "",1,6,true, "", "");
@@ -119,19 +86,13 @@ public class TestProductSpecCharacteristic {
 			for (ProductSpecCharacteristic relatedProdSpecChar : relatedProdSpecChars) {
 				System.out.println(relatedProdSpecChar.getName());
 			}
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        
 	}
 	
 	@Test
 	public void getRelatedValue(){
-		TimePeriod validFor = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        
-        try {
-            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor.endDateTime = format.parse("2015-07-21 23:59:59");
+		TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
+         
 			ProductSpecCharacteristic productSpecCharacteristic=new ProductSpecCharacteristic("1","尺寸", "",validFor , "",1,6,true, "", "");
 			ProductSpecCharacteristic subProductSpecCharLength=new ProductSpecCharacteristic("1","长", "",validFor , "",1,6,true, "", "");
 			ProductSpecCharacteristic subproductSpecCharWidth=new ProductSpecCharacteristic("1","宽", "",validFor , "",1,6,true, "", "");
@@ -143,8 +104,6 @@ public class TestProductSpecCharacteristic {
 			for (ProductSpecCharacteristic relatedProdSpecChar : relatedProdSpecChars) {
 				System.out.println(relatedProdSpecChar.getName());
 			}
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        
 	}
 }
