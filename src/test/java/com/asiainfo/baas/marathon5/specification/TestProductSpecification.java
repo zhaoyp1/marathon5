@@ -9,8 +9,10 @@ import org.junit.Test;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.specification.AtomicProductSpecification;
+import com.asiainfo.baas.marathon.specification.ProductSpecification;
 import com.asiainfo.baas.marathon.specification.ProductSpecificationCost;
 import com.asiainfo.baas.marathon.specification.ProductSpecificationVersion;
+import com.asiainfo.baas.marathon5.common.CommonUtils;
 
 public class TestProductSpecification {
 
@@ -168,5 +170,83 @@ public class TestProductSpecification {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testAddRelatedProdSpec() {
+
+        String productNumber = "5S";
+        String name = "iPhone5S";
+        String brand = "Apple iPhone";
+        String lifecycleStatus = "1";
+
+        AtomicProductSpecification iPhone5SSpecification = new AtomicProductSpecification(productNumber, name, brand,
+                lifecycleStatus);
+
+        String productNumber1 = "AC001";
+        String name1 = "AppleCare For iPhone";
+        String brand1 = "AppleCare";
+        String lifecycleStatus1 = "1";
+
+        AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+                brand1, lifecycleStatus1);
+
+        // type:1=“¿¿µ 2=ª•≥‚
+        String type = "1";
+        TimePeriod validFor = new TimePeriod();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        try {
+            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
+            validFor.endDateTime = format.parse("2015-09-21 23:59:59");
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            iPhone5SSpecification.addRelatedProdSpec(appleCareSpecification, type, validFor);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testQueryRelatedProdSpec() {
+
+        String productNumber = "5S";
+        String name = "iPhone5S";
+        String brand = "Apple iPhone";
+        String lifecycleStatus = "1";
+
+        AtomicProductSpecification iPhone5SSpecification = new AtomicProductSpecification(productNumber, name, brand,
+                lifecycleStatus);
+
+        String productNumber1 = "AC001";
+        String name1 = "AppleCare For iPhone";
+        String brand1 = "AppleCare";
+        String lifecycleStatus1 = "1";
+
+        AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+                brand1, lifecycleStatus1);
+
+        // type:1=“¿¿µ 2=ª•≥‚
+        String type = "1";
+        TimePeriod validFor = new TimePeriod();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        try {
+            validFor.startDateTime = format.parse("2015-02-03 12:00:00");
+            validFor.endDateTime = format.parse("2015-09-21 23:59:59");
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            iPhone5SSpecification.addRelatedProdSpec(appleCareSpecification, type, validFor);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ProductSpecification[] productSpecification = iPhone5SSpecification.queryRelatedProdSpec("1");
+        CommonUtils.printProperty(productSpecification, null);
+
     }
 }
