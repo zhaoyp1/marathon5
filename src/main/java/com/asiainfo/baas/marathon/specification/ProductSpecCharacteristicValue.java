@@ -227,7 +227,7 @@ public class ProductSpecCharacteristicValue {
     	if(this.prodSpecCharValueRelationship != null && prodSpecCharValueRelationship.size() > 0){
     		prodSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
     		for (ProdSpecCharValueRelationship relationship : prodSpecCharValueRelationship) {
-    			if(relationship.getCharValueRelationshipType() != null && type.equals(relationship.getCharValueRelationshipType()) && relationship.getValidFor().isInPeriod(time)){
+    			if(relationship.getCharValueRelationshipType() != null && type.equals(relationship.getCharValueRelationshipType()) && relationship.getValidFor().isInPeriod(time )){
     				prodSpecCharValues.add(relationship.getTargetCharValue());
     			}
 			}
