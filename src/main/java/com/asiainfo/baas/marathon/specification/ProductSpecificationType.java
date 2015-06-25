@@ -83,12 +83,12 @@ public abstract class ProductSpecificationType {
         List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
         if (this.prodSpec != null) {
             for (int i = 0; i < this.prodSpec.size(); i++) {
-                if (dateu this.prodSpec.get(i).getValidFor()) {
-                    
+                if (this.prodSpec.get(i).getValidFor().isInPeriod(new Date())) {
+                    productSpecifications.add(this.prodSpec.get(i));
                 }
             }
         }
-        throw new UnsupportedOperationException();
+        return productSpecifications.toArray(new ProductSpecification[0]);
     }
 
 }
