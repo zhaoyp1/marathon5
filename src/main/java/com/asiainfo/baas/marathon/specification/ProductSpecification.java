@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.asiainfo.baas.common.DateUtils;
+import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
@@ -580,7 +581,7 @@ public abstract class ProductSpecification {
     public ProdSpecCharValueUse[] retrieveCharacteristicValue(ProductSpecCharacteristic characteristic, Date time) {
     	List<ProdSpecCharValueUse> charValueUseList = null;
 		charValueUseList = new ArrayList<ProdSpecCharValueUse>();
-		ProductSpecCharUse charUse = getProdSpecCharUse(characteristic);
+		ProductSpecCharUse charUse = this.getProdSpecCharUse(characteristic);
 		List<ProdSpecCharValueUse> valueUseAllList = new ArrayList<ProdSpecCharValueUse>();
 		valueUseAllList = charUse.getProdSpecCharValueUse();
 		if(valueUseAllList != null){
@@ -607,6 +608,19 @@ public abstract class ProductSpecification {
     }
 
     public ProductSpecCharUse[] getRootCharacteristic() {
+    	List<ProductSpecCharUse> charUseList = null;
+    	if(prodSpecCharUse != null){
+    		charUseList = prodSpecCharUse;
+    		for(int i = 0 ; i < prodSpecCharUse.size() ; i++ ){
+    			ProductSpecCharUse charUse = prodSpecCharUse.get(i);
+    			ProductSpecCharacteristic[] prodSpecChar = charUse.getProdSpecChar().getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION);
+    			for(ProductSpecCharacteristic specChar : prodSpecChar){
+    				ProductSpecCharUse subCharUse = this.getProdSpecCharUse(specChar);
+    				charUseList.remove(subCharUse);
+    			}
+    		}
+    		return (ProductSpecCharUse[])charUseList.toArray(new ProductSpecCharUse[charUseList.size()]);
+    	}
     	return null;
     }
 
@@ -616,9 +630,16 @@ public abstract class ProductSpecification {
      * @param time
      */
     public ProductSpecCharUse[] getLeafCharacteristic(ProductSpecCharacteristic characteristic, Date time) {
-    	for(int i = 0 ; i < prodSpecRelationship.size() ; i++){
-    		ProductSpecificationRelationship relatedSpec = prodSpecRelationship.get(i);
-    		characteristic.getRelatedCharacteristic("dd");
+    	ProductSpecCharUse[] charUses = null;
+    	ProductSpecCharacteristic[] prodSpecChar = characteristic.getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION);
+    	if(prodSpecChar != null){
+    		charUses = new ProductSpecCharUse[prodSpecChar.length];
+	    	for(int i = 0 ; i < prodSpecChar.length ; i++){
+	    		ProductSpecCharUse charUse = this.getProdSpecCharUse(prodSpecChar[i]);
+	    		if(charUse != null)
+	    			charUses[i] = charUse;
+	    	}
+	    	return charUses;
     	}
     	return null;
     }
