@@ -74,14 +74,21 @@ public abstract class ProductSpecificationType {
             this.prodSpec.remove(prodSpec);
         }
     }
-    
-	/**
-	 * 
-	 * @param time
-	 */
-	public ProductSpecification[] queryProdSpec(Date time) {
-		// TODO - implement ProductSpecificationType.queryProdSpec
-		throw new UnsupportedOperationException();
-	}
+
+    /**
+     * 
+     * @param time
+     */
+    public ProductSpecification[] queryProdSpec(Date time) {
+        List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
+        if (this.prodSpec != null) {
+            for (int i = 0; i < this.prodSpec.size(); i++) {
+                if (dateu this.prodSpec.get(i).getValidFor()) {
+                    
+                }
+            }
+        }
+        throw new UnsupportedOperationException();
+    }
 
 }
