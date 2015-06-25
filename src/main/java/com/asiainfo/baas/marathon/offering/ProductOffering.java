@@ -3,6 +3,7 @@ package com.asiainfo.baas.marathon.offering;
 import java.util.*;
 import java.util.Date;
 
+import com.asiainfo.baas.common.DateUtils;
 import com.asiainfo.baas.marathon.offering.offeringPrice.*;
 import com.asiainfo.baas.marathon.offering.catalog.*;
 import com.asiainfo.baas.marathon.baseType.*;
@@ -120,7 +121,11 @@ public abstract class ProductOffering {
      * @param validFor
      */
     public void addRelatedOffering(ProductOffering offering, String relationType, TimePeriod validFor) {
-        throw new UnsupportedOperationException();
+    	ProductOfferingRelationship relationShip = new ProductOfferingRelationship(this,offering,relationType,validFor);
+    	if(prodOfferingRelationship == null){
+    		prodOfferingRelationship = new ArrayList<ProductOfferingRelationship>();
+    	}
+    	prodOfferingRelationship.add(relationShip);
     }
 
     /**
@@ -160,8 +165,19 @@ public abstract class ProductOffering {
      * @param time
      */
     public ProductOffering[] queryRelatedOffering(String relationType, Date time) {
-        // TODO - implement ProductOffering.queryRelatedOffering
-        throw new UnsupportedOperationException();
+    	List<ProductOffering> offering = null;
+    	if(prodOfferingRelationship == null && prodOfferingRelationship.size()>0){
+    		offering = new ArrayList<ProductOffering>();
+    		for(int i = 0 ; i < prodOfferingRelationship.size() ; i++){
+    			ProductOfferingRelationship relatedOffering = prodOfferingRelationship.get(i);
+    			if(relationType.equals(relatedOffering.getTypeRelationship()) && DateUtils.isInPeriod(time, relatedOffering.getValidFor())){
+    				offering.add(relatedOffering.getTargetOffering());
+    			}
+    		}
+    		return (ProductOffering[])offering.toArray(new ProductOffering[offering.size()]);
+    	}else{
+    		return null;
+    	}
     }
 
     /**
