@@ -2,7 +2,11 @@ package com.asiainfo.baas.marathon5.specification;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import net.sf.json.JSONObject;
 
 import org.junit.Test;
 
@@ -315,7 +319,10 @@ public class TestProductSpecification {
 			
 			ProductSpecCharacteristicValue charValue = createValue("∫Ï","",false);
 			appleCareSpecification.attachCharacteristicValue(specChar,charValue,false,validFor);
-			appleCareSpecification.specifyDefaultCharacteristicValue(specChar,charValue);
+			boolean retFlag = appleCareSpecification.specifyDefaultCharacteristicValue(specChar,charValue);
+			if(!retFlag){
+				System.out.println("…Ë÷√ ß∞‹");
+			}
 			CommonUtils.printProperty(null, null, appleCareSpecification);
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -499,5 +506,18 @@ public class TestProductSpecification {
 		specChar.addRelatedCharacteristic(subSpecChar2, ProductConst.RELATIONSHIP_TYPE_AGGREGATION, 2, validFor);
 		specChar.addRelatedCharacteristic(subSpecChar3, ProductConst.RELATIONSHIP_TYPE_AGGREGATION, 3, validFor);
 		return specChar;
+    }
+    
+    @Test
+    public void testList(){
+    	List<String> testlist = new ArrayList<String>();
+    	List<String> testlist2 = new ArrayList<String>();;
+    	testlist.add("test1");
+    	testlist.add("test2");
+    	testlist.add("test3");
+    	testlist.add("test4");
+    	testlist2.addAll(testlist);
+    	testlist2.remove("test3");
+    	System.out.println("22222");
     }
 }
