@@ -385,6 +385,9 @@ public class TestProductSpecification {
 			
 			ProductSpecCharacteristic specChar = createChar("1112","颜色","Text","否",1,3);
 			ProductSpecCharacteristic specChar2 = createBundledChar();
+			ProductSpecCharacteristic subSpecChar1 = createChar("11231","长","Number","米",1,1);
+			ProductSpecCharacteristic subSpecChar2 = createChar("11232","宽","Number","米",1,1);
+			ProductSpecCharacteristic subSpecChar3 = createChar("11233","高","Number","米",1,1);
 			String productNumber1 = "AC001";
 	        String name1 = "AppleCare For iPhone";
 	        String brand1 = "AppleCare";
@@ -393,6 +396,9 @@ public class TestProductSpecification {
 	                brand1, lifecycleStatus1);
 			appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
 			appleCareSpecification.addCharacteristic(specChar2, false, false, validFor);
+			appleCareSpecification.addCharacteristic(subSpecChar1, false, false, validFor);
+			appleCareSpecification.addCharacteristic(subSpecChar2, false, false, validFor);
+			appleCareSpecification.addCharacteristic(subSpecChar3, false, false, validFor);
 			
 			ProductSpecCharacteristicValue charValue = createValue("红","",false);
 			appleCareSpecification.attachCharacteristicValue(specChar,charValue,false,validFor);
@@ -421,12 +427,14 @@ public class TestProductSpecification {
 	        String lifecycleStatus1 = "1";
 			AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
 	                brand1, lifecycleStatus1);
+			appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
 			appleCareSpecification.addCharacteristic(specChar2, false, false, validFor);
+			appleCareSpecification.addCharacteristic(specChar3, false, false, validFor);
 			
 			ProductSpecCharacteristicValue charValue = createValue("红","",false);
 			appleCareSpecification.attachCharacteristicValue(specChar,charValue,false,validFor);
 			appleCareSpecification.specifyDefaultCharacteristicValue(specChar,charValue);
-			ProductSpecCharUse[] charUses = appleCareSpecification.getLeafCharacteristic(specChar,new Date());
+			ProductSpecCharUse[] charUses = appleCareSpecification.getLeafCharacteristic(specChar3,new Date());
 			CommonUtils.printProperty(charUses, null, null);
 		} catch (ParseException e) {
 			e.printStackTrace();
