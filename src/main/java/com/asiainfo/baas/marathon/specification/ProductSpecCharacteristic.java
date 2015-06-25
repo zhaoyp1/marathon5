@@ -238,14 +238,17 @@ public class ProductSpecCharacteristic {
      */
     public void setDefaultValue(ProductSpecCharacteristicValue charVal) {
     	
-    	if(this.productSpecCharacteristicValue!=null){
+    	if(this.productSpecCharacteristicValue==null){
+    		productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
+    	}
     		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
     			if(charValue.isIsDefault()){
     				charValue.setIsDefault(false);
     			}
 			}
     		charVal.setIsDefault(true);
-    	}
+    		productSpecCharacteristicValue.add(charVal);
+    	 
     }
 
     public ProductSpecCharacteristicValue getDefaultValue() {
@@ -267,6 +270,7 @@ public class ProductSpecCharacteristic {
     public void addLeafCharacteristic(ProductSpecCharacteristic characteristic,TimePeriod validFor) {
     	
     	ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic, "aggregation", validFor);
+    	if(this.prodSpecCharRelationship==null) prodSpecCharRelationship=new ArrayList<ProductSpecCharRelationship>();
     	this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
     	
     }
@@ -276,8 +280,6 @@ public class ProductSpecCharacteristic {
      * @param characteristic
      */
     public void removeLeafCharacteristic(ProductSpecCharacteristic characteristic) {
-    	ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic, "aggregation", validFor);
-    	this.prodSpecCharRelationship.remove(productSpecCharValueRelationShip);
     	 
     }
 
@@ -304,6 +306,7 @@ public class ProductSpecCharacteristic {
      */
     public void addRelatedCharacteristic(ProductSpecCharacteristic characteristic, String type, int charSpecSeq, TimePeriod validFor) {
     	ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic,type, validFor,charSpecSeq);
+    	if(prodSpecCharRelationship==null) prodSpecCharRelationship=new ArrayList<ProductSpecCharRelationship>();
     	this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
     }
 
@@ -312,8 +315,6 @@ public class ProductSpecCharacteristic {
      * @param characteristic
      */
     public void removeRelatedCharacteristic(ProductSpecCharacteristic characteristic) {
-    	//ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic);
-    	//this.prodSpecCharRelationship.remove(productSpecCharValueRelationShip);
     }
 
     /**
@@ -321,14 +322,14 @@ public class ProductSpecCharacteristic {
      * @param type
      */
     public ProductSpecCharacteristic[] getRelatedCharacteristic(String type) {
-    	List<ProductSpecCharacteristic>  leafCharacteristic=new ArrayList<ProductSpecCharacteristic>();
+    	List<ProductSpecCharacteristic>  relatedCharacteristic=new ArrayList<ProductSpecCharacteristic>();
     	if(prodSpecCharRelationship!=null){
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
         		if(type.equals(productSpecCharRelationship.getCharRelationshipType())){
-        			leafCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        			relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
         		}
     		}
-    		return (ProductSpecCharacteristic[])leafCharacteristic.toArray(new ProductSpecCharacteristic[leafCharacteristic.size()]);
+    		return (ProductSpecCharacteristic[])relatedCharacteristic.toArray(new ProductSpecCharacteristic[relatedCharacteristic.size()]);
     	}
     	return null;
     }

@@ -9,7 +9,7 @@ import org.apache.commons.beanutils.BeanUtils;
 
 public class CommonUtils {
 
-    public static void printProperty(Object[] beanArray, List<Object> printBeanList, Object beanObject) {
+    public static void printProperty(Object[] beanArray, List printBeanList, Object beanObject) {
 
         List<Object> beanList = printBeanList;
         StringBuilder outText = new StringBuilder();
@@ -17,8 +17,8 @@ public class CommonUtils {
             beanList = Arrays.asList(beanArray);
         }
         if (beanObject != null) {
-        	if(beanList == null)
-        		beanList = new ArrayList<Object>();
+            if (beanList == null)
+                beanList = new ArrayList<Object>();
             beanList.add(beanObject);
         }
         try {

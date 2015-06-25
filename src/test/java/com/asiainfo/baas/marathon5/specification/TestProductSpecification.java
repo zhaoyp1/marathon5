@@ -10,6 +10,7 @@ import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.specification.AtomicProductSpecification;
+import com.asiainfo.baas.marathon.specification.CompositeProductSpecification;
 import com.asiainfo.baas.marathon.specification.ProductSpecification;
 import com.asiainfo.baas.marathon.specification.ProductSpecificationCost;
 import com.asiainfo.baas.marathon.specification.ProductSpecificationVersion;
@@ -248,6 +249,43 @@ public class TestProductSpecification {
 
         ProductSpecification[] productSpecification = iPhone5SSpecification.queryRelatedProdSpec(type);
         CommonUtils.printProperty(productSpecification, null, null);
+
+    }
+
+    @Test
+    public void testAddSubProdSpec() {
+
+        String productNumber = "5S";
+        String name = "iPhone5S";
+        String brand = "Apple iPhone";
+        String lifecycleStatus = "1";
+
+        AtomicProductSpecification iPhone5SSpecification = new AtomicProductSpecification(productNumber, name, brand,
+                lifecycleStatus);
+
+        String productNumber1 = "AC001";
+        String name1 = "AppleCare For iPhone";
+        String brand1 = "AppleCare";
+        String lifecycleStatus1 = "1";
+
+        AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+                brand1, lifecycleStatus1);
+
+        String productNumber2 = "iPhone5s&AC001";
+        String name2 = "iPhone5s + AppleCare For iPhone";
+        String brand2 = "AppleCare";
+        String lifecycleStatus2 = "1";
+
+        CompositeProductSpecification compositeProductSpecification = new CompositeProductSpecification(productNumber2,
+                name2, brand2, lifecycleStatus2);
+
+        compositeProductSpecification.addSubProdSpec(iPhone5SSpecification);
+        compositeProductSpecification.addSubProdSpec(appleCareSpecification);
+
+        System.out.println("compositeProductSpecification £º");
+        CommonUtils.printProperty(null, null, compositeProductSpecification);
+        System.out.println("SubSpecification £º");
+        CommonUtils.printProperty(null, compositeProductSpecification.getProdSpec(), null);
 
     }
 }
