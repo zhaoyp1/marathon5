@@ -123,9 +123,14 @@ public class ProductCatalog {
      * 
      * @param offering
      */
-    public void cancelPublishedOffering(ProductOffering offering) {
+    public void retiredProductOffering(ProductOffering offering) {
         // TODO - implement ProductCatalog.cancelPublishedOffering
         throw new UnsupportedOperationException();
+    }
+    
+    public ProductOffering[] getProductOffering(String status){
+    	
+    	return null;
     }
 
     /**

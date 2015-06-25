@@ -333,6 +333,18 @@ public class ProductSpecCharacteristic {
     	}
     	return null;
     }
+    public ProductSpecCharacteristic[] getRelatedCharacteristic(String type,Date time) {
+    	List<ProductSpecCharacteristic>  relatedCharacteristic=new ArrayList<ProductSpecCharacteristic>();
+    	if(prodSpecCharRelationship!=null){
+    		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
+        		if(type.equals(productSpecCharRelationship.getCharRelationshipType()) && DateUtils.isInPeriod(time, productSpecCharRelationship.getValidFor())){
+        			relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        		}
+    		}
+    		return (ProductSpecCharacteristic[])relatedCharacteristic.toArray(new ProductSpecCharacteristic[relatedCharacteristic.size()]);
+    	}
+    	return null;
+    }
 
     /**
      * 
