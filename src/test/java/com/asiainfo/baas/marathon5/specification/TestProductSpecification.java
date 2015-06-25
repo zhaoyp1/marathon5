@@ -16,46 +16,51 @@ import com.asiainfo.baas.marathon5.common.CommonUtils;
 
 public class TestProductSpecification {
 
-	@Test
-	public void addCost(){
-		Money cost=new Money();
-		cost.amount=11;
-		cost.units="mine";
-		TimePeriod timePeriod=new TimePeriod();
-		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		try {
-			timePeriod.startDateTime=format.parse("2015-02-03 12:00:00");
-			timePeriod.endDateTime=format.parse("2015-07-21 23:59:59");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		AtomicProductSpecification prodSpec=new AtomicProductSpecification("1342","343","","");
-		prodSpec.addCost(cost, timePeriod);
-	}
-	@Test
-	public void queryCost(){
-		Money cost=new Money();
-		cost.amount=11;
-		cost.units="mine";
-		TimePeriod timePeriod=new TimePeriod();
-		SimpleDateFormat format=new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-		try {
-			timePeriod.startDateTime=format.parse("2015-02-03 12:00:00");
-			timePeriod.endDateTime=format.parse("2015-07-21 23:59:59");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		AtomicProductSpecification prodSpec=new AtomicProductSpecification("1342","343","","");
-		prodSpec.addCost(cost, timePeriod);
-		try {
-			ProductSpecificationCost[] prodSpecCostList= prodSpec.queryCost(format.parse("2015-07-20 23:59:59"));
-			for (ProductSpecificationCost productSpecificationCost : prodSpecCostList) {
-				System.out.println(productSpecificationCost.getCostToBusiness().amount+","+productSpecificationCost.getCostToBusiness().units+","+format.format(productSpecificationCost.getValidFor().startDateTime)+" ,"+format.format(productSpecificationCost.getValidFor().endDateTime));
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	} 
+    @Test
+    public void addCost() {
+        Money cost = new Money();
+        cost.amount = 11;
+        cost.units = "mine";
+        TimePeriod timePeriod = new TimePeriod();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        try {
+            timePeriod.startDateTime = format.parse("2015-02-03 12:00:00");
+            timePeriod.endDateTime = format.parse("2015-07-21 23:59:59");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        AtomicProductSpecification prodSpec = new AtomicProductSpecification("1342", "343", "", "");
+        prodSpec.addCost(cost, timePeriod);
+    }
+
+    @Test
+    public void queryCost() {
+        Money cost = new Money();
+        cost.amount = 11;
+        cost.units = "mine";
+        TimePeriod timePeriod = new TimePeriod();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        try {
+            timePeriod.startDateTime = format.parse("2015-02-03 12:00:00");
+            timePeriod.endDateTime = format.parse("2015-07-21 23:59:59");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        AtomicProductSpecification prodSpec = new AtomicProductSpecification("1342", "343", "", "");
+        prodSpec.addCost(cost, timePeriod);
+        try {
+            ProductSpecificationCost[] prodSpecCostList = prodSpec.queryCost(format.parse("2015-07-20 23:59:59"));
+            for (ProductSpecificationCost productSpecificationCost : prodSpecCostList) {
+                System.out.println(productSpecificationCost.getCostToBusiness().amount + ","
+                        + productSpecificationCost.getCostToBusiness().units + ","
+                        + format.format(productSpecificationCost.getValidFor().startDateTime) + " ,"
+                        + format.format(productSpecificationCost.getValidFor().endDateTime));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void testSetVersion() {
         String productNumber = "5S";
@@ -241,7 +246,7 @@ public class TestProductSpecification {
         }
 
         ProductSpecification[] productSpecification = iPhone5SSpecification.queryRelatedProdSpec("1");
-        CommonUtils.printProperty(productSpecification, null);
+        CommonUtils.printProperty(productSpecification, null, null);
 
     }
 }
