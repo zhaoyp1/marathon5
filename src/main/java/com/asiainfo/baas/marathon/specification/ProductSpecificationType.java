@@ -83,7 +83,7 @@ public abstract class ProductSpecificationType {
         List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
         if (this.prodSpec != null) {
             for (int i = 0; i < this.prodSpec.size(); i++) {
-                if (this.prodSpec.get(i).getValidFor().isInPeriod(new Date())) {
+                if (this.prodSpec.get(i).getValidFor().isInPeriod(time)) {
                     productSpecifications.add(this.prodSpec.get(i));
                 }
             }

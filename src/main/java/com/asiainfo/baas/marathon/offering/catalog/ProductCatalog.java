@@ -127,10 +127,18 @@ public class ProductCatalog {
         // TODO - implement ProductCatalog.cancelPublishedOffering
         throw new UnsupportedOperationException();
     }
-    
-    public ProductOffering[] getProductOffering(String status){
-    	
-    	return null;
+
+    public ProductOffering[] getProductOffering(String status) {
+        List<ProductOffering> productOfferings = new ArrayList<ProductOffering>();
+        if (this.prodCatalogProdOffers != null) {
+            for (int i = 0; i < this.prodCatalogProdOffers.size(); i++) {
+                ProductOffering productOffering = this.prodCatalogProdOffers.get(i).getProdOffering();
+                if (status.equals(productOffering.getStatus())) {
+                    productOfferings.add(productOffering);
+                }
+            }
+        }
+        return productOfferings.toArray(new ProductOffering[0]);
     }
 
     /**
