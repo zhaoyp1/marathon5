@@ -614,9 +614,11 @@ public abstract class ProductSpecification {
     		for(int i = 0 ; i < prodSpecCharUse.size() ; i++ ){
     			ProductSpecCharUse charUse = prodSpecCharUse.get(i);
     			ProductSpecCharacteristic[] prodSpecChar = charUse.getProdSpecChar().getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION);
-    			for(ProductSpecCharacteristic specChar : prodSpecChar){
-    				ProductSpecCharUse subCharUse = this.getProdSpecCharUse(specChar);
-    				charUseList.remove(subCharUse);
+    			if(prodSpecChar != null){
+    				for(ProductSpecCharacteristic specChar : prodSpecChar){
+        				ProductSpecCharUse subCharUse = this.getProdSpecCharUse(specChar);
+        				charUseList.remove(subCharUse);
+        			}
     			}
     		}
     		return (ProductSpecCharUse[])charUseList.toArray(new ProductSpecCharUse[charUseList.size()]);

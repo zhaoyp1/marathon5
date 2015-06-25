@@ -11,6 +11,10 @@ import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.specification.AtomicProductSpecification;
 import com.asiainfo.baas.marathon.specification.CompositeProductSpecification;
+import com.asiainfo.baas.marathon.specification.ProdSpecCharValueUse;
+import com.asiainfo.baas.marathon.specification.ProductSpecCharUse;
+import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
+import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 import com.asiainfo.baas.marathon.specification.ProductSpecification;
 import com.asiainfo.baas.marathon.specification.ProductSpecificationCost;
 import com.asiainfo.baas.marathon.specification.ProductSpecificationVersion;
@@ -286,5 +290,256 @@ public class TestProductSpecification {
         CommonUtils.printProperty(null, null, compositeProductSpecification);
         System.out.println("SubSpecification £º");
         CommonUtils.printProperty(null, compositeProductSpecification.getProdSpec(), null);
+    }
+    
+    @Test
+    public void addCharacteristic(){
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    	try {
+			validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+			validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+			String id = "1112";
+			String name = "ÑÕÉ«" ;
+			String valueType = "Text";
+			String unique = "·ñ";
+			int minCardinality = 1; 
+			int maxCardinality = 3;
+			ProductSpecCharacteristic specChar = new ProductSpecCharacteristic(id,name,valueType,validFor,unique,minCardinality,maxCardinality);
+			
+			String productNumber1 = "AC001";
+	        String name1 = "AppleCare For iPhone";
+	        String brand1 = "AppleCare";
+	        String lifecycleStatus1 = "1";
+			AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+	                brand1, lifecycleStatus1);
+			appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+			CommonUtils.printProperty(null, null, appleCareSpecification);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    @Test
+    public void attachCharacteristicValue(){
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    	try {
+			validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+			validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+			ProductSpecCharacteristic specChar = createChar("1112","ÑÕÉ«","Text","·ñ",1,3);
+			
+			String productNumber1 = "AC001";
+	        String name1 = "AppleCare For iPhone";
+	        String brand1 = "AppleCare";
+	        String lifecycleStatus1 = "1";
+			AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+	                brand1, lifecycleStatus1);
+			appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+			
+			ProductSpecCharacteristicValue charValue = createValue("ºì","",false);
+			
+			appleCareSpecification.attachCharacteristicValue(specChar,charValue,false,validFor);
+			CommonUtils.printProperty(null, null, appleCareSpecification);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    @Test
+    public void specifyDefaultCharacteristicValue(){
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    	try {
+			validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+			validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+			
+			ProductSpecCharacteristic specChar = createChar("1112","ÑÕÉ«","Text","·ñ",1,3);
+			String productNumber1 = "AC001";
+	        String name1 = "AppleCare For iPhone";
+	        String brand1 = "AppleCare";
+	        String lifecycleStatus1 = "1";
+			AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+	                brand1, lifecycleStatus1);
+			appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+			
+			ProductSpecCharacteristicValue charValue = createValue("ºì","",false);
+			appleCareSpecification.attachCharacteristicValue(specChar,charValue,false,validFor);
+			appleCareSpecification.specifyDefaultCharacteristicValue(specChar,charValue);
+			CommonUtils.printProperty(null, null, appleCareSpecification);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+    @Test
+    public void retrieveCharacteristic(){
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    	try {
+			validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+			validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+			
+			ProductSpecCharacteristic specChar = createChar("1112","ÑÕÉ«","Text","·ñ",1,3);
+			String productNumber1 = "AC001";
+	        String name1 = "AppleCare For iPhone";
+	        String brand1 = "AppleCare";
+	        String lifecycleStatus1 = "1";
+			AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+	                brand1, lifecycleStatus1);
+			appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+			
+			ProductSpecCharacteristicValue charValue = createValue("ºì","",false);
+			appleCareSpecification.attachCharacteristicValue(specChar,charValue,false,validFor);
+			appleCareSpecification.specifyDefaultCharacteristicValue(specChar,charValue);
+			ProductSpecCharUse[] charUses = appleCareSpecification.retrieveCharacteristic(new Date());
+			CommonUtils.printProperty(charUses, null, null);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    @Test
+    public void retrieveCharacteristicValue(){
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    	try {
+			validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+			validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+			
+			ProductSpecCharacteristic specChar = createChar("1112","ÑÕÉ«","Text","·ñ",1,3);
+			String productNumber1 = "AC001";
+	        String name1 = "AppleCare For iPhone";
+	        String brand1 = "AppleCare";
+	        String lifecycleStatus1 = "1";
+			AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+	                brand1, lifecycleStatus1);
+			appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+			
+			ProductSpecCharacteristicValue charValue = createValue("ºì","",false);
+			appleCareSpecification.attachCharacteristicValue(specChar,charValue,false,validFor);
+			appleCareSpecification.specifyDefaultCharacteristicValue(specChar,charValue);
+			ProdSpecCharValueUse[] charValueUses = appleCareSpecification.retrieveCharacteristicValue(specChar,new Date());
+			CommonUtils.printProperty(charValueUses, null, null);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    @Test
+    public void getRootCharacteristic(){
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    	try {
+			validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+			validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+			
+			ProductSpecCharacteristic specChar = createChar("1112","ÑÕÉ«","Text","·ñ",1,3);
+			ProductSpecCharacteristic specChar2 = createBundledChar();
+			String productNumber1 = "AC001";
+	        String name1 = "AppleCare For iPhone";
+	        String brand1 = "AppleCare";
+	        String lifecycleStatus1 = "1";
+			AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+	                brand1, lifecycleStatus1);
+			appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+			appleCareSpecification.addCharacteristic(specChar2, false, false, validFor);
+			
+			ProductSpecCharacteristicValue charValue = createValue("ºì","",false);
+			appleCareSpecification.attachCharacteristicValue(specChar,charValue,false,validFor);
+			appleCareSpecification.specifyDefaultCharacteristicValue(specChar,charValue);
+			ProductSpecCharUse[] charUses = appleCareSpecification.getRootCharacteristic();
+			CommonUtils.printProperty(charUses, null, null);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    @Test
+    public void getLeafCharacteristic(){
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    	try {
+			validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+			validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+			ProductSpecCharacteristic specChar = createChar("1112","ÑÕÉ«","Text","·ñ",1,3);
+			ProductSpecCharacteristic specChar2 = createBundledChar();
+			ProductSpecCharacteristic specChar3 = createChar("11231","³¤","Number","Ã×",1,1);
+			
+			String productNumber1 = "AC001";
+	        String name1 = "AppleCare For iPhone";
+	        String brand1 = "AppleCare";
+	        String lifecycleStatus1 = "1";
+			AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+	                brand1, lifecycleStatus1);
+			appleCareSpecification.addCharacteristic(specChar2, false, false, validFor);
+			
+			ProductSpecCharacteristicValue charValue = createValue("ºì","",false);
+			appleCareSpecification.attachCharacteristicValue(specChar,charValue,false,validFor);
+			appleCareSpecification.specifyDefaultCharacteristicValue(specChar,charValue);
+			ProductSpecCharUse[] charUses = appleCareSpecification.getLeafCharacteristic(specChar,new Date());
+			CommonUtils.printProperty(charUses, null, null);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    @Test
+    public void setCardinality(){
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    	try {
+			validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+			validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+			
+			ProductSpecCharacteristic specChar = createChar("1112","ÑÕÉ«","Text","·ñ",1,3);
+			String productNumber1 = "AC001";
+	        String name1 = "AppleCare For iPhone";
+	        String brand1 = "AppleCare";
+	        String lifecycleStatus1 = "1";
+			AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
+	                brand1, lifecycleStatus1);
+			appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+			
+			ProductSpecCharacteristicValue charValue = createValue("ºì","",false);
+			appleCareSpecification.attachCharacteristicValue(specChar,charValue,false,validFor);
+			appleCareSpecification.specifyDefaultCharacteristicValue(specChar,charValue);
+			appleCareSpecification.setCardinality(specChar,2,5);
+			CommonUtils.printProperty(null, null, appleCareSpecification.getProdSpecCharUse().get(0));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+    private ProductSpecCharacteristicValue createValue(String value,String unitOfMeasure,boolean isDefault) throws ParseException{
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+		validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+    	String valueType = "Text";
+		ProductSpecCharacteristicValue charValue = new ProductSpecCharacteristicValue(valueType,isDefault,unitOfMeasure,validFor,value);
+		return charValue;
+    }
+    
+    private ProductSpecCharacteristic createChar(String id,String name,String valueType,String unique,int minCardinality,int maxCardinality) throws ParseException{
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+		validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+		ProductSpecCharacteristic specChar = new ProductSpecCharacteristic(id,name,valueType,validFor,unique,minCardinality,maxCardinality);
+		return specChar;
+    }
+    
+    private ProductSpecCharacteristic createBundledChar() throws ParseException{
+    	TimePeriod validFor = new TimePeriod();
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		validFor.startDateTime = format.parse("2015-06-24 00:00:00");
+		validFor.endDateTime = format.parse("2015-08-24 00:00:00");
+		ProductSpecCharacteristic specChar = createChar("1123","³ß´ç","Text","",1,1);
+		ProductSpecCharacteristic subSpecChar1 = createChar("11231","³¤","Number","Ã×",1,1);
+		ProductSpecCharacteristic subSpecChar2 = createChar("11232","¿í","Number","Ã×",1,1);
+		ProductSpecCharacteristic subSpecChar3 = createChar("11233","¸ß","Number","Ã×",1,1);
+		specChar.addRelatedCharacteristic(subSpecChar1, ProductConst.RELATIONSHIP_TYPE_AGGREGATION, 1, validFor);
+		specChar.addRelatedCharacteristic(subSpecChar2, ProductConst.RELATIONSHIP_TYPE_AGGREGATION, 2, validFor);
+		specChar.addRelatedCharacteristic(subSpecChar3, ProductConst.RELATIONSHIP_TYPE_AGGREGATION, 3, validFor);
+		return specChar;
     }
 }
