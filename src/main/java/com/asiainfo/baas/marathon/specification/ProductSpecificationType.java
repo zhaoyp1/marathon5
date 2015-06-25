@@ -1,6 +1,7 @@
 package com.asiainfo.baas.marathon.specification;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -73,5 +74,14 @@ public abstract class ProductSpecificationType {
             this.prodSpec.remove(prodSpec);
         }
     }
+    
+	/**
+	 * 
+	 * @param time
+	 */
+	public ProductSpecification[] queryProdSpec(Date time) {
+		// TODO - implement ProductSpecificationType.queryProdSpec
+		throw new UnsupportedOperationException();
+	}
 
 }
