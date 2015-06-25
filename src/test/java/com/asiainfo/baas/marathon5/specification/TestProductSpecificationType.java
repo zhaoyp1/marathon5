@@ -1,7 +1,5 @@
 package com.asiainfo.baas.marathon5.specification;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.Test;
@@ -63,19 +61,8 @@ public class TestProductSpecificationType {
         AtomicProductSpecification iPhone6Specification = new AtomicProductSpecification(productNumber1, name1, brand1,
                 lifecycleStatus1);
 
-        TimePeriod validFor5S = new TimePeriod();
-        TimePeriod validFor6 = new TimePeriod();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        try {
-            validFor5S.startDateTime = format.parse("2014-02-03 12:00:00");
-            validFor5S.endDateTime = format.parse("2014-09-21 23:59:59");
-
-            validFor6.startDateTime = format.parse("2015-02-03 12:00:00");
-            validFor6.endDateTime = format.parse("2015-09-21 23:59:59");
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        TimePeriod validFor5S = new TimePeriod("2014-02-03 12:00:00", "2014-09-21 23:59:59");
+        TimePeriod validFor6 = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
 
         iPhone5SSpecification.setValidFor(validFor5S);
         iPhone6Specification.setValidFor(validFor6);

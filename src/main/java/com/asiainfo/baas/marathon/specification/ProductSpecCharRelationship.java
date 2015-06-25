@@ -87,8 +87,11 @@ public class ProductSpecCharRelationship {
      * @param specSeq
      */
     public ProductSpecCharRelationship(ProductSpecCharacteristic srcProdSpecChar, ProductSpecCharacteristic targetProdSpecChar, String relationType, TimePeriod validFor, int specSeq) {
-        // TODO - implement ProductSpecCharRelationship.ProductSpecCharRelationship
-        throw new UnsupportedOperationException();
+    	this.srcProdSpecChar=srcProdSpecChar;
+    	this.targetProdSpecChar=targetProdSpecChar;
+    	this.charRelationshipType=relationType;
+    	this.validFor=validFor;
+    	this.charSpecSeq=specSeq;
     }
 
 }
