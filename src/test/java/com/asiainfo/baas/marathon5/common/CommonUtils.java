@@ -1,6 +1,7 @@
 package com.asiainfo.baas.marathon5.common;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class CommonUtils {
             beanList = Arrays.asList(beanArray);
         }
         if (beanObject != null) {
+        	if(beanList == null)
+        		beanList = new ArrayList<Object>();
             beanList.add(beanObject);
         }
         try {
