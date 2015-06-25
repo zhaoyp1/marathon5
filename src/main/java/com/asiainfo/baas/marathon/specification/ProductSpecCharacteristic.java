@@ -224,7 +224,7 @@ public class ProductSpecCharacteristic {
     	if(this.productSpecCharacteristicValue!=null){
     		productSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
     		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-    			if(DateUtils.isInPeriod(time, validFor)){
+    			if(validFor.isInPeriod(time)){
         			productSpecCharValues.add(charValue);
     			}
 			}
@@ -338,7 +338,7 @@ public class ProductSpecCharacteristic {
     	List<ProductSpecCharacteristic>  relatedCharacteristic=new ArrayList<ProductSpecCharacteristic>();
     	if(prodSpecCharRelationship!=null){
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-        		if(type.equals(productSpecCharRelationship.getCharRelationshipType()) && DateUtils.isInPeriod(time, productSpecCharRelationship.getValidFor())){
+        		if(type.equals(productSpecCharRelationship.getCharRelationshipType()) && productSpecCharRelationship.getValidFor().isInPeriod(time)){
         			relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
         		}
     		}
