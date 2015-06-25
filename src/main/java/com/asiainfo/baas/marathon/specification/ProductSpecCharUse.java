@@ -207,7 +207,7 @@ public class ProductSpecCharUse {
      * 
      * @param defaultValue
      */
-    public void specifyDefaultCharacteristicValue(ProductSpecCharacteristicValue defaultValue) {
+    public void specifyDefaultCharacteristicValueUse(ProductSpecCharacteristicValue defaultValue) {
     	if(prodSpecCharValueUse != null){
     		for(int i = 0 ; i < prodSpecCharValueUse.size() ; i++){
     			ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
@@ -220,7 +220,12 @@ public class ProductSpecCharUse {
     		}
     	}
     }
-
+    
+    public ProdSpecCharValueUse getDefaultCharacteristicValueUse(){
+    	
+		return null;
+    	
+    }
     /**
      * 
      * @param minCardinality

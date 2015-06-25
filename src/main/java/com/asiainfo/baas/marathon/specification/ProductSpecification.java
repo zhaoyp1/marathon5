@@ -549,7 +549,7 @@ public abstract class ProductSpecification {
     		for(int i = 0 ; i < prodSpecCharUse.size() ; i++ ){
     			ProductSpecCharUse charUse = prodSpecCharUse.get(i);
     			if(characteristic.getID().equals(charUse.getProdSpecChar().getID()))
-    				charUse.specifyDefaultCharacteristicValue(defaultValue);
+    				charUse.specifyDefaultCharacteristicValueUse(defaultValue);
     		}
     	}
     }

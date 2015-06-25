@@ -166,7 +166,7 @@ public abstract class ProductOffering {
      */
     public ProductOffering[] queryRelatedOffering(String relationType, Date time) {
     	List<ProductOffering> offering = null;
-    	if(prodOfferingRelationship == null && prodOfferingRelationship.size()>0){
+    	if(prodOfferingRelationship != null && prodOfferingRelationship.size()>0){
     		offering = new ArrayList<ProductOffering>();
     		for(int i = 0 ; i < prodOfferingRelationship.size() ; i++){
     			ProductOfferingRelationship relatedOffering = prodOfferingRelationship.get(i);
