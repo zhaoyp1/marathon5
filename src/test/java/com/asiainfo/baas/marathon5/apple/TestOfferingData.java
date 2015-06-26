@@ -12,6 +12,6 @@ public class TestOfferingData {
 		{"1","13 ”¢¥Á≈‰±∏ Retina œ‘ æ∆¡µƒ MacBook Pro",ProductConst.OFFERING_STATUS_ACTIVE,"2013-01-01 00:00:00"}
 	};
 	public static String[][] offeringCalatlog = {
-		{"1", "MacBook Pro", "MacBook","2013-01-01 00:00:00"}
+		{"1", "MacBook Pro", ProductConst.PRODUCT_CATALOG_TYPE_REGULAR,"2013-01-01 00:00:00"}
 	};
 }
