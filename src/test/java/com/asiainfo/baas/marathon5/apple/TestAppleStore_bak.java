@@ -20,7 +20,7 @@ import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 import com.asiainfo.baas.marathon.specification.ProductSpecification;
 import com.asiainfo.baas.marathon5.common.CommonUtils;
 
-public class TestAppleStore {
+public class TestAppleStore_bak {
 
     private static List<ProductSpecCharacteristic> productSpecChars;
 
