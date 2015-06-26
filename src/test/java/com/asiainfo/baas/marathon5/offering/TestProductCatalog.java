@@ -36,8 +36,8 @@ public class TestProductCatalog {
                 iPhone5SSpecification, offeringDescription);
 
         String catalogId = "1";
-        String catalogName = "手机";
-        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_MOBILEPHONE;
+        String catalogName = "日常";
+        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_REGULAR;
         TimePeriod validForCatalog = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
 
         ProductCatalog catalog = new ProductCatalog(catalogId, catalogName, catalogType, validForCatalog);
@@ -77,8 +77,8 @@ public class TestProductCatalog {
                 iPhone5SSpecification, offeringDescription);
 
         String catalogId = "1";
-        String catalogName = "手机";
-        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_MOBILEPHONE;
+        String catalogName = "日常";
+        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_REGULAR;
         TimePeriod validForCatalog = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
 
         ProductCatalog catalog = new ProductCatalog(catalogId, catalogName, catalogType, validForCatalog);
