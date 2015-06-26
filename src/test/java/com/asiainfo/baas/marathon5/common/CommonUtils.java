@@ -59,7 +59,8 @@ public class CommonUtils {
         // ≥ı ºªØconfig
         JsonConfig config = new JsonConfig();
         config.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd hh:mm:ss"));
-        String[] excudes = { "price","historyVersion","currentVersion","currentVersionString","leafCharacteristic","defaultCharacteristicValueUse","rootCharacteristic","" };
+        String[] excudes = { "price", "historyVersion", "currentVersion", "currentVersionString", "leafCharacteristic",
+                "defaultCharacteristicValueUse", "rootCharacteristic", "subOffering" };
         config.setExcludes(excudes);
         config.setIgnoreDefaultExcludes(false);
         config.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
@@ -82,7 +83,7 @@ public class CommonUtils {
                 }
             }
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
         System.out.println(outText.toString());
     }
