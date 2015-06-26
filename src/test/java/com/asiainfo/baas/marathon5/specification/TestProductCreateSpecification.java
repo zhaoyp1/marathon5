@@ -82,7 +82,7 @@ public class TestProductCreateSpecification {
 				for (int i=0 ; i<TestProductSpecificationDate.one_charData.length ; i++) {
 					ProductSpecCharacteristic prodSpecChar=null;
 						prodSpecChar=this.getCharByCharName(TestProductSpecificationDate.one_charData[i][0].toString());
-						productSpec.addCharacteristic(prodSpecChar, (boolean)TestProductSpecificationDate.one_charData[i][1], (boolean)TestProductSpecificationDate.one_charData[i][2], (TimePeriod)TestProductSpecificationDate.one_charData[i][3]);
+						productSpec.addCharacteristic(prodSpecChar, (boolean)TestProductSpecificationDate.one_charData[i][1], (boolean)TestProductSpecificationDate.one_charData[i][2], (TimePeriod)TestProductSpecificationDate.one_charData[i][3],TestProductSpecificationDate.one_charData[i][6].toString(),TestProductSpecificationDate.one_charData[i][7].toString(),(int)TestProductSpecificationDate.one_charData[i][8],(int)TestProductSpecificationDate.one_charData[i][9],(boolean)TestProductSpecificationDate.one_charData[i][10],TestProductSpecificationDate.one_charData[i][11].toString());
 						if(Boolean.parseBoolean(TestProductSpecificationDate.one_charData[i][4].toString())){
 							ProductSpecCharacteristicValue[] values=this.getCharValue(prodSpecChar,(int[])TestProductSpecificationDate.one_charData[i][5]);
 							if(values!=null){

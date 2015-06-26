@@ -4,140 +4,162 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import net.sf.json.processors.JsDateJsonBeanProcessor;
-import net.sf.json.util.CycleDetectionStrategy;
-
+import org.junit.Before;
 import org.junit.Test;
 
 import com.asiainfo.baas.common.ProductConst;
+import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.BundledProductOffering;
 import com.asiainfo.baas.marathon.offering.ProductOffering;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
 import com.asiainfo.baas.marathon.offering.catalog.ProductCatalog;
+import com.asiainfo.baas.marathon.specification.AtomicProductSpecification;
+import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
+import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
+import com.asiainfo.baas.marathon.specification.ProductSpecification;
 import com.asiainfo.baas.marathon5.common.CommonUtils;
-import com.asiainfo.baas.marathon5.common.JsonDateValueProcessor;
-import com.asiainfo.baas.marathon5.common.JsonPropertyFilter;
 
 public class TestAppleStoreOffering {
+	private static List<ProductSpecCharacteristic> productSpecChars;
+	 @Before
+	    public void createProductSpecChar() {
+	    	productSpecChars = new ArrayList<ProductSpecCharacteristic>();
+		 	for (int i = 0; i < TestProductSpecificationDate.specChar.length; i++) {
+		 		
+		 		ProductSpecCharacteristic productSpecCharProcessor1 = new ProductSpecCharacteristic(TestProductSpecificationDate.specChar[i][0].toString(), TestProductSpecificationDate.specChar[i][1].toString(),
+		 				TestProductSpecificationDate.specChar[i][2].toString(), (TimePeriod)TestProductSpecificationDate.specChar[i][3], TestProductSpecificationDate.specChar[i][4].toString(), (int)TestProductSpecificationDate.specChar[i][5], (int)TestProductSpecificationDate.specChar[i][6]);
+		 		for(int j=0 ;j<TestProductSpecificationDate.specCharValue.length;j++){
+		 			if((int)TestProductSpecificationDate.specCharValue[j][0]==i){
+		 				ProductSpecCharacteristicValue oneprocessorValue1 = new ProductSpecCharacteristicValue(TestProductSpecificationDate.specCharValue[j][1].toString(), (boolean)TestProductSpecificationDate.specCharValue[j][2], TestProductSpecificationDate.specCharValue[j][3].toString(),
+		 		                (TimePeriod)TestProductSpecificationDate.specCharValue[j][4], TestProductSpecificationDate.specCharValue[j][5].toString()); 
+		 				productSpecCharProcessor1.addValue(oneprocessorValue1);
+		 			}
+		 		}
+		 		productSpecChars.add(productSpecCharProcessor1);
+			}
+
+	    }
 
     /**
      * 创建三个offering，一个复合offering，两个原子offering
+     * @throws Exception 
      */
     @Test
-    public void createOffering() {
+    public void createOffering() throws Exception {
+    	 // 创建规格
+        ProductSpecification productSpecification1 = createProductSpecification(TestProductSpecificationDate.specParameter,TestProductSpecificationDate.one_charData);
+        ProductSpecification productSpecification2 = createProductSpecification(TestProductSpecificationDate.specParameter2,TestProductSpecificationDate.two_charData);
+        
+    	// 创建SimpleOffering
+        ProductOffering offering1 = this.createSimpleProductOffering(productSpecification1,TestOfferingData.offeringData[0]);
+        // 创建SimpleOffering
+        ProductOffering offering2 = this.createSimpleProductOffering(productSpecification2,TestOfferingData.offeringData[1]);
+        // 创建BundledOffering
+        BundledProductOffering bundledOffering = this.createBundledProductOffering(TestOfferingData.bundledOfferingData[0]);
+        //给BundledOffering添加SubOffering
+        bundledOffering.addSubOffering(offering1);
+        bundledOffering.addSubOffering(offering2);
 
-        List<ProductOffering> offering = this.createProductOffering();
-        CommonUtils.printPropertyToJson(null, offering, null);
+        CommonUtils.printPropertyToJson(null, null, bundledOffering);
 
     }
 
     @Test
     public void createCatalog() {
 
-        ProductCatalog macBookProproductCatalog = this.createProductCatalog();
+        ProductCatalog macBookProproductCatalog = this.createProductCatalog(TestOfferingData.offeringCalatlog[0]);
         CommonUtils.printPropertyToJson(null, null, macBookProproductCatalog);
 
     }
 
-    @Test
-    public void publishOffering() {
+    public ProductCatalog createProductCatalog(String[] catalogData) {
+        TimePeriod validFor = new TimePeriod(catalogData[3], null);
+        ProductCatalog macBookProproductCatalog = new ProductCatalog(catalogData[0], catalogData[1], catalogData[2], validFor);
+        return macBookProproductCatalog;
+    }
 
-        ProductCatalog macBookProproductCatalog = this.createProductCatalog();
-        List<ProductOffering> offerings = this.createProductOffering();
-        if (offerings != null) {
-            for (ProductOffering productOffering : offerings) {
-                TimePeriod validFor = new TimePeriod("2015-01-01 00:00:00", "2015-07-01 00:00:00");
-                macBookProproductCatalog.publishOffering(productOffering, validFor);
+    public SimpleProductOffering createSimpleProductOffering(ProductSpecification productSpecification,String[] offeringData) {
+        TimePeriod validFor = new TimePeriod(offeringData[3], null);
+        SimpleProductOffering simpleProductOffering = new SimpleProductOffering(offeringData[0], offeringData[1],
+                validFor, offeringData[2], productSpecification, offeringData[4]);
+        return simpleProductOffering;
+    }
+    
+    public BundledProductOffering createBundledProductOffering(String[] bundledofferingData) {
+        TimePeriod validFor = new TimePeriod(bundledofferingData[3], null);
+        BundledProductOffering bundledProductOffering = new BundledProductOffering(bundledofferingData[0], bundledofferingData[1],
+                validFor, bundledofferingData[2],"");
+        return bundledProductOffering;
+    }
+    
+    /**
+     * 创建两个规格
+     * 
+     * @return
+     * @throws Exception
+     */
+    public ProductSpecification createProductSpecification(Object[] specParameter,Object[][] charData ) throws Exception {
+
+    	if(specParameter!=null){
+    		ProductSpecification productSpec=new AtomicProductSpecification(TestProductSpecificationDate.specParameter[0].toString(),TestProductSpecificationDate.specParameter[1].toString(),TestProductSpecificationDate.specParameter[2].toString(),TestProductSpecificationDate.specParameter[3].toString());
+			for (int i=0 ; i<charData.length ; i++) {
+				ProductSpecCharacteristic prodSpecChar=null;
+					prodSpecChar=this.getCharByCharName(charData[i][0].toString());
+					
+					productSpec.addCharacteristic(prodSpecChar, (boolean)charData[i][1], (boolean)charData[i][2], (TimePeriod)charData[i][3],charData[i][6].toString(),charData[i][7].toString(),(int)charData[i][8],(int)charData[i][9],(boolean)charData[i][10],charData[i][11].toString());
+					if(Boolean.parseBoolean(charData[i][4].toString())){
+						ProductSpecCharacteristicValue[] values=this.getCharValue(prodSpecChar,(int[])charData[i][5]);
+						if(values!=null){
+							for (ProductSpecCharacteristicValue productSpecCharacteristicValue : values) {
+								productSpec.attachCharacteristicValue(prodSpecChar,productSpecCharacteristicValue, true, (TimePeriod)TestProductSpecificationDate.specParameter[4]);
+							}
+						}	
+					} 
+			 }
+			
+			//添加成本
+			Money cost=new Money(TestProductSpecificationDate.specParameter[8].toString(),Long.parseLong(TestProductSpecificationDate.specParameter[9].toString()));
+			productSpec.addCost(cost, (TimePeriod)TestProductSpecificationDate.specParameter[4]);
+			productSpec.setVersion(TestProductSpecificationDate.specParameter[6].toString(), TestProductSpecificationDate.specParameter[7].toString(),new Date(), (TimePeriod)TestProductSpecificationDate.specParameter[4]);
+			
+			
+			 				
+        return productSpec;
+    }
+    	return null;
+   }
+    
+    public ProductSpecCharacteristic getCharByCharName(String name) {
+        ProductSpecCharacteristic prodSpecChar = null;
+        for (int i = 0; i < productSpecChars.size(); i++) {
+            prodSpecChar = productSpecChars.get(i);
+            if (name.equals(prodSpecChar.getName())) {
+                return prodSpecChar;
             }
         }
-        CommonUtils.printPropertyToJson(null, null, macBookProproductCatalog);
-    }
-
-    public ProductCatalog createProductCatalog() {
-        StringBuilder description1 = new StringBuilder();
-        description1.append("2.7GHz 双核 Intel Core i5 处理器");
-        description1.append("\n");
-        description1.append("Turbo Boost 高达 3.1GHz");
-        description1.append("\n");
-        description1.append("8GB 1866MHz LPDDR3 内存");
-        description1.append("\n");
-        description1.append("基于 PCIe 的 128GB 闪存1");
-        description1.append("\n");
-        description1.append("Intel Iris Graphics 6100");
-        description1.append("\n");
-        description1.append("内置电池 (10 小时)2");
-        description1.append("\n");
-        description1.append("Force Touch 触控板");
-        description1.append("\n");
-
-        TimePeriod validFor1 = new TimePeriod("2013-01-01 00:00:00", null);
-        ProductCatalog macBookProproductCatalog = new ProductCatalog("1", "MacBook Pro", "MacBook", validFor1);
-        return macBookProproductCatalog;
+        return null;
 
     }
 
-    public List<ProductOffering> createProductOffering() {
-        List<ProductOffering> productOfferings = new ArrayList<ProductOffering>();
-        StringBuilder description1 = new StringBuilder();
-        description1.append("2.7GHz 双核 Intel Core i5 处理器");
-        description1.append("\n");
-        description1.append("Turbo Boost 高达 3.1GHz");
-        description1.append("\n");
-        description1.append("8GB 1866MHz LPDDR3 内存");
-        description1.append("\n");
-        description1.append("基于 PCIe 的 128GB 闪存1");
-        description1.append("\n");
-        description1.append("Intel Iris Graphics 6100");
-        description1.append("\n");
-        description1.append("内置电池 (10 小时)2");
-        description1.append("\n");
-        description1.append("Force Touch 触控板");
-        description1.append("\n");
+    public ProductSpecCharacteristicValue[] getCharValue(ProductSpecCharacteristic characteristic, int[] ids) {
+        if (ids != null) {
+            List<ProductSpecCharacteristicValue> productValues = characteristic.getProductSpecCharacteristicValue();
+            List<ProductSpecCharacteristicValue> prodSpecChars = new ArrayList<ProductSpecCharacteristicValue>();
 
-        TimePeriod validFor1 = new TimePeriod("2013-01-01 00:00:00", null);
-        SimpleProductOffering simpleProductOffering1 = new SimpleProductOffering("11", "2.7GHz 处理器\n128 GB 存储容量",
-                validFor1, ProductConst.OFFERING_STATUS_ACTIVE, null, description1.toString());
+            for (int id : ids) {
+                for (int i = 0; i < productValues.size(); i++) {
+                    if (id == i) {
+                        prodSpecChars.add(productValues.get(i));
+                        break;
+                    }
+                }
+            }
+            return (ProductSpecCharacteristicValue[]) prodSpecChars
+                    .toArray(new ProductSpecCharacteristicValue[prodSpecChars.size()]);
+        }
+        return null;
 
-        StringBuilder description2 = new StringBuilder();
-        description2.append("2.7GHz 双核 Intel Core i5 处理器");
-        description2.append("\n");
-        description2.append("Turbo Boost 高达 3.1GHz");
-        description2.append("\n");
-        description2.append("8GB 1866MHz LPDDR3 内存");
-        description2.append("\n");
-        description2.append("基于 PCIe 的 128GB 闪存1");
-        description2.append("\n");
-        description2.append("Intel Iris Graphics 6100");
-        description2.append("\n");
-        description2.append("内置电池 (10 小时)2");
-        description2.append("\n");
-        description2.append("Force Touch 触控板");
-        description2.append("\n");
-
-        TimePeriod validFor2 = new TimePeriod("2013-01-01 00:00:00", null);
-        SimpleProductOffering simpleProductOffering2 = new SimpleProductOffering("12", "2.7GHz 处理器\n256 GB 存储容量",
-                validFor2, ProductConst.OFFERING_STATUS_ACTIVE, null, description2.toString());
-
-        TimePeriod validFor4 = new TimePeriod("2013-01-01 00:00:00", null);
-        BundledProductOffering bundledProductOffering = new BundledProductOffering("1",
-                "13 英寸配备 Retina 显示屏的 MacBook Pro", validFor4, ProductConst.OFFERING_STATUS_ACTIVE, "");
-        bundledProductOffering.addSubOffering(simpleProductOffering1);
-        bundledProductOffering.addSubOffering(simpleProductOffering2);
-
-        // 两个原子Offering是互斥关系
-        simpleProductOffering1.addRelatedOffering(simpleProductOffering2, ProductConst.RELATIONSHIP_TYPE_EXCLUSIVITY,
-                validFor1);
-        simpleProductOffering2.addRelatedOffering(simpleProductOffering1, ProductConst.RELATIONSHIP_TYPE_EXCLUSIVITY,
-                validFor2);
-
-        productOfferings.add(simpleProductOffering1);
-        productOfferings.add(simpleProductOffering2);
-        productOfferings.add(bundledProductOffering);
-
-        return productOfferings;
     }
 
 }

@@ -64,11 +64,6 @@ public class TestApple {
 	        bundledOffering.addSubOffering(offering1);
 	        bundledOffering.addSubOffering(offering2);
 	        
-	        // 两个原子Offering是互斥关系
-	        TimePeriod validFor = new TimePeriod("2015-01-01 00:00:00", "2015-07-01 00:00:00");
-	        offering1.addRelatedOffering(offering2, ProductConst.RELATIONSHIP_TYPE_EXCLUSIVITY,
-	                validFor);
-	        
 	        // 创建catalog
 	        ProductCatalog catalog = this.createProductCatalog(TestOfferingData.offeringCalatlog[0]);
 	        
@@ -97,7 +92,8 @@ public class TestApple {
 				for (int i=0 ; i<charData.length ; i++) {
 					ProductSpecCharacteristic prodSpecChar=null;
 						prodSpecChar=this.getCharByCharName(charData[i][0].toString());
-						productSpec.addCharacteristic(prodSpecChar, (boolean)charData[i][1], (boolean)charData[i][2], (TimePeriod)charData[i][3]);
+						
+						productSpec.addCharacteristic(prodSpecChar, (boolean)charData[i][1], (boolean)charData[i][2], (TimePeriod)charData[i][3],charData[i][6].toString(),charData[i][7].toString(),(int)charData[i][8],(int)charData[i][9],(boolean)charData[i][10],charData[i][11].toString());
 						if(Boolean.parseBoolean(charData[i][4].toString())){
 							ProductSpecCharacteristicValue[] values=this.getCharValue(prodSpecChar,(int[])charData[i][5]);
 							if(values!=null){
