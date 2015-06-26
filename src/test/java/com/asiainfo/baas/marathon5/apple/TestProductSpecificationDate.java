@@ -15,6 +15,15 @@ public class TestProductSpecificationDate {
 	public static Object[] specParameter = new Object[]{"mac-13","13-inch MacBook Pro","apple","in_active",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),null,"1.0.0","","min",109};
 	
 	public static Object[] specParameter2 = new Object[]{"11","2.7GHz 处理器 256 GB 存储容量","apple","in_active",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),null,"2.0.0","","min",109};
-
+	public static Object [][] specChar= {
+			        {"1","processor(处理器)","number",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),"unique",1,1},		
+					{"2","memory","text",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),"",1,1}
+				};
+	public static Object [][] specCharValue= {
+			{0,"number",true,"GB",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),"8"},
+			{0,"number",false,"GB",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),"16"},
+			{1,"number",true,"GHz",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),"2.9"},
+			{1,"number",false,"GHz",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),"2.7"},
+	};
 
 }

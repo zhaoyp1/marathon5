@@ -25,33 +25,22 @@ public class TestProductCreateSpecification {
 	public  List<ProductSpecCharacteristic> productSpecChars;
 	@Before
 	public void createProductSpecChar(){
-		 TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59");
-	        // 处理器
-	        ProductSpecCharacteristic productSpecCharProcessor = new ProductSpecCharacteristic("1", "processor(处理器)",
-	                "number", validFor, "unique", 1, 1);
-	        ProductSpecCharacteristicValue oneprocessorValue = new ProductSpecCharacteristicValue("number", true, "GHz",
-	                validFor, "2.9");
-	        ProductSpecCharacteristicValue twoprocessorValue = new ProductSpecCharacteristicValue("number", false, "GHz",
-	                validFor, "2.7");
-	        productSpecCharProcessor.addValue(oneprocessorValue);
-	        productSpecCharProcessor.addValue(twoprocessorValue);
-
-	        // 内存
-	        ProductSpecCharacteristic productSpecCharMemory = new ProductSpecCharacteristic("2", "memory", "text",
-	                validFor, "", 1, 1);
-	        ProductSpecCharacteristicValue memoryValue1 = new ProductSpecCharacteristicValue("text", false, "", validFor,
-	                "8GB 1866MHz LPDDR3 SDRAM");
-	        ProductSpecCharacteristicValue memoryValue2 = new ProductSpecCharacteristicValue("text", false, "", validFor,
-	                "16GB 1866MHz LPDDR3 SDRAM");
-	        productSpecCharMemory.addValue(memoryValue1);
-	        productSpecCharMemory.addValue(memoryValue2);
-
-	        productSpecChars = new ArrayList<ProductSpecCharacteristic>();
-	        productSpecChars.add(productSpecCharProcessor);
-	        productSpecChars.add(productSpecCharMemory);
-		//specParameter=new Object[]{"mac-13","13-inch MacBook Pro","apple","in_active",validFor,null,"1.0.0","","min",109};
-		
+		 	productSpecChars = new ArrayList<ProductSpecCharacteristic>();
+		 	for (int i = 0; i < TestProductSpecificationDate.specChar.length; i++) {
+		 		
+		 		ProductSpecCharacteristic productSpecCharProcessor1 = new ProductSpecCharacteristic(TestProductSpecificationDate.specChar[i][0].toString(), TestProductSpecificationDate.specChar[i][1].toString(),
+		 				TestProductSpecificationDate.specChar[i][2].toString(), (TimePeriod)TestProductSpecificationDate.specChar[i][3], TestProductSpecificationDate.specChar[i][4].toString(), (int)TestProductSpecificationDate.specChar[i][5], (int)TestProductSpecificationDate.specChar[i][6]);
+		 		for(int j=0 ;j<TestProductSpecificationDate.specCharValue.length;j++){
+		 			if((int)TestProductSpecificationDate.specCharValue[j][0]==i){
+		 				ProductSpecCharacteristicValue oneprocessorValue1 = new ProductSpecCharacteristicValue(TestProductSpecificationDate.specCharValue[j][1].toString(), (boolean)TestProductSpecificationDate.specCharValue[j][2], TestProductSpecificationDate.specCharValue[j][3].toString(),
+		 		                (TimePeriod)TestProductSpecificationDate.specCharValue[j][4], TestProductSpecificationDate.specCharValue[j][5].toString()); 
+		 				productSpecCharProcessor1.addValue(oneprocessorValue1);
+		 			}
+		 		}
+		 		productSpecChars.add(productSpecCharProcessor1);
+			}
 	}
+	
 	public ProductSpecCharacteristic getCharByCharName(String name){
 		ProductSpecCharacteristic prodSpecChar=null;
 		for (int i = 0; i < productSpecChars.size(); i++) {
