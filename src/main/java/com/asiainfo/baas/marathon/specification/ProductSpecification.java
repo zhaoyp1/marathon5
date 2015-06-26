@@ -629,7 +629,8 @@ public abstract class ProductSpecification {
                 if (prodSpecChar != null) {
                     for (ProductSpecCharacteristic specChar : prodSpecChar) {
                         ProductSpecCharUse subCharUse = this.getProdSpecCharUse(specChar);
-                        charUseList.remove(subCharUse);
+                        if(subCharUse != null)
+                        	charUseList.remove(subCharUse);
                     }
                 }
             }
@@ -646,7 +647,7 @@ public abstract class ProductSpecification {
     public ProductSpecCharUse[] getLeafCharacteristic(ProductSpecCharacteristic characteristic, Date time) {
         ProductSpecCharUse[] charUses = null;
         ProductSpecCharacteristic[] prodSpecChar = characteristic
-                .getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION);
+                .getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION,time);
         if (prodSpecChar != null) {
             charUses = new ProductSpecCharUse[prodSpecChar.length];
             for (int i = 0; i < prodSpecChar.length; i++) {

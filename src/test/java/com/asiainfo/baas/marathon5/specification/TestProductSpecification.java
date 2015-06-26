@@ -435,7 +435,7 @@ public class TestProductSpecification {
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
             appleCareSpecification.specifyDefaultCharacteristicValue(specChar, charValue);
-            ProductSpecCharUse[] charUses = appleCareSpecification.getLeafCharacteristic(specChar3, new Date());
+            ProductSpecCharUse[] charUses = appleCareSpecification.getLeafCharacteristic(specChar2, new Date());
             CommonUtils.printProperty(charUses, null, null);
         } catch (ParseException e) {
             e.printStackTrace();
