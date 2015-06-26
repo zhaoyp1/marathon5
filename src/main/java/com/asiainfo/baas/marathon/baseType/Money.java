@@ -12,14 +12,27 @@ public class Money {
 	public Money(){
 		
 	}
+	
 
     /**
      * Currency(Notes:refer to [ISO 4217]) or non-currency terms, such as loyalty points.
      */
-    public String units;
+    public  String units;
     /**
      * A positive floating point number.
      */
-    public long amount;
+    public   long amount;
+	public String getUnits() {
+		return units;
+	}
+	public void setUnits(String units) {
+		this.units = units;
+	}
+	public long getAmount() {
+		return amount;
+	}
+	public void setAmount(long amount) {
+		this.amount = amount;
+	}
 
 }
