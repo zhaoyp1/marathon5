@@ -25,10 +25,6 @@ public class TestApple {
 
 	    private static List<ProductSpecCharacteristic> productSpecChars;
 	    
-	    private Object[] specParameter1;
-	    
-	    private Object[]specParameter2;
-	    
 
 	    @Before
 	    public void createProductSpecChar() {
@@ -56,42 +52,6 @@ public class TestApple {
 	        productSpecChars = new ArrayList<ProductSpecCharacteristic>();
 	        productSpecChars.add(productSpecCharProcessor);
 	        productSpecChars.add(productSpecCharMemory);
-	        
-	        
-	        ProdSpecCharParameter[] charParameter=new ProdSpecCharParameter[2];
-			charParameter[0]=new ProdSpecCharParameter();
-			charParameter[0].setName("processor(处理器)");
-			charParameter[0].setCanBeOveridden(true);
-			charParameter[0].setPackage(true);
-			charParameter[0].setContainValue(true);
-			charParameter[0].setValidFor(validFor);
-			charParameter[0].setValueIndex(new int[]{0});
-			
-			charParameter[1]=new ProdSpecCharParameter();
-			charParameter[1].setName("memory");
-			charParameter[1].setCanBeOveridden(true);
-			charParameter[1].setPackage(true);
-			charParameter[1].setContainValue(true);
-			charParameter[1].setValidFor(validFor);
-			charParameter[1].setValueIndex(new int[]{0});
-			specParameter1=new Object[]{"11","2.7GHz 处理器 128 GB 存储容量","apple","in_active",validFor,charParameter,"1.0.0","","min",109};
-			ProdSpecCharParameter[] charParameter2=new ProdSpecCharParameter[2];
-			charParameter2[0]=new ProdSpecCharParameter();
-			charParameter2[0].setName("processor(处理器)");
-			charParameter2[0].setCanBeOveridden(true);
-			charParameter2[0].setPackage(true);
-			charParameter2[0].setContainValue(true);
-			charParameter2[0].setValidFor(validFor);
-			charParameter2[0].setValueIndex(new int[]{1});
-			
-			charParameter2[1]=new ProdSpecCharParameter();
-			charParameter2[1].setName("memory");
-			charParameter2[1].setCanBeOveridden(true);
-			charParameter2[1].setPackage(true);
-			charParameter2[1].setContainValue(true);
-			charParameter2[1].setValidFor(validFor);
-			charParameter2[1].setValueIndex(new int[]{1});
-			specParameter2=new Object[]{"11","2.7GHz 处理器 256 GB 存储容量","apple","in_active",validFor,charParameter2,"2.0.0","","min",109};
 
 	    }
 
@@ -99,8 +59,8 @@ public class TestApple {
 	    public void appleStore() throws Exception {
 
 	        // 创建规格
-	        ProductSpecification productSpecification1 = createProductSpecification(specParameter1);
-	        ProductSpecification productSpecification2 = createProductSpecification(specParameter2);
+	        ProductSpecification productSpecification1 = createProductSpecification(TestProductSpecificationDate.specParameter,TestProductSpecificationDate.one_charData);
+	        ProductSpecification productSpecification2 = createProductSpecification(TestProductSpecificationDate.specParameter2,TestProductSpecificationDate.two_charData);
 
 	        // 创建SimpleOffering
 	        ProductOffering offering1 = this.createSimpleProductOffering(productSpecification1,TestOfferingData.offeringData[0]);
@@ -140,30 +100,31 @@ public class TestApple {
 	     * @return
 	     * @throws Exception
 	     */
-	    public ProductSpecification createProductSpecification(Object[] specParameter ) throws Exception {
+	    public ProductSpecification createProductSpecification(Object[] specParameter,Object[][] charData ) throws Exception {
 
 	    	if(specParameter!=null){
-				ProductSpecification productSpec=new AtomicProductSpecification(specParameter[0].toString(),specParameter[1].toString(),specParameter[2].toString(),specParameter[3].toString());
-				ProdSpecCharParameter[]	charParameter=(ProdSpecCharParameter[])specParameter[5];
-				for (ProdSpecCharParameter prodCharParameter : charParameter) {
+	    		ProductSpecification productSpec=new AtomicProductSpecification(TestProductSpecificationDate.specParameter[0].toString(),TestProductSpecificationDate.specParameter[1].toString(),TestProductSpecificationDate.specParameter[2].toString(),TestProductSpecificationDate.specParameter[3].toString());
+				for (int i=0 ; i<charData.length ; i++) {
 					ProductSpecCharacteristic prodSpecChar=null;
-						prodSpecChar=this.getCharByCharName(prodCharParameter.getName());
-						productSpec.addCharacteristic(prodSpecChar, prodCharParameter.isCanBeOveridden(), prodCharParameter.isPackage(), prodCharParameter.getValidFor());
-						if(prodCharParameter.isContainValue()){
-							ProductSpecCharacteristicValue[] values=this.getCharValue(prodSpecChar,prodCharParameter.getValueIndex());
+						prodSpecChar=this.getCharByCharName(charData[i][0].toString());
+						productSpec.addCharacteristic(prodSpecChar, (boolean)charData[i][1], (boolean)charData[i][2], (TimePeriod)charData[i][3]);
+						if(Boolean.parseBoolean(charData[i][4].toString())){
+							ProductSpecCharacteristicValue[] values=this.getCharValue(prodSpecChar,(int[])charData[i][5]);
 							if(values!=null){
 								for (ProductSpecCharacteristicValue productSpecCharacteristicValue : values) {
-									productSpec.attachCharacteristicValue(prodSpecChar,productSpecCharacteristicValue, true, (TimePeriod)specParameter[4]);
+									productSpec.attachCharacteristicValue(prodSpecChar,productSpecCharacteristicValue, true, (TimePeriod)TestProductSpecificationDate.specParameter[4]);
 								}
 							}	
 						} 
 				 }
 				
 				//添加成本
-				Money cost=new Money(specParameter[8].toString(),Long.parseLong(specParameter[9].toString()));
-				productSpec.addCost(cost, (TimePeriod)specParameter[4]);
-				productSpec.setVersion(specParameter[6].toString(), specParameter[7].toString(),new Date(), (TimePeriod)specParameter[4]);
+				Money cost=new Money(TestProductSpecificationDate.specParameter[8].toString(),Long.parseLong(TestProductSpecificationDate.specParameter[9].toString()));
+				productSpec.addCost(cost, (TimePeriod)TestProductSpecificationDate.specParameter[4]);
+				productSpec.setVersion(TestProductSpecificationDate.specParameter[6].toString(), TestProductSpecificationDate.specParameter[7].toString(),new Date(), (TimePeriod)TestProductSpecificationDate.specParameter[4]);
 				
+				
+				 				
 	        return productSpec;
 	    }
 	    	return null;
