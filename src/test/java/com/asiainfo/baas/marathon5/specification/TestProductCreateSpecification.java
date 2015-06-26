@@ -16,6 +16,7 @@ import com.asiainfo.baas.marathon.specification.ProductSpecCharUse;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 import com.asiainfo.baas.marathon.specification.ProductSpecification;
+import com.asiainfo.baas.marathon5.common.CommonUtils;
 import com.asiainfo.baas.marathon5.common.ProdSpecCharParameter;
 
 public class TestProductCreateSpecification {
@@ -23,6 +24,7 @@ public class TestProductCreateSpecification {
 	public  List<ProductSpecCharacteristic> productSpecChars;
 	
 	public Object[] specParameter;
+	
 	@Before
 	public void createProductSpecChar(){
 		TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
@@ -132,6 +134,8 @@ public class TestProductCreateSpecification {
 				Money cost=new Money(specParameter[8].toString(),Long.parseLong(specParameter[9].toString()));
 				productSpec.addCost(cost, (TimePeriod)specParameter[4]);
 				productSpec.setVersion(specParameter[6].toString(), specParameter[7].toString(),new Date(), (TimePeriod)specParameter[4]);
+				
+				CommonUtils.printPropertyToJson(null,null,productSpec);
 		} 
 		
 	}
