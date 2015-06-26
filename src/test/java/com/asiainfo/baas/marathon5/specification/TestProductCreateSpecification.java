@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.sf.json.JSONObject;
-
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,10 +16,13 @@ import com.asiainfo.baas.marathon.specification.ProductSpecCharUse;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 import com.asiainfo.baas.marathon.specification.ProductSpecification;
+import com.asiainfo.baas.marathon5.common.ProdSpecCharParameter;
 
 public class TestProductCreateSpecification {
 
-	static List<ProductSpecCharacteristic> productSpecChars;
+	public  List<ProductSpecCharacteristic> productSpecChars;
+	
+	public Object[] specParameter;
 	@Before
 	public void createProductSpecChar(){
 		TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
@@ -54,57 +56,25 @@ public class TestProductCreateSpecification {
 		productSpecChars.add(productSpecCharDepth);
 		productSpecChars.add(productSpecCharWeight);
 		productSpecChars.add(productSpecCharProcessor);
-	}
-	
-	@Test
-	public void createProductSpecification() throws Exception{
-		
-		TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
-		ProductSpecification productSpec=new AtomicProductSpecification("mac-13","13-inch MacBook Pro","apple","in_active");
-		ProductSpecCharacteristic prodSpecChar=this.getCharByCharName("size and weight");
-		productSpec.addCharacteristic(prodSpecChar, true, true, validFor);
-		prodSpecChar=this.getCharByCharName("Height");
-		productSpec.addCharacteristic(prodSpecChar, true, true, validFor);
-		ProductSpecCharacteristicValue[] values=this.getCharValue(prodSpecChar,new int[]{0});
-		if(values!=null){
-			for (ProductSpecCharacteristicValue productSpecCharacteristicValue : values) {
-				productSpec.attachCharacteristicValue(prodSpecChar,productSpecCharacteristicValue, true, validFor);
-			}
-		}
-		//添加成本
-		Money cost=new Money("min",109);
-		productSpec.addCost(cost, validFor);
-		productSpec.setVersion("1.0.0", "",new Date(), validFor);
-		 
-//		System.out.println(JSONObject.fromObject(productSpec).toString());
-		System.out.print("规格信息:");
-		System.out.println("name:"+productSpec.getName()+"  ,   brand:"+productSpec.getProductNumber()+""+productSpec.getBrand());
-		
-		List<ProductSpecCharUse> productSpecCharUses=productSpec.getProdSpecCharUse();
-		for (ProductSpecCharUse productSpecCharUse : productSpecCharUses) {
-			ProductSpecCharacteristic useprodSpecChar=productSpecCharUse.getProdSpecChar();
-			System.out.println("特征：");
-			System.out.println("name:"+useprodSpecChar.getName()+"  ,   valueType:"+useprodSpecChar.getValueType());
-			List<ProdSpecCharValueUse> valueUses=productSpecCharUse.getProdSpecCharValueUse();
-			if(valueUses!=null){
-				for (ProdSpecCharValueUse prodSpecCharValueUse : valueUses) {
-					ProductSpecCharacteristicValue charValue=prodSpecCharValueUse.getProdSpecCharValue();
-					System.out.println("特征值：");	
-
-					if(charValue.getValue()!=null){
-						System.out.println(" value:"+charValue.getValueFrom());	
-
-					}else{
-						System.out.println(" valueFrom:"+charValue.getValueFrom()+" ,   valueTo: "+charValue.getValueTo());	
-					}
-					
-				}
-			}
-			
-		}
+		//{productNumber,name,brand,lifecyleStatus,validFor,parameters,version,versionDescription,cost,amount}
+		ProdSpecCharParameter[] charParameter=new ProdSpecCharParameter[2];
+		charParameter[0]=new ProdSpecCharParameter();
+		charParameter[0].setName("size and weight");
+		charParameter[0].setCanBeOveridden(true);
+		charParameter[0].setPackage(true);
+		charParameter[0].setContainValue(false);
+		charParameter[0].setValidFor(validFor);
+		charParameter[0].setValueIndex(null);
+		charParameter[1]=new ProdSpecCharParameter();
+		charParameter[1].setName("Height");
+		charParameter[1].setCanBeOveridden(true);
+		charParameter[1].setPackage(true);
+		charParameter[1].setContainValue(true);
+		charParameter[1].setValidFor(validFor);
+		charParameter[1].setValueIndex(new int[]{0});
+		specParameter=new Object[]{"mac-13","13-inch MacBook Pro","apple","in_active",validFor,charParameter,"1.0.0","","min",109};
 		
 	}
-	
 	public ProductSpecCharacteristic getCharByCharName(String name){
 		ProductSpecCharacteristic prodSpecChar=null;
 		for (int i = 0; i < productSpecChars.size(); i++) {
@@ -137,4 +107,37 @@ public class TestProductCreateSpecification {
 		
 	}
 	
+	
+	//[] {productNumber,name,brand,lifecyleStatus,validFor,parameters,version,versionDescription,cost,amount}
+	@Test
+	public void createProductSpecificationTest() throws Exception{
+		if(specParameter!=null){
+				ProductSpecification productSpec=new AtomicProductSpecification(specParameter[0].toString(),specParameter[1].toString(),specParameter[2].toString(),specParameter[3].toString());
+				ProdSpecCharParameter[]	charParameter=(ProdSpecCharParameter[])specParameter[5];
+				for (ProdSpecCharParameter prodCharParameter : charParameter) {
+					ProductSpecCharacteristic prodSpecChar=null;
+						prodSpecChar=this.getCharByCharName(prodCharParameter.getName());
+						productSpec.addCharacteristic(prodSpecChar, prodCharParameter.isCanBeOveridden(), prodCharParameter.isPackage(), prodCharParameter.getValidFor());
+						if(prodCharParameter.isContainValue()){
+							ProductSpecCharacteristicValue[] values=this.getCharValue(prodSpecChar,prodCharParameter.getValueIndex());
+							if(values!=null){
+								for (ProductSpecCharacteristicValue productSpecCharacteristicValue : values) {
+									productSpec.attachCharacteristicValue(prodSpecChar,productSpecCharacteristicValue, true, (TimePeriod)specParameter[4]);
+								}
+							}	
+						} 
+				 }
+				
+				//添加成本
+				Money cost=new Money(specParameter[8].toString(),Long.parseLong(specParameter[9].toString()));
+				productSpec.addCost(cost, (TimePeriod)specParameter[4]);
+				productSpec.setVersion(specParameter[6].toString(), specParameter[7].toString(),new Date(), (TimePeriod)specParameter[4]);
+		} 
+		
+	}
+	@After
+	public void printSpecInfo(){
+		
+	}
 }
+
