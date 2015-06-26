@@ -39,6 +39,24 @@ public class TestProductCreateSpecification {
 		 		}
 		 		productSpecChars.add(productSpecCharProcessor1);
 			}
+		 	
+		 	for(int i=0 ; i<TestProductSpecificationDate.relateSpecChar.length ; i++){
+		 		String srcId=TestProductSpecificationDate.relateSpecChar[i][0].toString();
+		 		String targetId=TestProductSpecificationDate.relateSpecChar[i][1].toString();
+		 		ProductSpecCharacteristic srcChar= this.getProdSpecCharById(srcId);
+		 		ProductSpecCharacteristic targetChar = this.getProdSpecCharById(targetId);
+		 		srcChar.addRelatedCharacteristic(targetChar, TestProductSpecificationDate.relateSpecChar[i][2].toString(), Integer.parseInt( TestProductSpecificationDate.relateSpecChar[i][3].toString()), (TimePeriod)TestProductSpecificationDate.relateSpecChar[i][4]);
+		 	}
+	}
+	public ProductSpecCharacteristic getProdSpecCharById(String id){
+		if(productSpecChars!=null){
+			for (ProductSpecCharacteristic productSpecCharacteristic : productSpecChars) {
+				if(id.equals(productSpecCharacteristic.getID())){
+					return productSpecCharacteristic;
+				}
+			}
+		}
+		return null;
 	}
 	
 	public ProductSpecCharacteristic getCharByCharName(String name){

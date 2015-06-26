@@ -288,7 +288,7 @@ public class ProductSpecCharacteristic {
     	List<ProductSpecCharacteristic>  leafCharacteristic=new ArrayList<ProductSpecCharacteristic>();
     	if(prodSpecCharRelationship!=null){
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-        		if(ProductConst.RELATIONSHIP_TYPE_DEPENDENCY.equals(productSpecCharRelationship.getCharRelationshipType())){
+        		if(ProductConst.RELATIONSHIP_TYPE_AGGREGATION.equals(productSpecCharRelationship.getCharRelationshipType())){
         			leafCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
         		}
     		}
