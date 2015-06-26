@@ -29,14 +29,14 @@ public class TestApple {
 	    @Before
 	    public void createProductSpecChar() {
 	    	productSpecChars = new ArrayList<ProductSpecCharacteristic>();
-		 	for (int i = 0; i < TestProductSpecificationDate.specChar.length; i++) {
+		 	for (int i = 0; i < TestProductSpecificationData.specChar.length; i++) {
 		 		
-		 		ProductSpecCharacteristic productSpecCharProcessor1 = new ProductSpecCharacteristic(TestProductSpecificationDate.specChar[i][0].toString(), TestProductSpecificationDate.specChar[i][1].toString(),
-		 				TestProductSpecificationDate.specChar[i][2].toString(), (TimePeriod)TestProductSpecificationDate.specChar[i][3], TestProductSpecificationDate.specChar[i][4].toString(), (int)TestProductSpecificationDate.specChar[i][5], (int)TestProductSpecificationDate.specChar[i][6]);
-		 		for(int j=0 ;j<TestProductSpecificationDate.specCharValue.length;j++){
-		 			if((int)TestProductSpecificationDate.specCharValue[j][0]==i){
-		 				ProductSpecCharacteristicValue oneprocessorValue1 = new ProductSpecCharacteristicValue(TestProductSpecificationDate.specCharValue[j][1].toString(), (boolean)TestProductSpecificationDate.specCharValue[j][2], TestProductSpecificationDate.specCharValue[j][3].toString(),
-		 		                (TimePeriod)TestProductSpecificationDate.specCharValue[j][4], TestProductSpecificationDate.specCharValue[j][5].toString()); 
+		 		ProductSpecCharacteristic productSpecCharProcessor1 = new ProductSpecCharacteristic(TestProductSpecificationData.specChar[i][0].toString(), TestProductSpecificationData.specChar[i][1].toString(),
+		 				TestProductSpecificationData.specChar[i][2].toString(), (TimePeriod)TestProductSpecificationData.specChar[i][3], TestProductSpecificationData.specChar[i][4].toString(), (int)TestProductSpecificationData.specChar[i][5], (int)TestProductSpecificationData.specChar[i][6]);
+		 		for(int j=0 ;j<TestProductSpecificationData.specCharValue.length;j++){
+		 			if((int)TestProductSpecificationData.specCharValue[j][0]==i){
+		 				ProductSpecCharacteristicValue oneprocessorValue1 = new ProductSpecCharacteristicValue(TestProductSpecificationData.specCharValue[j][1].toString(), (boolean)TestProductSpecificationData.specCharValue[j][2], TestProductSpecificationData.specCharValue[j][3].toString(),
+		 		                (TimePeriod)TestProductSpecificationData.specCharValue[j][4], TestProductSpecificationData.specCharValue[j][5].toString()); 
 		 				productSpecCharProcessor1.addValue(oneprocessorValue1);
 		 			}
 		 		}
@@ -49,8 +49,8 @@ public class TestApple {
 	    public void appleStore() throws Exception {
 
 	        // 创建规格
-	        ProductSpecification productSpecification1 = createProductSpecification(TestProductSpecificationDate.specParameter,TestProductSpecificationDate.one_charData);
-	        ProductSpecification productSpecification2 = createProductSpecification(TestProductSpecificationDate.specParameter2,TestProductSpecificationDate.two_charData);
+	        ProductSpecification productSpecification1 = createProductSpecification(TestProductSpecificationData.specParameter,TestProductSpecificationData.one_charData);
+	        ProductSpecification productSpecification2 = createProductSpecification(TestProductSpecificationData.specParameter2,TestProductSpecificationData.two_charData);
 
 	        // 创建SimpleOffering
 	        ProductOffering offering1 = this.createSimpleProductOffering(productSpecification1,TestOfferingData.offeringData[0]);
@@ -88,7 +88,7 @@ public class TestApple {
 	    public ProductSpecification createProductSpecification(Object[] specParameter,Object[][] charData ) throws Exception {
 
 	    	if(specParameter!=null){
-	    		ProductSpecification productSpec=new AtomicProductSpecification(TestProductSpecificationDate.specParameter[0].toString(),TestProductSpecificationDate.specParameter[1].toString(),TestProductSpecificationDate.specParameter[2].toString(),TestProductSpecificationDate.specParameter[3].toString());
+	    		ProductSpecification productSpec=new AtomicProductSpecification(TestProductSpecificationData.specParameter[0].toString(),TestProductSpecificationData.specParameter[1].toString(),TestProductSpecificationData.specParameter[2].toString(),TestProductSpecificationData.specParameter[3].toString());
 				for (int i=0 ; i<charData.length ; i++) {
 					ProductSpecCharacteristic prodSpecChar=null;
 						prodSpecChar=this.getCharByCharName(charData[i][0].toString());
@@ -98,16 +98,16 @@ public class TestApple {
 							ProductSpecCharacteristicValue[] values=this.getCharValue(prodSpecChar,(int[])charData[i][5]);
 							if(values!=null){
 								for (ProductSpecCharacteristicValue productSpecCharacteristicValue : values) {
-									productSpec.attachCharacteristicValue(prodSpecChar,productSpecCharacteristicValue, true, (TimePeriod)TestProductSpecificationDate.specParameter[4]);
+									productSpec.attachCharacteristicValue(prodSpecChar,productSpecCharacteristicValue, true, (TimePeriod)TestProductSpecificationData.specParameter[4]);
 								}
 							}	
 						} 
 				 }
 				
 				//添加成本
-				Money cost=new Money(TestProductSpecificationDate.specParameter[8].toString(),Long.parseLong(TestProductSpecificationDate.specParameter[9].toString()));
-				productSpec.addCost(cost, (TimePeriod)TestProductSpecificationDate.specParameter[4]);
-				productSpec.setVersion(TestProductSpecificationDate.specParameter[6].toString(), TestProductSpecificationDate.specParameter[7].toString(),new Date(), (TimePeriod)TestProductSpecificationDate.specParameter[4]);
+				Money cost=new Money(TestProductSpecificationData.specParameter[8].toString(),Long.parseLong(TestProductSpecificationData.specParameter[9].toString()));
+				productSpec.addCost(cost, (TimePeriod)TestProductSpecificationData.specParameter[4]);
+				productSpec.setVersion(TestProductSpecificationData.specParameter[6].toString(), TestProductSpecificationData.specParameter[7].toString(),new Date(), (TimePeriod)TestProductSpecificationData.specParameter[4]);
 				
 				
 				 				
