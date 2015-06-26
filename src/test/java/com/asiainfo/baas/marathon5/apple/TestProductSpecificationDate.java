@@ -1,5 +1,6 @@
 package com.asiainfo.baas.marathon5.apple;
 
+import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 
 public class TestProductSpecificationDate {
@@ -16,6 +17,8 @@ public class TestProductSpecificationDate {
 				{1,"number",true,"GHz",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),"2.9"},
 				{1,"number",false,"GHz",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),"2.7"},
 		};
+		
+		public static Object[][] relateSpecChar={{"1","2",ProductConst.RELATIONSHIP_TYPE_EXCLUSIVITY,"1",new TimePeriod(null, null)}};
 	//使用特征值	
 	public static Object[][] one_charData = {
 		
