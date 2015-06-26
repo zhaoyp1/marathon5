@@ -1,7 +1,13 @@
 package com.asiainfo.baas.marathon5.apple;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+import net.sf.json.processors.JsDateJsonBeanProcessor;
+import net.sf.json.util.CycleDetectionStrategy;
 
 import org.junit.Test;
 
@@ -12,6 +18,8 @@ import com.asiainfo.baas.marathon.offering.ProductOffering;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
 import com.asiainfo.baas.marathon.offering.catalog.ProductCatalog;
 import com.asiainfo.baas.marathon5.common.CommonUtils;
+import com.asiainfo.baas.marathon5.common.JsonDateValueProcessor;
+import com.asiainfo.baas.marathon5.common.JsonPropertyFilter;
 
 public class TestAppleStoreOffering {
 
@@ -22,24 +30,15 @@ public class TestAppleStoreOffering {
     public void createOffering() {
 
         List<ProductOffering> offering = this.createProductOffering();
+        CommonUtils.printPropertyToJson(null, offering, null);
 
-        CommonUtils.printProperty(null, offering, null);
-        // JsonConfig config = new JsonConfig();
-        // config.setIgnoreDefaultExcludes(false);
-        // config.registerJsonBeanProcessor(Date.class, new
-        // JsDateJsonBeanProcessor());
-        // JsonPropertyFilter jsonPropertyFilter = new JsonPropertyFilter();
-        // config.setJsonPropertyFilter(jsonPropertyFilter);
-        // config.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
-        // JSONObject a = JSONObject.fromObject(offering.get(0), config);
-        // System.out.println(a.toString());
     }
 
     @Test
     public void createCatalog() {
 
         ProductCatalog macBookProproductCatalog = this.createProductCatalog();
-        CommonUtils.printProperty(null, null, macBookProproductCatalog);
+        CommonUtils.printPropertyToJson(null, null, macBookProproductCatalog);
 
     }
 
@@ -54,7 +53,7 @@ public class TestAppleStoreOffering {
                 macBookProproductCatalog.publishOffering(productOffering, validFor);
             }
         }
-        CommonUtils.printProperty(null, null, macBookProproductCatalog);
+        CommonUtils.printPropertyToJson(null, null, macBookProproductCatalog);
     }
 
     public ProductCatalog createProductCatalog() {
@@ -100,7 +99,7 @@ public class TestAppleStoreOffering {
 
         TimePeriod validFor1 = new TimePeriod("2013-01-01 00:00:00", null);
         SimpleProductOffering simpleProductOffering1 = new SimpleProductOffering("11", "2.7GHz 处理器\n128 GB 存储容量",
-                validFor1, ProductConst.STATUS_TYPE_NORMAL, null, description1.toString());
+                validFor1, ProductConst.OFFERING_STATUS_ACTIVE, null, description1.toString());
 
         StringBuilder description2 = new StringBuilder();
         description2.append("2.7GHz 双核 Intel Core i5 处理器");
@@ -120,11 +119,11 @@ public class TestAppleStoreOffering {
 
         TimePeriod validFor2 = new TimePeriod("2013-01-01 00:00:00", null);
         SimpleProductOffering simpleProductOffering2 = new SimpleProductOffering("12", "2.7GHz 处理器\n256 GB 存储容量",
-                validFor2, ProductConst.STATUS_TYPE_NORMAL, null, description2.toString());
+                validFor2, ProductConst.OFFERING_STATUS_ACTIVE, null, description2.toString());
 
         TimePeriod validFor4 = new TimePeriod("2013-01-01 00:00:00", null);
         BundledProductOffering bundledProductOffering = new BundledProductOffering("1",
-                "13 英寸配备 Retina 显示屏的 MacBook Pro", validFor4, ProductConst.STATUS_TYPE_NORMAL, "");
+                "13 英寸配备 Retina 显示屏的 MacBook Pro", validFor4, ProductConst.OFFERING_STATUS_ACTIVE, "");
         bundledProductOffering.addSubOffering(simpleProductOffering1);
         bundledProductOffering.addSubOffering(simpleProductOffering2);
 

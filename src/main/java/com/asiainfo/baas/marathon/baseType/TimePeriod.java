@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.asiainfo.baas.common.DateUtils;
 
 /**
@@ -24,22 +26,39 @@ public class TimePeriod {
      * Notes: If null, then represents to the end of time
      */
     public Date endDateTime;
-    
-    public TimePeriod(String startDateTime,String endDateTime){
-    	SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+
+    public TimePeriod(String startDateTime, String endDateTime) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
-        	if("".equals(startDateTime)){
-        		 this.startDateTime = format.parse(startDateTime);
-        	}
-        	if("".equals(endDateTime)){
-        		this.endDateTime = format.parse(endDateTime);
-        	}
+            if (StringUtils.isNotEmpty(startDateTime)) {
+                this.startDateTime = format.parse(startDateTime);
+            }
+            if (StringUtils.isNotEmpty(endDateTime)) {
+                this.endDateTime = format.parse(endDateTime);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
-    public TimePeriod(){
-    	
+
+    public Date getStartDateTime() {
+        return startDateTime;
+    }
+
+    public void setStartDateTime(Date startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public Date getEndDateTime() {
+        return endDateTime;
+    }
+
+    public void setEndDateTime(Date endDateTime) {
+        this.endDateTime = endDateTime;
+    }
+
+    public TimePeriod() {
+
     }
 
     /**
