@@ -16,7 +16,7 @@ import com.asiainfo.baas.marathon.specification.ProductSpecCharUse;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 import com.asiainfo.baas.marathon.specification.ProductSpecification;
-import com.asiainfo.baas.marathon5.apple.TestProductSpecificationDate;
+import com.asiainfo.baas.marathon5.apple.TestProductSpecificationData;
 import com.asiainfo.baas.marathon5.common.CommonUtils;
 import com.asiainfo.baas.marathon5.common.ProdSpecCharParameter;
 
@@ -26,26 +26,26 @@ public class TestProductCreateSpecification {
 	@Before
 	public void createProductSpecChar(){
 		 	productSpecChars = new ArrayList<ProductSpecCharacteristic>();
-		 	for (int i = 0; i < TestProductSpecificationDate.specChar.length; i++) {
+		 	for (int i = 0; i < TestProductSpecificationData.specChar.length; i++) {
 		 		
-		 		ProductSpecCharacteristic productSpecCharProcessor1 = new ProductSpecCharacteristic(TestProductSpecificationDate.specChar[i][0].toString(), TestProductSpecificationDate.specChar[i][1].toString(),
-		 				TestProductSpecificationDate.specChar[i][2].toString(), (TimePeriod)TestProductSpecificationDate.specChar[i][3], TestProductSpecificationDate.specChar[i][4].toString(), (int)TestProductSpecificationDate.specChar[i][5], (int)TestProductSpecificationDate.specChar[i][6]);
-		 		for(int j=0 ;j<TestProductSpecificationDate.specCharValue.length;j++){
-		 			if((int)TestProductSpecificationDate.specCharValue[j][0]==i){
-		 				ProductSpecCharacteristicValue oneprocessorValue1 = new ProductSpecCharacteristicValue(TestProductSpecificationDate.specCharValue[j][1].toString(), (boolean)TestProductSpecificationDate.specCharValue[j][2], TestProductSpecificationDate.specCharValue[j][3].toString(),
-		 		                (TimePeriod)TestProductSpecificationDate.specCharValue[j][4], TestProductSpecificationDate.specCharValue[j][5].toString()); 
+		 		ProductSpecCharacteristic productSpecCharProcessor1 = new ProductSpecCharacteristic(TestProductSpecificationData.specChar[i][0].toString(), TestProductSpecificationData.specChar[i][1].toString(),
+		 				TestProductSpecificationData.specChar[i][2].toString(), (TimePeriod)TestProductSpecificationData.specChar[i][3], TestProductSpecificationData.specChar[i][4].toString(), (int)TestProductSpecificationData.specChar[i][5], (int)TestProductSpecificationData.specChar[i][6]);
+		 		for(int j=0 ;j<TestProductSpecificationData.specCharValue.length;j++){
+		 			if((int)TestProductSpecificationData.specCharValue[j][0]==i){
+		 				ProductSpecCharacteristicValue oneprocessorValue1 = new ProductSpecCharacteristicValue(TestProductSpecificationData.specCharValue[j][1].toString(), (boolean)TestProductSpecificationData.specCharValue[j][2], TestProductSpecificationData.specCharValue[j][3].toString(),
+		 		                (TimePeriod)TestProductSpecificationData.specCharValue[j][4], TestProductSpecificationData.specCharValue[j][5].toString()); 
 		 				productSpecCharProcessor1.addValue(oneprocessorValue1);
 		 			}
 		 		}
 		 		productSpecChars.add(productSpecCharProcessor1);
 			}
 		 	
-		 	for(int i=0 ; i<TestProductSpecificationDate.relateSpecChar.length ; i++){
-		 		String srcId=TestProductSpecificationDate.relateSpecChar[i][0].toString();
-		 		String targetId=TestProductSpecificationDate.relateSpecChar[i][1].toString();
+		 	for(int i=0 ; i<TestProductSpecificationData.relateSpecChar.length ; i++){
+		 		String srcId=TestProductSpecificationData.relateSpecChar[i][0].toString();
+		 		String targetId=TestProductSpecificationData.relateSpecChar[i][1].toString();
 		 		ProductSpecCharacteristic srcChar= this.getProdSpecCharById(srcId);
 		 		ProductSpecCharacteristic targetChar = this.getProdSpecCharById(targetId);
-		 		srcChar.addRelatedCharacteristic(targetChar, TestProductSpecificationDate.relateSpecChar[i][2].toString(), Integer.parseInt( TestProductSpecificationDate.relateSpecChar[i][3].toString()), (TimePeriod)TestProductSpecificationDate.relateSpecChar[i][4]);
+		 		srcChar.addRelatedCharacteristic(targetChar, TestProductSpecificationData.relateSpecChar[i][2].toString(), Integer.parseInt( TestProductSpecificationData.relateSpecChar[i][3].toString()), (TimePeriod)TestProductSpecificationData.relateSpecChar[i][4]);
 		 	}
 	}
 	public ProductSpecCharacteristic getProdSpecCharById(String id){
@@ -95,26 +95,26 @@ public class TestProductCreateSpecification {
 	//[] {productNumber,name,brand,lifecyleStatus,validFor,parameters,version,versionDescription,cost,amount}
 	@Test
 	public void createProductSpecificationTest() throws Exception{
-		if(TestProductSpecificationDate.specParameter!=null){
-				ProductSpecification productSpec=new AtomicProductSpecification(TestProductSpecificationDate.specParameter[0].toString(),TestProductSpecificationDate.specParameter[1].toString(),TestProductSpecificationDate.specParameter[2].toString(),TestProductSpecificationDate.specParameter[3].toString());
-				for (int i=0 ; i<TestProductSpecificationDate.one_charData.length ; i++) {
+		if(TestProductSpecificationData.specParameter!=null){
+				ProductSpecification productSpec=new AtomicProductSpecification(TestProductSpecificationData.specParameter[0].toString(),TestProductSpecificationData.specParameter[1].toString(),TestProductSpecificationData.specParameter[2].toString(),TestProductSpecificationData.specParameter[3].toString());
+				for (int i=0 ; i<TestProductSpecificationData.one_charData.length ; i++) {
 					ProductSpecCharacteristic prodSpecChar=null;
-						prodSpecChar=this.getCharByCharName(TestProductSpecificationDate.one_charData[i][0].toString());
-						productSpec.addCharacteristic(prodSpecChar, (boolean)TestProductSpecificationDate.one_charData[i][1], (boolean)TestProductSpecificationDate.one_charData[i][2], (TimePeriod)TestProductSpecificationDate.one_charData[i][3],TestProductSpecificationDate.one_charData[i][6].toString(),TestProductSpecificationDate.one_charData[i][7].toString(),(int)TestProductSpecificationDate.one_charData[i][8],(int)TestProductSpecificationDate.one_charData[i][9],(boolean)TestProductSpecificationDate.one_charData[i][10],TestProductSpecificationDate.one_charData[i][11].toString());
-						if(Boolean.parseBoolean(TestProductSpecificationDate.one_charData[i][4].toString())){
-							ProductSpecCharacteristicValue[] values=this.getCharValue(prodSpecChar,(int[])TestProductSpecificationDate.one_charData[i][5]);
+						prodSpecChar=this.getCharByCharName(TestProductSpecificationData.one_charData[i][0].toString());
+						productSpec.addCharacteristic(prodSpecChar, (boolean)TestProductSpecificationData.one_charData[i][1], (boolean)TestProductSpecificationData.one_charData[i][2], (TimePeriod)TestProductSpecificationData.one_charData[i][3],TestProductSpecificationData.one_charData[i][6].toString(),TestProductSpecificationData.one_charData[i][7].toString(),(int)TestProductSpecificationData.one_charData[i][8],(int)TestProductSpecificationData.one_charData[i][9],(boolean)TestProductSpecificationData.one_charData[i][10],TestProductSpecificationData.one_charData[i][11].toString());
+						if(Boolean.parseBoolean(TestProductSpecificationData.one_charData[i][4].toString())){
+							ProductSpecCharacteristicValue[] values=this.getCharValue(prodSpecChar,(int[])TestProductSpecificationData.one_charData[i][5]);
 							if(values!=null){
 								for (ProductSpecCharacteristicValue productSpecCharacteristicValue : values) {
-									productSpec.attachCharacteristicValue(prodSpecChar,productSpecCharacteristicValue, true, (TimePeriod)TestProductSpecificationDate.specParameter[4]);
+									productSpec.attachCharacteristicValue(prodSpecChar,productSpecCharacteristicValue, true, (TimePeriod)TestProductSpecificationData.specParameter[4]);
 								}
 							}	
 						} 
 				 }
 				
 				//Ìí¼Ó³É±¾
-				Money cost=new Money(TestProductSpecificationDate.specParameter[8].toString(),Long.parseLong(TestProductSpecificationDate.specParameter[9].toString()));
-				productSpec.addCost(cost, (TimePeriod)TestProductSpecificationDate.specParameter[4]);
-				productSpec.setVersion(TestProductSpecificationDate.specParameter[6].toString(), TestProductSpecificationDate.specParameter[7].toString(),new Date(), (TimePeriod)TestProductSpecificationDate.specParameter[4]);
+				Money cost=new Money(TestProductSpecificationData.specParameter[8].toString(),Long.parseLong(TestProductSpecificationData.specParameter[9].toString()));
+				productSpec.addCost(cost, (TimePeriod)TestProductSpecificationData.specParameter[4]);
+				productSpec.setVersion(TestProductSpecificationData.specParameter[6].toString(), TestProductSpecificationData.specParameter[7].toString(),new Date(), (TimePeriod)TestProductSpecificationData.specParameter[4]);
 				
 				CommonUtils.printPropertyToJson(null,null,productSpec);
 		} 
