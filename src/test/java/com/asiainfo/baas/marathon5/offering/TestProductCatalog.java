@@ -36,8 +36,8 @@ public class TestProductCatalog {
                 iPhone5SSpecification, offeringDescription);
 
         String catalogId = "1";
-        String catalogName = "手机";
-        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_MOBILEPHONE;
+        String catalogName = "日常";
+        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_REGULAR;
         TimePeriod validForCatalog = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
 
         ProductCatalog catalog = new ProductCatalog(catalogId, catalogName, catalogType, validForCatalog);
@@ -46,11 +46,11 @@ public class TestProductCatalog {
         catalog.publishOffering(offering, publishTimePeriod);
 
         System.out.println("catalog ：");
-        CommonUtils.printProperty(null, null, catalog);
+        CommonUtils.printPropertyToJson(null, null, catalog);
         System.out.println("catalog.prodCatalogProdOffers ：");
-        CommonUtils.printProperty(null, catalog.getProdCatalogProdOffers(), null);
+        CommonUtils.printPropertyToJson(null, catalog.getProdCatalogProdOffers(), null);
         System.out.println("catalog.prodCatalogProdOffers.getProdOffering ：");
-        CommonUtils.printProperty(null, null, catalog.getProdCatalogProdOffers().get(0).getProdOffering());
+        CommonUtils.printPropertyToJson(null, null, catalog.getProdCatalogProdOffers().get(0).getProdOffering());
     }
 
     @Test
@@ -77,8 +77,8 @@ public class TestProductCatalog {
                 iPhone5SSpecification, offeringDescription);
 
         String catalogId = "1";
-        String catalogName = "手机";
-        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_MOBILEPHONE;
+        String catalogName = "日常";
+        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_REGULAR;
         TimePeriod validForCatalog = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
 
         ProductCatalog catalog = new ProductCatalog(catalogId, catalogName, catalogType, validForCatalog);
@@ -89,8 +89,8 @@ public class TestProductCatalog {
         ProductOffering[] productOfferings = catalog.getProductOffering("1");
 
         System.out.println("catalog ：");
-        CommonUtils.printProperty(null, null, catalog);
-        System.out.println("catalog.getProductOffering(1)：");
-        CommonUtils.printProperty(productOfferings, null, null);
+        CommonUtils.printPropertyToJson(null, null, catalog);
+        System.out.println("catalog.getProductOffering：");
+        CommonUtils.printPropertyToJson(productOfferings, null, null);
     }
 }

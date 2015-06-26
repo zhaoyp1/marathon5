@@ -10,28 +10,32 @@ public class ProductConst {
     /** 聚合 **/
     public static final String RELATIONSHIP_TYPE_AGGREGATION = "AGGREGATION ";
 
-    /** 产品目录类型 ----手机 **/
-    public static final String PRODUCT_CATALOG_TYPE_MOBILEPHONE = "1";
-    /** 产品目录类型-----笔记本 **/
-    public static final String PRODUCT_CATALOG_TYPE_LAPTOP = "2";
-
-    /** 状态类型 -----正常 **/
-    public static final String STATUS_TYPE_NORMAL = "normal";
-    /** 规格类型 ----删除 **/
-    public static final String STATUS_TYPE_DELETE = "delete";
+    /** 产品目录类型 ----日常类 **/
+    public static final String PRODUCT_CATALOG_TYPE_REGULAR = "REGULAR";
+    /** 产品目录类型-----促销 类 **/
+    public static final String PRODUCT_CATALOG_TYPE_PROMOTION = "PROMOTION";
 
     /** 版本类型 -----大版本 **/
-    public static final String VERSION_TYPE_MAJOR = "major";
+    public static final String VERSION_TYPE_MAJOR = "MAJOR";
     /** 规格状态 ----中版本 **/
-    public static final String VERSION_TYPE_MINOR = "minor";
+    public static final String VERSION_TYPE_MINOR = "MINOR";
     /** 规格状态 ----小版本 **/
-    public static final String version_TYPE_patch = "patch";
+    public static final String VERSION_TYPE_PATCH = "PATCH";
 
     /** Offering状态-----planned **/
-    public static final String OFFERING_STATUS_PLANNED = "planned";
+    public static final String OFFERING_STATUS_PLANNED = "PLANNED";
     /** Offering状态 ----obsolete **/
-    public static final String OFFERING_STATUS_OBSOLETE = "obsolete";
+    public static final String OFFERING_STATUS_OBSOLETE = "OBSOLETE";
     /** Offering状态 ----active **/
-    public static final String OFFERING_STATUS_ACTIVE = "active";
+    public static final String OFFERING_STATUS_ACTIVE = "ACTIVE";
+
+    /** 特征类型-----数值型 **/
+    public static final String CHARACRISTIC_TYPE_NUMBER = "NUMBER";
+    /** 特征类型 ----文本 **/
+    public static final String CHARACRISTIC_TYPE_TEXT = "TEXT";
+    /** 特征值类型 ----数值型 **/
+    public static final String CHARACRISTICVALUE_TYPE_NUMBER = "NUMBER";
+    /** 特征值类型 ----文本 **/
+    public static final String CHARACRISTICVALUE_TYPE_TEXT = "TEXT";
 
 }

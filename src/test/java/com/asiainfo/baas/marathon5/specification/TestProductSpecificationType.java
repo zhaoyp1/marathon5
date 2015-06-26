@@ -37,9 +37,9 @@ public class TestProductSpecificationType {
         productSpecificationType.addProdSpec(appleCareSpecification);
 
         System.out.println("ProductLine £º");
-        CommonUtils.printProperty(null, null, productSpecificationType);
+        CommonUtils.printPropertyToJson(null, null, productSpecificationType);
         System.out.println("ProductLine.ProdSpecification £º");
-        CommonUtils.printProperty(null, productSpecificationType.getProdSpec(), null);
+        CommonUtils.printPropertyToJson(null, productSpecificationType.getProdSpec(), null);
     }
 
     @Test
@@ -74,8 +74,8 @@ public class TestProductSpecificationType {
         productSpecificationType.addProdSpec(iPhone6Specification);
 
         System.out.println("ProductLine £º");
-        CommonUtils.printProperty(null, null, productSpecificationType);
+        CommonUtils.printPropertyToJson(null, null, productSpecificationType);
         System.out.println("ProductLine.ProdSpecification £º");
-        CommonUtils.printProperty(productSpecificationType.queryProdSpec(new Date()), null, null);
+        CommonUtils.printPropertyToJson(productSpecificationType.queryProdSpec(new Date()), null, null);
     }
 }

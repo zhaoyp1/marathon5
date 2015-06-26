@@ -221,7 +221,8 @@ public abstract class ProductSpecification {
     public void setVersion(String version, String description, Date revisionDate, TimePeriod validFor) throws Exception {
 
         String versionNumbers[] = version.split("\\.");
-        String versionTypes[] = { "1", "2", "3" };
+        String versionTypes[] = { ProductConst.VERSION_TYPE_MAJOR, ProductConst.VERSION_TYPE_MINOR,
+                ProductConst.VERSION_TYPE_PATCH };
 
         if (versionNumbers == null || versionNumbers.length != 3) {
             throw new Exception("Incorrect Version Format! Please check the version type.");
@@ -499,8 +500,8 @@ public abstract class ProductSpecification {
      *            CharacteristicSpecification.
      */
     public void modifyCharacteristicInfo(ProductSpecCharacteristic characteristic, boolean canBeOveridden,
-            boolean isPackage, TimePeriod validFor, String name, String unique, int minCardinality,
-            int maxCardinality, boolean extensible, String description) {
+            boolean isPackage, TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality,
+            boolean extensible, String description) {
         // TODO - implement ProductSpecification.modifyCharacteristicInfo
         throw new UnsupportedOperationException();
     }
@@ -522,13 +523,13 @@ public abstract class ProductSpecification {
         if (prodSpecCharUse != null) {
             for (int i = 0; i < prodSpecCharUse.size(); i++) {
                 ProductSpecCharUse charUse = prodSpecCharUse.get(i);
-                if (characteristic.getID().equals(charUse.getProdSpecChar().getID())){
+                if (characteristic.getID().equals(charUse.getProdSpecChar().getID())) {
                     charUse.addValue(charValue, isDefault, validFor);
                     return true;
                 }
             }
-        }else{
-        	return false;
+        } else {
+            return false;
         }
         return false;
     }
@@ -554,13 +555,13 @@ public abstract class ProductSpecification {
         if (prodSpecCharUse != null) {
             for (int i = 0; i < prodSpecCharUse.size(); i++) {
                 ProductSpecCharUse charUse = prodSpecCharUse.get(i);
-                if (characteristic.getID().equals(charUse.getProdSpecChar().getID())){
-                	charUse.specifyDefaultCharacteristicValueUse(defaultValue);
-                	return true;
+                if (characteristic.getID().equals(charUse.getProdSpecChar().getID())) {
+                    charUse.specifyDefaultCharacteristicValueUse(defaultValue);
+                    return true;
                 }
             }
-        }else{
-        	return false;
+        } else {
+            return false;
         }
         return false;
     }
@@ -589,20 +590,20 @@ public abstract class ProductSpecification {
      * @param time
      */
     public ProdSpecCharValueUse[] retrieveCharacteristicValue(ProductSpecCharacteristic characteristic, Date time) {
-    	List<ProdSpecCharValueUse> charValueUseList = null;
-		charValueUseList = new ArrayList<ProdSpecCharValueUse>();
-		ProductSpecCharUse charUse = this.getProdSpecCharUse(characteristic);
-		List<ProdSpecCharValueUse> valueUseAllList = new ArrayList<ProdSpecCharValueUse>();
-		valueUseAllList = charUse.getProdSpecCharValueUse();
-		if(valueUseAllList != null){
-			for(int j = 0 ; j < valueUseAllList.size() ; j++){
-				ProdSpecCharValueUse valueUse = valueUseAllList.get(j);
-				if(valueUse.getValidFor().isInPeriod(time))
-					charValueUseList.add(valueUse);
-			}
-			return (ProdSpecCharValueUse[])charValueUseList.toArray(new ProdSpecCharValueUse[charValueUseList.size()]);
-		}
-    	return null;
+        List<ProdSpecCharValueUse> charValueUseList = null;
+        charValueUseList = new ArrayList<ProdSpecCharValueUse>();
+        ProductSpecCharUse charUse = this.getProdSpecCharUse(characteristic);
+        List<ProdSpecCharValueUse> valueUseAllList = new ArrayList<ProdSpecCharValueUse>();
+        valueUseAllList = charUse.getProdSpecCharValueUse();
+        if (valueUseAllList != null) {
+            for (int j = 0; j < valueUseAllList.size(); j++) {
+                ProdSpecCharValueUse valueUse = valueUseAllList.get(j);
+                if (valueUse.getValidFor().isInPeriod(time))
+                    charValueUseList.add(valueUse);
+            }
+            return (ProdSpecCharValueUse[]) charValueUseList.toArray(new ProdSpecCharValueUse[charValueUseList.size()]);
+        }
+        return null;
     }
 
     private ProductSpecCharUse getProdSpecCharUse(ProductSpecCharacteristic characteristic) {
@@ -618,22 +619,23 @@ public abstract class ProductSpecification {
     }
 
     public ProductSpecCharUse[] getRootCharacteristic() {
-    	List<ProductSpecCharUse> charUseList = null;
-    	if(prodSpecCharUse != null){
-    		charUseList = prodSpecCharUse;
-    		for(int i = 0 ; i < prodSpecCharUse.size() ; i++ ){
-    			ProductSpecCharUse charUse = prodSpecCharUse.get(i);
-    			ProductSpecCharacteristic[] prodSpecChar = charUse.getProdSpecChar().getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION);
-    			if(prodSpecChar != null){
-    				for(ProductSpecCharacteristic specChar : prodSpecChar){
-        				ProductSpecCharUse subCharUse = this.getProdSpecCharUse(specChar);
-        				charUseList.remove(subCharUse);
-        			}
-    			}
-    		}
-    		return (ProductSpecCharUse[])charUseList.toArray(new ProductSpecCharUse[charUseList.size()]);
-    	}
-    	return null;
+        List<ProductSpecCharUse> charUseList = null;
+        if (prodSpecCharUse != null) {
+            charUseList = prodSpecCharUse;
+            for (int i = 0; i < prodSpecCharUse.size(); i++) {
+                ProductSpecCharUse charUse = prodSpecCharUse.get(i);
+                ProductSpecCharacteristic[] prodSpecChar = charUse.getProdSpecChar().getRelatedCharacteristic(
+                        ProductConst.RELATIONSHIP_TYPE_AGGREGATION);
+                if (prodSpecChar != null) {
+                    for (ProductSpecCharacteristic specChar : prodSpecChar) {
+                        ProductSpecCharUse subCharUse = this.getProdSpecCharUse(specChar);
+                        charUseList.remove(subCharUse);
+                    }
+                }
+            }
+            return (ProductSpecCharUse[]) charUseList.toArray(new ProductSpecCharUse[charUseList.size()]);
+        }
+        return null;
     }
 
     /**
@@ -642,18 +644,19 @@ public abstract class ProductSpecification {
      * @param time
      */
     public ProductSpecCharUse[] getLeafCharacteristic(ProductSpecCharacteristic characteristic, Date time) {
-    	ProductSpecCharUse[] charUses = null;
-    	ProductSpecCharacteristic[] prodSpecChar = characteristic.getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION);
-    	if(prodSpecChar != null){
-    		charUses = new ProductSpecCharUse[prodSpecChar.length];
-	    	for(int i = 0 ; i < prodSpecChar.length ; i++){
-	    		ProductSpecCharUse charUse = this.getProdSpecCharUse(prodSpecChar[i]);
-	    		if(charUse != null)
-	    			charUses[i] = charUse;
-	    	}
-	    	return charUses;
-    	}
-    	return null;
+        ProductSpecCharUse[] charUses = null;
+        ProductSpecCharacteristic[] prodSpecChar = characteristic
+                .getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION);
+        if (prodSpecChar != null) {
+            charUses = new ProductSpecCharUse[prodSpecChar.length];
+            for (int i = 0; i < prodSpecChar.length; i++) {
+                ProductSpecCharUse charUse = this.getProdSpecCharUse(prodSpecChar[i]);
+                if (charUse != null)
+                    charUses[i] = charUse;
+            }
+            return charUses;
+        }
+        return null;
     }
 
     /**
