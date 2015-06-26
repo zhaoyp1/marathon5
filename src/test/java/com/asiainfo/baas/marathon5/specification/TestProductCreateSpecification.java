@@ -45,7 +45,7 @@ public class TestProductCreateSpecification {
 		 		String targetId=TestProductSpecificationDate.relateSpecChar[i][1].toString();
 		 		ProductSpecCharacteristic srcChar= this.getProdSpecCharById(srcId);
 		 		ProductSpecCharacteristic targetChar = this.getProdSpecCharById(targetId);
-		 		srcChar.addRelatedCharacteristic(targetChar, TestProductSpecificationDate.relateSpecChar[i][3].toString(), Integer.parseInt( TestProductSpecificationDate.relateSpecChar[i][4].toString()), (TimePeriod)TestProductSpecificationDate.relateSpecChar[i][5]);
+		 		srcChar.addRelatedCharacteristic(targetChar, TestProductSpecificationDate.relateSpecChar[i][2].toString(), Integer.parseInt( TestProductSpecificationDate.relateSpecChar[i][3].toString()), (TimePeriod)TestProductSpecificationDate.relateSpecChar[i][4]);
 		 	}
 	}
 	public ProductSpecCharacteristic getProdSpecCharById(String id){
