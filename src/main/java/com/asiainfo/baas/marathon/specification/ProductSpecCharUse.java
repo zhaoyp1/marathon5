@@ -221,7 +221,7 @@ public class ProductSpecCharUse {
     	}
     }
     
-    public ProdSpecCharValueUse getDefaultCharacteristicValueUse(){
+    public ProdSpecCharValueUse retrieveDefaultCharacteristicValueUse(){
     	if(prodSpecCharValueUse != null){
     		for(int i = 0 ; i < prodSpecCharValueUse.size() ; i++){
     			ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);

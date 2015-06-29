@@ -79,7 +79,7 @@ public abstract class ProductSpecificationType {
      * 
      * @param time
      */
-    public ProductSpecification[] queryProdSpec(Date time) {
+    public List<ProductSpecification> queryProdSpec(Date time) {
         List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
         if (this.prodSpec != null) {
             for (int i = 0; i < this.prodSpec.size(); i++) {
@@ -88,7 +88,7 @@ public abstract class ProductSpecificationType {
                 }
             }
         }
-        return productSpecifications.toArray(new ProductSpecification[0]);
+        return productSpecifications;
     }
 
 }

@@ -170,7 +170,7 @@ public class ProductSpecCharacteristicValue {
      * @param unitOfMeasure
      * @param value
      */
-    public void setValue(String unitOfMeasure, String value) {
+    public void specifyValue(String unitOfMeasure, String value) {
     	this.unitOfMeasure=unitOfMeasure;
     	this.value=value;
     }
@@ -182,7 +182,7 @@ public class ProductSpecCharacteristicValue {
      * @param valueTo
      * @param rangeInterval
      */
-    public void setValue(String unitOfMeasure, String valueFrom, String valueTo, String rangeInterval) {
+    public void specifyValue(String unitOfMeasure, String valueFrom, String valueTo, String rangeInterval) {
     	this.unitOfMeasure=unitOfMeasure;
     	this.valueFrom=valueFrom;
     	this.valueTo=valueTo;
@@ -220,7 +220,7 @@ public class ProductSpecCharacteristicValue {
      * @param type
      * @param time
      */
-    public ProductSpecCharacteristicValue[] queryRelatedCharValue(String type, Date time) {
+    public List<ProductSpecCharacteristicValue> queryRelatedCharValue(String type, Date time) {
     	
     	List<ProductSpecCharacteristicValue> prodSpecCharValues=null;
     	if(this.prodSpecCharValueRelationship != null && prodSpecCharValueRelationship.size() > 0){
@@ -230,7 +230,7 @@ public class ProductSpecCharacteristicValue {
     				prodSpecCharValues.add(relationship.getTargetCharValue());
     			}
 			}
-    		return (ProductSpecCharacteristicValue[])prodSpecCharValues.toArray(new ProductSpecCharacteristicValue[prodSpecCharValues.size()]);
+    		return prodSpecCharValues;
     	}else{
     		return null;
     	}
