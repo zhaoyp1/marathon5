@@ -1,11 +1,15 @@
 package com.asiainfo.baas.marathon.specification;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import com.asiainfo.baas.common.DateUtils;
 import com.asiainfo.baas.common.ProductConst;
+ 
 import com.asiainfo.baas.marathon.baseType.*;
+ 
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
+ 
 
 /**
  * A characteristic quality or distinctive feature of a ProductSpecification. The characteristic can be take on a discrete value, such as color, can take on a range of values, (for example, sensitivity of 100-240 mV), or can be derived from a formula (for example, usage time (hrs) = 30 - talk time *3). Certain characteristics, such as color, may be configured during the ordering or some other process.
@@ -373,6 +377,63 @@ public class ProductSpecCharacteristic {
 	public void setProductSpecCharacteristicValue(
 			List<ProductSpecCharacteristicValue> productSpecCharacteristicValue) {
 		this.productSpecCharacteristicValue = productSpecCharacteristicValue;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ID == null) ? 0 : ID.hashCode());
+		result = prime * result + maxCardinality;
+		result = prime * result + minCardinality;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((unique == null) ? 0 : unique.hashCode());
+		result = prime * result
+				+ ((validFor == null) ? 0 : validFor.hashCode());
+		result = prime * result
+				+ ((valueType == null) ? 0 : valueType.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductSpecCharacteristic other = (ProductSpecCharacteristic) obj;
+		if (ID == null) {
+			if (other.ID != null)
+				return false;
+		} else if (!ID.equals(other.ID))
+			return false;
+		if (maxCardinality != other.maxCardinality)
+			return false;
+		if (minCardinality != other.minCardinality)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (unique == null) {
+			if (other.unique != null)
+				return false;
+		} else if (!unique.equals(other.unique))
+			return false;
+		if (validFor == null) {
+			if (other.validFor != null)
+				return false;
+		} else if (!validFor.equals(other.validFor))
+			return false;
+		if (valueType == null) {
+			if (other.valueType != null)
+				return false;
+		} else if (!valueType.equals(other.valueType))
+			return false;
+		return true;
 	}
 
 }
