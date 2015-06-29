@@ -6,7 +6,6 @@ import java.util.Date;
 import com.asiainfo.baas.common.DateUtils;
 import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.*;
-import com.asiainfo.baas.marathon.dateType.*;
 
 /**
  * A characteristic quality or distinctive feature of a ProductSpecification. The characteristic can be take on a discrete value, such as color, can take on a range of values, (for example, sensitivity of 100-240 mV), or can be derived from a formula (for example, usage time (hrs) = 30 - talk time *3). Certain characteristics, such as color, may be configured during the ordering or some other process.
@@ -203,7 +202,17 @@ public class ProductSpecCharacteristic {
      * @param value
      */
     public void addValue(ProductSpecCharacteristicValue value) {
-    	if(this.productSpecCharacteristicValue==null) this.productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
+    	if(this.productSpecCharacteristicValue==null){
+    		
+    		this.productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
+    	
+    	} else{
+    		for (ProductSpecCharacteristicValue productSpecCharValue : productSpecCharacteristicValue) {
+    			
+    		}
+    	}
+    	
+    	
     	productSpecCharacteristicValue.add(value);
     }
 

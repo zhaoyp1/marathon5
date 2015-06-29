@@ -3,6 +3,7 @@ package com.asiainfo.baas.marathon5.specification;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -42,7 +43,7 @@ public class TestProductSpecification {
         AtomicProductSpecification prodSpec = new AtomicProductSpecification("1342", "343", "", "");
         prodSpec.addCost(cost, timePeriod);
         try {
-            ProductSpecificationCost[] prodSpecCostList = prodSpec.queryCost(format.parse("2015-07-20 23:59:59"));
+            List<ProductSpecificationCost> prodSpecCostList = prodSpec.queryCost(format.parse("2015-07-20 23:59:59"));
             for (ProductSpecificationCost productSpecificationCost : prodSpecCostList) {
                 System.out.println(productSpecificationCost.getCostToBusiness().amount + ","
                         + productSpecificationCost.getCostToBusiness().units + ","
@@ -69,7 +70,7 @@ public class TestProductSpecification {
         Date revisionDate = new Date();
         TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59");
         try {
-            atomicProductSpecification.setVersion(version, description, revisionDate, validFor);
+            atomicProductSpecification.specifyVersion(version, description, revisionDate, validFor);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,12 +94,12 @@ public class TestProductSpecification {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
         try {
-            atomicProductSpecification.setVersion(version, description, revisionDate, validFor);
+            atomicProductSpecification.specifyVersion(version, description, revisionDate, validFor);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        ProductSpecificationVersion[] currentVersion = atomicProductSpecification.getCurrentVersion();
+        List<ProductSpecificationVersion> currentVersion = atomicProductSpecification.retrieveCurrentVersion();
 
         StringBuilder outText = new StringBuilder();
         for (ProductSpecificationVersion productSpecificationVersion : currentVersion) {
@@ -134,12 +135,12 @@ public class TestProductSpecification {
         Date revisionDate = new Date();
         TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
         try {
-            atomicProductSpecification.setVersion(version, description, revisionDate, validFor);
+            atomicProductSpecification.specifyVersion(version, description, revisionDate, validFor);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        String currentVersion = atomicProductSpecification.getCurrentVersionString();
+        String currentVersion = atomicProductSpecification.retrieveCurrentVersionString();
 
         System.out.println(currentVersion);
     }
@@ -199,8 +200,8 @@ public class TestProductSpecification {
             e.printStackTrace();
         }
 
-        ProductSpecification[] productSpecification = iPhone5SSpecification.queryRelatedProdSpec(type);
-        CommonUtils.printPropertyToJson(productSpecification, null, null);
+        List<ProductSpecification> productSpecification = iPhone5SSpecification.queryRelatedProdSpec(type);
+        CommonUtils.printPropertyToJson(null, productSpecification, null);
 
     }
 
@@ -341,8 +342,8 @@ public class TestProductSpecification {
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
             appleCareSpecification.specifyDefaultCharacteristicValue(specChar, charValue);
-            ProductSpecCharUse[] charUses = appleCareSpecification.retrieveCharacteristic(new Date());
-            CommonUtils.printProperty(charUses, null, null);
+            List<ProductSpecCharUse> charUses = appleCareSpecification.retrieveCharacteristic(new Date());
+            CommonUtils.printProperty(null,charUses, null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -368,9 +369,9 @@ public class TestProductSpecification {
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
             appleCareSpecification.specifyDefaultCharacteristicValue(specChar, charValue);
-            ProdSpecCharValueUse[] charValueUses = appleCareSpecification.retrieveCharacteristicValue(specChar,
+            List<ProdSpecCharValueUse> charValueUses = appleCareSpecification.retrieveCharacteristicValue(specChar,
                     new Date());
-            CommonUtils.printProperty(charValueUses, null, null);
+            CommonUtils.printProperty( null,charValueUses, null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -404,8 +405,8 @@ public class TestProductSpecification {
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
             appleCareSpecification.specifyDefaultCharacteristicValue(specChar, charValue);
-            ProductSpecCharUse[] charUses = appleCareSpecification.getRootCharacteristic();
-            CommonUtils.printProperty(charUses, null, null);
+            List<ProductSpecCharUse> charUses = appleCareSpecification.retrieveRootCharacteristic();
+            CommonUtils.printProperty( null, charUses,null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -435,8 +436,8 @@ public class TestProductSpecification {
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
             appleCareSpecification.specifyDefaultCharacteristicValue(specChar, charValue);
-            ProductSpecCharUse[] charUses = appleCareSpecification.getLeafCharacteristic(specChar2, new Date());
-            CommonUtils.printProperty(charUses, null, null);
+            List<ProductSpecCharUse> charUses = appleCareSpecification.retrieveLeafCharacteristic(specChar2, new Date());
+            CommonUtils.printProperty( null,charUses, null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -462,7 +463,7 @@ public class TestProductSpecification {
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
             appleCareSpecification.specifyDefaultCharacteristicValue(specChar, charValue);
-            appleCareSpecification.setCardinality(specChar, 2, 5);
+            appleCareSpecification.specifyCardinality(specChar, 2, 5);
             CommonUtils.printProperty(null, null, appleCareSpecification.getProdSpecCharUse().get(0));
         } catch (ParseException e) {
             e.printStackTrace();
