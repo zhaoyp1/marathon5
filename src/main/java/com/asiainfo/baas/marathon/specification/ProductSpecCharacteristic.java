@@ -219,7 +219,7 @@ public class ProductSpecCharacteristic {
      * 
      * @param time
      */
-    public ProductSpecCharacteristicValue[] getValue(Date time) {
+    public List<ProductSpecCharacteristicValue> retrieveValue(Date time) {
     	List<ProductSpecCharacteristicValue> productSpecCharValues=null;
     	if(this.productSpecCharacteristicValue!=null){
     		productSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
@@ -228,7 +228,7 @@ public class ProductSpecCharacteristic {
         			productSpecCharValues.add(charValue);
     			}
 			}
-    		return (ProductSpecCharacteristicValue[])productSpecCharValues.toArray(new ProductSpecCharacteristicValue[productSpecCharValues.size()]);
+    		return productSpecCharValues;
     	}
     	return null;
     }
@@ -237,7 +237,7 @@ public class ProductSpecCharacteristic {
      * 
      * @param charVal
      */
-    public void setDefaultValue(ProductSpecCharacteristicValue charVal) {
+    public void specifyDefaultValue(ProductSpecCharacteristicValue charVal) {
     	
     	if(this.productSpecCharacteristicValue==null){
     		productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
@@ -252,7 +252,7 @@ public class ProductSpecCharacteristic {
     	 
     }
 
-    public ProductSpecCharacteristicValue getDefaultValue() {
+    public ProductSpecCharacteristicValue retrieveDefaultValue() {
     	if(this.productSpecCharacteristicValue!=null){
     		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
     			if(charValue.isIsDefault()){
@@ -284,7 +284,7 @@ public class ProductSpecCharacteristic {
     	 
     }
 
-    public ProductSpecCharacteristic[] getLeafCharacteristic() {
+    public List<ProductSpecCharacteristic> retrieveLeafCharacteristic() {
     	List<ProductSpecCharacteristic>  leafCharacteristic=new ArrayList<ProductSpecCharacteristic>();
     	if(prodSpecCharRelationship!=null){
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
@@ -292,7 +292,7 @@ public class ProductSpecCharacteristic {
         			leafCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
         		}
     		}
-    		return (ProductSpecCharacteristic[])leafCharacteristic.toArray(new ProductSpecCharacteristic[leafCharacteristic.size()]);
+    		return leafCharacteristic;
     	}
     	return null;
     	
@@ -322,7 +322,7 @@ public class ProductSpecCharacteristic {
      * 
      * @param type
      */
-    public ProductSpecCharacteristic[] getRelatedCharacteristic(String type) {
+    public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type) {
     	List<ProductSpecCharacteristic>  relatedCharacteristic=new ArrayList<ProductSpecCharacteristic>();
     	if(prodSpecCharRelationship!=null){
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
@@ -330,11 +330,11 @@ public class ProductSpecCharacteristic {
         			relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
         		}
     		}
-    		return (ProductSpecCharacteristic[])relatedCharacteristic.toArray(new ProductSpecCharacteristic[relatedCharacteristic.size()]);
+    		return relatedCharacteristic;
     	}
     	return null;
     }
-    public ProductSpecCharacteristic[] getRelatedCharacteristic(String type,Date time) {
+    public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type,Date time) {
     	List<ProductSpecCharacteristic>  relatedCharacteristic=new ArrayList<ProductSpecCharacteristic>();
     	if(prodSpecCharRelationship!=null){
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
@@ -342,7 +342,7 @@ public class ProductSpecCharacteristic {
         			relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
         		}
     		}
-    		return (ProductSpecCharacteristic[])relatedCharacteristic.toArray(new ProductSpecCharacteristic[relatedCharacteristic.size()]);
+    		return relatedCharacteristic;
     	}
     	return null;
     }
@@ -352,7 +352,7 @@ public class ProductSpecCharacteristic {
      * @param minCardinality
      * @param maxCardinality
      */
-    public void setCardinality(int minCardinality, int maxCardinality) {
+    public void specifyCardinality(int minCardinality, int maxCardinality) {
     	this.setMinCardinality(minCardinality);
     	this.setMaxCardinality(maxCardinality);
     }

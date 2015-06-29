@@ -201,7 +201,7 @@ public abstract class ProductSpecification {
      * @param revisionDate
      * @param validFor
      */
-    private void setVersion(String verType, String version, String description, Date revisionDate, TimePeriod validFor) {
+    private void specifyVersion(String verType, String version, String description, Date revisionDate, TimePeriod validFor) {
         ProductSpecificationVersion prodSpecversion = new ProductSpecificationVersion(verType, description, version,
                 revisionDate, validFor);
         if (productSpecificationVersion == null) {
@@ -218,7 +218,7 @@ public abstract class ProductSpecification {
      * @param validFor
      * @throws Exception
      */
-    public void setVersion(String version, String description, Date revisionDate, TimePeriod validFor) throws Exception {
+    public void specifyVersion(String version, String description, Date revisionDate, TimePeriod validFor) throws Exception {
 
         String versionNumbers[] = version.split("\\.");
         String versionTypes[] = { ProductConst.VERSION_TYPE_MAJOR, ProductConst.VERSION_TYPE_MINOR,
@@ -228,11 +228,11 @@ public abstract class ProductSpecification {
             throw new Exception("Incorrect Version Format! Please check the version type.");
         }
         for (int i = 0; i < versionNumbers.length; i++) {
-            this.setVersion(versionTypes[i], versionNumbers[i], description, revisionDate, validFor);
+            this.specifyVersion(versionTypes[i], versionNumbers[i], description, revisionDate, validFor);
         }
     }
 
-    public ProductSpecificationVersion[] getCurrentVersion() {
+    public List<ProductSpecificationVersion> retrieveCurrentVersion() {
 
         List<ProductSpecificationVersion> currentVersions = new ArrayList<ProductSpecificationVersion>();
         Date now = new Date();
@@ -244,15 +244,15 @@ public abstract class ProductSpecification {
             }
         }
 
-        return currentVersions.toArray(new ProductSpecificationVersion[0]);
+        return currentVersions;
     }
 
-    public String getCurrentVersionString() {
+    public String retrieveCurrentVersionString() {
 
         String versionString = "";
-        ProductSpecificationVersion[] currentVersions = getCurrentVersion();
+        List<ProductSpecificationVersion> currentVersions = retrieveCurrentVersion();
 
-        if (currentVersions != null && currentVersions.length > 0) {
+        if (currentVersions != null && currentVersions.size() > 0) {
             for (ProductSpecificationVersion currentVersion : currentVersions) {
                 versionString = versionString + "." + currentVersion.getProdSpecRevisionNumber();
             }
@@ -263,7 +263,7 @@ public abstract class ProductSpecification {
         return versionString;
     }
 
-    public ProductSpecificationVersion[] getHistoryVersion() {
+    public List<ProductSpecificationVersion> retrieveHistoryVersion() {
         // TODO - implement ProductSpecification.getHistoryVersion
         throw new UnsupportedOperationException();
     }
@@ -326,7 +326,7 @@ public abstract class ProductSpecification {
      * 
      * @param time
      */
-    public ProductSpecificationCost[] queryCost(Date time) {
+    public List<ProductSpecificationCost> queryCost(Date time) {
         List<ProductSpecificationCost> validProdSpecCost = new ArrayList<ProductSpecificationCost>();
         for (int i = 0; i < productSpecificationCost.size(); i++) {
             ProductSpecificationCost cost = productSpecificationCost.get(i);
@@ -336,8 +336,7 @@ public abstract class ProductSpecification {
 
         }
         if (validProdSpecCost != null && validProdSpecCost.size() > 0) {
-            return (ProductSpecificationCost[]) validProdSpecCost
-                    .toArray(new ProductSpecificationCost[validProdSpecCost.size()]);
+            return  validProdSpecCost;
         } else {
             return null;
         }
@@ -373,7 +372,7 @@ public abstract class ProductSpecification {
      * 
      * @param type
      */
-    public ProductSpecification[] queryRelatedProdSpec(String type) {
+    public List<ProductSpecification> queryRelatedProdSpec(String type) {
         List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
         int len = this.prodSpecRelationship.size();
         for (int i = 0; i < len; i++) {
@@ -381,7 +380,7 @@ public abstract class ProductSpecification {
                 productSpecifications.add(this.prodSpecRelationship.get(i).getTargetProdSpec());
             }
         }
-        return productSpecifications.toArray(new ProductSpecification[0]);
+        return productSpecifications;
     }
 
     /**
@@ -570,7 +569,7 @@ public abstract class ProductSpecification {
      * 
      * @param time
      */
-    public ProductSpecCharUse[] retrieveCharacteristic(Date time) {
+    public List<ProductSpecCharUse> retrieveCharacteristic(Date time) {
         List<ProductSpecCharUse> charUseList = null;
         if (prodSpecCharUse != null) {
             charUseList = new ArrayList<ProductSpecCharUse>();
@@ -579,7 +578,7 @@ public abstract class ProductSpecification {
                 if (charUse.getValidFor().isInPeriod(time))
                     charUseList.add(charUse);
             }
-            return (ProductSpecCharUse[]) charUseList.toArray(new ProductSpecCharUse[charUseList.size()]);
+            return   charUseList;
         }
         return null;
     }
@@ -589,7 +588,7 @@ public abstract class ProductSpecification {
      * @param characteristic
      * @param time
      */
-    public ProdSpecCharValueUse[] retrieveCharacteristicValue(ProductSpecCharacteristic characteristic, Date time) {
+    public List<ProdSpecCharValueUse> retrieveCharacteristicValue(ProductSpecCharacteristic characteristic, Date time) {
         List<ProdSpecCharValueUse> charValueUseList = null;
         charValueUseList = new ArrayList<ProdSpecCharValueUse>();
         ProductSpecCharUse charUse = this.getProdSpecCharUse(characteristic);
@@ -601,7 +600,7 @@ public abstract class ProductSpecification {
                 if (valueUse.getValidFor().isInPeriod(time))
                     charValueUseList.add(valueUse);
             }
-            return (ProdSpecCharValueUse[]) charValueUseList.toArray(new ProdSpecCharValueUse[charValueUseList.size()]);
+            return  charValueUseList;
         }
         return null;
     }
@@ -618,13 +617,13 @@ public abstract class ProductSpecification {
         return null;
     }
 
-    public ProductSpecCharUse[] getRootCharacteristic() {
+    public List<ProductSpecCharUse> retrieveRootCharacteristic() {
         List<ProductSpecCharUse> charUseList = null;
         if (prodSpecCharUse != null) {
             charUseList = prodSpecCharUse;
             for (int i = 0; i < prodSpecCharUse.size(); i++) {
                 ProductSpecCharUse charUse = prodSpecCharUse.get(i);
-                ProductSpecCharacteristic[] prodSpecChar = charUse.getProdSpecChar().getRelatedCharacteristic(
+                List<ProductSpecCharacteristic> prodSpecChar = charUse.getProdSpecChar().retrieveRelatedCharacteristic(
                         ProductConst.RELATIONSHIP_TYPE_AGGREGATION);
                 if (prodSpecChar != null) {
                     for (ProductSpecCharacteristic specChar : prodSpecChar) {
@@ -634,7 +633,7 @@ public abstract class ProductSpecification {
                     }
                 }
             }
-            return (ProductSpecCharUse[]) charUseList.toArray(new ProductSpecCharUse[charUseList.size()]);
+            return  charUseList;
         }
         return null;
     }
@@ -644,16 +643,16 @@ public abstract class ProductSpecification {
      * @param characteristic
      * @param time
      */
-    public ProductSpecCharUse[] getLeafCharacteristic(ProductSpecCharacteristic characteristic, Date time) {
-        ProductSpecCharUse[] charUses = null;
-        ProductSpecCharacteristic[] prodSpecChar = characteristic
-                .getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION,time);
+    public List<ProductSpecCharUse> retrieveLeafCharacteristic(ProductSpecCharacteristic characteristic, Date time) {
+       List<ProductSpecCharUse> charUses = null;
+       List<ProductSpecCharacteristic> prodSpecChar = characteristic
+                .retrieveRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION,time);
         if (prodSpecChar != null) {
-            charUses = new ProductSpecCharUse[prodSpecChar.length];
-            for (int i = 0; i < prodSpecChar.length; i++) {
-                ProductSpecCharUse charUse = this.getProdSpecCharUse(prodSpecChar[i]);
+            charUses = new ArrayList<ProductSpecCharUse>();
+            for (int i = 0; i < prodSpecChar.size(); i++) {
+                ProductSpecCharUse charUse = this.getProdSpecCharUse(prodSpecChar.get(i));
                 if (charUse != null)
-                    charUses[i] = charUse;
+                	charUses.add(charUse);
             }
             return charUses;
         }
@@ -666,7 +665,7 @@ public abstract class ProductSpecification {
      * @param minCardinality
      * @param maxCardinality
      */
-    public void setCardinality(ProductSpecCharacteristic characteristic, int minCardinality, int maxCardinality) {
+    public void specifyCardinality(ProductSpecCharacteristic characteristic, int minCardinality, int maxCardinality) {
         for (int i = 0; i < prodSpecCharUse.size(); i++) {
             ProductSpecCharUse charUse = prodSpecCharUse.get(i);
             if (characteristic.getID().equals(charUse.getProdSpecChar().getID()))
