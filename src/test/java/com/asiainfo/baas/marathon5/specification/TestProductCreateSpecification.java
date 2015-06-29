@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,18 +12,16 @@ import org.junit.Test;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.specification.AtomicProductSpecification;
-import com.asiainfo.baas.marathon.specification.ProdSpecCharValueUse;
-import com.asiainfo.baas.marathon.specification.ProductSpecCharUse;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 import com.asiainfo.baas.marathon.specification.ProductSpecification;
 import com.asiainfo.baas.marathon5.apple.TestProductSpecificationData;
 import com.asiainfo.baas.marathon5.common.CommonUtils;
-import com.asiainfo.baas.marathon5.common.ProdSpecCharParameter;
 
 public class TestProductCreateSpecification {
 
 	public  List<ProductSpecCharacteristic> productSpecChars;
+	private static Logger logger = Logger.getLogger(TestProductCreateSpecification.class);
 	@Before
 	public void createProductSpecChar(){
 		 	productSpecChars = new ArrayList<ProductSpecCharacteristic>();
@@ -95,6 +94,7 @@ public class TestProductCreateSpecification {
 	//[] {productNumber,name,brand,lifecyleStatus,validFor,parameters,version,versionDescription,cost,amount}
 	@Test
 	public void createProductSpecificationTest() throws Exception{
+		logger.info("¿ªÊ¼");
 		if(TestProductSpecificationData.specParameter!=null){
 				ProductSpecification productSpec=new AtomicProductSpecification(TestProductSpecificationData.specParameter[0].toString(),TestProductSpecificationData.specParameter[1].toString(),TestProductSpecificationData.specParameter[2].toString(),TestProductSpecificationData.specParameter[3].toString());
 				for (int i=0 ; i<TestProductSpecificationData.one_charData.length ; i++) {
