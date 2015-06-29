@@ -674,4 +674,67 @@ public abstract class ProductSpecification {
         }
     }
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((brand == null) ? 0 : brand.hashCode());
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result
+				+ ((lifecycleStatus == null) ? 0 : lifecycleStatus.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((prodSpecType == null) ? 0 : prodSpecType.hashCode());
+		result = prime * result
+				+ ((productNumber == null) ? 0 : productNumber.hashCode());
+		result = prime * result
+				+ ((validFor == null) ? 0 : validFor.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductSpecification other = (ProductSpecification) obj;
+		if (brand == null) {
+			if (other.brand != null)
+				return false;
+		} else if (!brand.equals(other.brand))
+			return false;
+		
+		if (lifecycleStatus == null) {
+			if (other.lifecycleStatus != null)
+				return false;
+		} else if (!lifecycleStatus.equals(other.lifecycleStatus))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (prodSpecType == null) {
+			if (other.prodSpecType != null)
+				return false;
+		} else if (!prodSpecType.equals(other.prodSpecType))
+			return false;
+		if (productNumber == null) {
+			if (other.productNumber != null)
+				return false;
+		} else if (!productNumber.equals(other.productNumber))
+			return false;
+		if (validFor == null) {
+			if (other.validFor != null)
+				return false;
+		} else if (!validFor.equals(other.validFor))
+			return false;
+		return true;
+	}
+    
+
 }
