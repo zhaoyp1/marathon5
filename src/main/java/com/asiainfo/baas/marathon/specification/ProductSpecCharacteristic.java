@@ -5,9 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.asiainfo.baas.common.ProductConst;
- 
-import com.asiainfo.baas.marathon.baseType.*;
- 
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
  
 
@@ -206,18 +203,23 @@ public class ProductSpecCharacteristic {
      * @param value
      */
     public void addValue(ProductSpecCharacteristicValue value) {
+    	boolean isEquals=false;
     	if(this.productSpecCharacteristicValue==null){
     		
     		this.productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
     	
     	} else{
     		for (ProductSpecCharacteristicValue productSpecCharValue : productSpecCharacteristicValue) {
-    			
+    			if(value.equals(productSpecCharValue)){
+    				isEquals=true;
+    				break;
+    			}
     		}
     	}
+    	if(!isEquals){
+    		productSpecCharacteristicValue.add(value);
+    	}
     	
-    	
-    	productSpecCharacteristicValue.add(value);
     }
 
     /**

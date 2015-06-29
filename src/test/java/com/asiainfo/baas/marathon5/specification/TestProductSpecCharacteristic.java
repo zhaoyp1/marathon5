@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.asiainfo.baas.common.ProductConst;
@@ -14,6 +15,17 @@ import com.asiainfo.baas.marathon5.common.CommonUtils;
 
 
 public class TestProductSpecCharacteristic {
+	
+	private ProductSpecCharacteristic productSpecCharacteristic;
+	
+	private TimePeriod validFor;
+	
+	@Before
+	public void initValue(){
+		productSpecCharacteristic=new ProductSpecCharacteristic("1","ÑÕÉ«", "",validFor , "",1,6,true, "", "");
+
+	}
+	public void setUp
 
 	@Test
 	public void  addValue(){
