@@ -2,13 +2,18 @@ package com.asiainfo.baas.marathon.specification;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
+import com.asiainfo.baas.marathon5.specification.TestProductCreateSpecification;
  
 
 /**
@@ -21,7 +26,9 @@ import com.asiainfo.baas.marathon.baseType.TimePeriod;
  */
 public class ProductSpecCharacteristic {
 
-    private List<ProductSpecCharacteristicValue> productSpecCharacteristicValue;
+	private   Logger logger = Logger.getLogger(ProductSpecCharacteristic.class);
+
+    private Set<ProductSpecCharacteristicValue> productSpecCharacteristicValue;
     private List<ProductSpecCharUse> prodSpecCharUse;
     private List<ProductSpecCharRelationship> prodSpecCharRelationship;
     /**
@@ -223,23 +230,20 @@ public class ProductSpecCharacteristic {
      * @param value
      */
     public void addValue(ProductSpecCharacteristicValue value) {
-    	boolean isEquals=false;
 
+    	if(value==null){
+    		logger.error("特征值ProductSpecCharacteristicValue为空，不能添加");
+    		return ;
+    	}
     	if(this.productSpecCharacteristicValue==null){
-    		
-    		this.productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
-    	
-    	} else{
-    		for (ProductSpecCharacteristicValue productSpecCharValue : productSpecCharacteristicValue) {
-    			if(value.equals(productSpecCharValue)){
-    				isEquals=true;
-    				break;
-    			}
-    		}
+    		this.productSpecCharacteristicValue=new HashSet<ProductSpecCharacteristicValue>();
     	}
-    	if(!isEquals){
-    		productSpecCharacteristicValue.add(value);
+    	if(productSpecCharacteristicValue.contains(value)){
+    		logger.error("特征值ProductSpecCharacteristicValue已经存在");
+    		return ;
     	}
+    	productSpecCharacteristicValue.add(value);
+    	logger.info("添加特征值成功");
     	
     }
 
@@ -275,7 +279,7 @@ public class ProductSpecCharacteristic {
     public void specifyDefaultValue(ProductSpecCharacteristicValue charVal) {
     	
     	if(this.productSpecCharacteristicValue==null){
-    		productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
+    		productSpecCharacteristicValue=new HashSet<ProductSpecCharacteristicValue>();
     	}
     		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
     			if(charValue.isIsDefault()){
@@ -397,11 +401,11 @@ public class ProductSpecCharacteristic {
     	this.setMaxCardinality(maxCardinality);
     }
 
-    public List<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
+    public Set<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
         return productSpecCharacteristicValue;
     }
 
-    public void setProductSpecCharacteristicValue(List<ProductSpecCharacteristicValue> productSpecCharacteristicValue) {
+    public void setProductSpecCharacteristicValue(Set<ProductSpecCharacteristicValue> productSpecCharacteristicValue) {
         this.productSpecCharacteristicValue = productSpecCharacteristicValue;
     }
 
@@ -445,34 +449,7 @@ public class ProductSpecCharacteristic {
 				return false;
 		} else if (!ID.equals(other.ID))
 			return false;
-		if (maxCardinality != other.maxCardinality)
-			return false;
-		if (minCardinality != other.minCardinality)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (unique == null) {
-			if (other.unique != null)
-				return false;
-		} else if (!unique.equals(other.unique))
-			return false;
-		if (validFor == null) {
-			if (other.validFor != null)
-				return false;
-		} else {
-			if (!validFor.getStartDateTime().equals(other.validFor.getStartDateTime()))
-				return false;
-			if (!validFor.getEndDateTime().equals(other.validFor.getEndDateTime()))
-				return false;
-		} 
-		if (valueType == null) {
-			if (other.valueType != null)
-				return false;
-		} else if (!valueType.equals(other.valueType))
-			return false;
+		
 		return true;
 	}
 
