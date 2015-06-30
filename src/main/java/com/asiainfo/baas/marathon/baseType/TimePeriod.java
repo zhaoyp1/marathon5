@@ -94,8 +94,8 @@ public class TimePeriod {
     public String toString() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("startDateTime", format.format(this.startDateTime))
-                .append("endDateTime", format.format(this.endDateTime)).toString();
+                .append("startDateTime", this.startDateTime == null ? "" : format.format(this.startDateTime))
+                .append("endDateTime", this.endDateTime == null ? "" : format.format(this.endDateTime)).toString();
     }
 
 }
