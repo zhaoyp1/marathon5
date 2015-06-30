@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.asiainfo.baas.common.DateUtils;
 import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
@@ -730,8 +729,12 @@ public abstract class ProductSpecification {
 		if (validFor == null) {
 			if (other.validFor != null)
 				return false;
-		} else if (!validFor.equals(other.validFor))
-			return false;
+		} else {
+			if (!validFor.getStartDateTime().equals(other.validFor.getStartDateTime()))
+				return false;
+			if (!validFor.getEndDateTime().equals(other.validFor.getEndDateTime()))
+				return false;
+		} 
 		return true;
 	}
     

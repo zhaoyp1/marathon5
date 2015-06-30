@@ -118,7 +118,7 @@ public class TestAppleStore_bak {
         // 添加成本
         Money cost = new Money("min", 109);
         productSpec.addCost(cost, validFor);
-        productSpec.setVersion("1.0.0", "", new Date(), validFor);
+        productSpec.specifyVersion("1.0.0", "", new Date(), validFor);
         /** 规格1 ***/
 
         /** 规格2 ***/
@@ -148,7 +148,7 @@ public class TestAppleStore_bak {
         // 添加成本
         Money cost1 = new Money("min", 109);
         productSpec1.addCost(cost1, validFor1);
-        productSpec1.setVersion("1.0.0", "", new Date(), validFor1);
+        productSpec1.specifyVersion("1.0.0", "", new Date(), validFor1);
         /** 规格2 ***/
 
         productSpecs.add(productSpec);
