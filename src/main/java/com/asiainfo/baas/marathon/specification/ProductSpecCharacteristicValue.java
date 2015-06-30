@@ -181,7 +181,8 @@ public class ProductSpecCharacteristicValue {
      * @param unitOfMeasure
      * @param value
      */
-    public void setValue(String unitOfMeasure, String value) {
+
+    public void specifyValue(String unitOfMeasure, String value) {
         this.unitOfMeasure = unitOfMeasure;
         this.value = value;
     }
@@ -193,7 +194,7 @@ public class ProductSpecCharacteristicValue {
      * @param valueTo
      * @param rangeInterval
      */
-    public void setValue(String unitOfMeasure, String valueFrom, String valueTo, String rangeInterval) {
+    public void specifyValue(String unitOfMeasure, String valueFrom, String valueTo, String rangeInterval) {
         this.unitOfMeasure = unitOfMeasure;
         this.valueFrom = valueFrom;
         this.valueTo = valueTo;
@@ -231,7 +232,7 @@ public class ProductSpecCharacteristicValue {
      * @param type
      * @param time
      */
-    public ProductSpecCharacteristicValue[] queryRelatedCharValue(String type, Date time) {
+    public List<ProductSpecCharacteristicValue> queryRelatedCharValue(String type, Date time) {
 
         List<ProductSpecCharacteristicValue> prodSpecCharValues = null;
         if (this.prodSpecCharValueRelationship != null && prodSpecCharValueRelationship.size() > 0) {
@@ -243,41 +244,75 @@ public class ProductSpecCharacteristicValue {
                     prodSpecCharValues.add(relationship.getTargetCharValue());
                 }
             }
-            return (ProductSpecCharacteristicValue[]) prodSpecCharValues
-                    .toArray(new ProductSpecCharacteristicValue[prodSpecCharValues.size()]);
+            return prodSpecCharValues;
         } else {
             return null;
         }
-
     }
 
-    public boolean equals(ProductSpecCharacteristicValue value) {
-        if (this == value)
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((rangeInterval == null) ? 0 : rangeInterval.hashCode());
+        result = prime * result + ((unitOfMeasure == null) ? 0 : unitOfMeasure.hashCode());
+        result = prime * result + ((validFor == null) ? 0 : validFor.hashCode());
+        result = prime * result + ((value == null) ? 0 : value.hashCode());
+        result = prime * result + ((valueFrom == null) ? 0 : valueFrom.hashCode());
+        result = prime * result + ((valueTo == null) ? 0 : valueTo.hashCode());
+        result = prime * result + ((valueType == null) ? 0 : valueType.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if (!(value instanceof ProductSpecCharacteristicValue))
+        if (obj == null)
             return false;
-        final ProductSpecCharacteristicValue newValue = value;
-        if (!newValue.getValue().isEmpty() && !this.getValue().isEmpty()) {
-            if (newValue.getValue().equals(this.getValue()))
-                return true;
-            else
+        if (getClass() != obj.getClass())
+            return false;
+        ProductSpecCharacteristicValue other = (ProductSpecCharacteristicValue) obj;
+        if (rangeInterval == null) {
+            if (other.rangeInterval != null)
+                return false;
+        } else if (!rangeInterval.equals(other.rangeInterval))
+            return false;
+        if (unitOfMeasure == null) {
+            if (other.unitOfMeasure != null)
+                return false;
+        } else if (!unitOfMeasure.equals(other.unitOfMeasure))
+            return false;
+        if (validFor == null) {
+            if (other.validFor != null)
+                return false;
+        } else {
+            if (!validFor.getStartDateTime().equals(other.validFor.getStartDateTime()))
+                return false;
+            if (!validFor.getEndDateTime().equals(other.validFor.getEndDateTime()))
                 return false;
         }
-        if (!newValue.getValueFrom().isEmpty() && !this.getValueFrom().isEmpty()) {
-            if (!newValue.getValueTo().isEmpty() && !this.getValueTo().isEmpty()) {
-                if (newValue.getValueFrom().equals(this.getValueFrom())
-                        && newValue.getValueTo().equals(this.getValueTo()))
-                    return true;
-                else
-                    return false;
-            } else {
-                if (newValue.getValueFrom().equals(this.getValueFrom()))
-                    return true;
-                else
-                    return false;
-            }
-        }
-        return false;
+        if (value == null) {
+            if (other.value != null)
+                return false;
+        } else if (!value.equals(other.value))
+            return false;
+        if (valueFrom == null) {
+            if (other.valueFrom != null)
+                return false;
+        } else if (!valueFrom.equals(other.valueFrom))
+            return false;
+        if (valueTo == null) {
+            if (other.valueTo != null)
+                return false;
+        } else if (!valueTo.equals(other.valueTo))
+            return false;
+        if (valueType == null) {
+            if (other.valueType != null)
+                return false;
+        } else if (!valueType.equals(other.valueType))
+            return false;
+        return true;
     }
 
     public ProductSpecCharacteristic getProductSpecCharacteristic() {

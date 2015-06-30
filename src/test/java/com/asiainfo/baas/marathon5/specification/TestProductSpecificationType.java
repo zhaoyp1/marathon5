@@ -76,6 +76,6 @@ public class TestProductSpecificationType {
         System.out.println("ProductLine £º");
         CommonUtils.printPropertyToJson(null, null, productSpecificationType);
         System.out.println("ProductLine.ProdSpecification £º");
-        CommonUtils.printPropertyToJson(productSpecificationType.queryProdSpec(new Date()), null, null);
+        CommonUtils.printPropertyToJson(null, productSpecificationType.queryProdSpec(new Date()), null);
     }
 }

@@ -1,15 +1,15 @@
 package com.asiainfo.baas.marathon.specification;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import com.asiainfo.baas.common.DateUtils;
 import com.asiainfo.baas.common.ProductConst;
-import com.asiainfo.baas.marathon.baseType.*;
-import com.asiainfo.baas.marathon.dateType.*;
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
+ 
 
 /**
  * A characteristic quality or distinctive feature of a ProductSpecification.
@@ -223,9 +223,17 @@ public class ProductSpecCharacteristic {
      * @param value
      */
     public void addValue(ProductSpecCharacteristicValue value) {
-        if (this.productSpecCharacteristicValue == null)
-            this.productSpecCharacteristicValue = new ArrayList<ProductSpecCharacteristicValue>();
-        productSpecCharacteristicValue.add(value);
+
+    	if(this.productSpecCharacteristicValue==null){
+    		
+    		this.productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
+    	
+    	} else{
+    		for (ProductSpecCharacteristicValue productSpecCharValue : productSpecCharacteristicValue) {
+    			
+    		}
+    	}
+    	productSpecCharacteristicValue.add(value);
     }
 
     /**
@@ -240,50 +248,47 @@ public class ProductSpecCharacteristic {
      * 
      * @param time
      */
-    public ProductSpecCharacteristicValue[] getValue(Date time) {
-        List<ProductSpecCharacteristicValue> productSpecCharValues = null;
-        if (this.productSpecCharacteristicValue != null) {
-            productSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
-            for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-                if (validFor.isInPeriod(time)) {
-                    productSpecCharValues.add(charValue);
-                }
-            }
-            return (ProductSpecCharacteristicValue[]) productSpecCharValues
-                    .toArray(new ProductSpecCharacteristicValue[productSpecCharValues.size()]);
-        }
-        return null;
+    public List<ProductSpecCharacteristicValue> retrieveValue(Date time) {
+    	List<ProductSpecCharacteristicValue> productSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
+    	if(this.productSpecCharacteristicValue!=null){
+    		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+    			if(validFor.isInPeriod(time)){
+        			productSpecCharValues.add(charValue);
+    			}
+			}
+    	}
+    	return productSpecCharValues;
     }
 
     /**
      * 
      * @param charVal
      */
-    public void setDefaultValue(ProductSpecCharacteristicValue charVal) {
 
-        if (this.productSpecCharacteristicValue == null) {
-            productSpecCharacteristicValue = new ArrayList<ProductSpecCharacteristicValue>();
-        }
-        for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-            if (charValue.isIsDefault()) {
-                charValue.setIsDefault(false);
-            }
-        }
-        charVal.setIsDefault(true);
-        productSpecCharacteristicValue.add(charVal);
-
+    public void specifyDefaultValue(ProductSpecCharacteristicValue charVal) {
+    	
+    	if(this.productSpecCharacteristicValue==null){
+    		productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
+    	}
+    		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+    			if(charValue.isIsDefault()){
+    				charValue.setIsDefault(false);
+    			}
+			}
+    		charVal.setIsDefault(true);
+    		productSpecCharacteristicValue.add(charVal);
     }
 
-    public ProductSpecCharacteristicValue getDefaultValue() {
-        if (this.productSpecCharacteristicValue != null) {
-            for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-                if (charValue.isIsDefault()) {
-                    return charValue;
-                }
-            }
-        }
-        return null;
 
+    public ProductSpecCharacteristicValue retrieveDefaultValue() {
+    	if(this.productSpecCharacteristicValue!=null){
+    		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+    			if(charValue.isIsDefault()){
+    				 return charValue;
+    			}
+			}
+    	}
+    	return null;
     }
 
     /**
@@ -308,20 +313,17 @@ public class ProductSpecCharacteristic {
 
     }
 
-    public ProductSpecCharacteristic[] getLeafCharacteristic() {
-        List<ProductSpecCharacteristic> leafCharacteristic = new ArrayList<ProductSpecCharacteristic>();
-        if (prodSpecCharRelationship != null) {
-            for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-                if (ProductConst.RELATIONSHIP_TYPE_AGGREGATION.equals(productSpecCharRelationship
-                        .getCharRelationshipType())) {
-                    leafCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
-                }
-            }
-            return (ProductSpecCharacteristic[]) leafCharacteristic
-                    .toArray(new ProductSpecCharacteristic[leafCharacteristic.size()]);
-        }
-        return null;
-
+    public List<ProductSpecCharacteristic> retrieveLeafCharacteristic() {
+    	List<ProductSpecCharacteristic>  leafCharacteristic=new ArrayList<ProductSpecCharacteristic>();
+    	if(prodSpecCharRelationship!=null){
+    		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
+        		if(ProductConst.RELATIONSHIP_TYPE_AGGREGATION.equals(productSpecCharRelationship.getCharRelationshipType())){
+        			leafCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        		}
+    		}
+    		return leafCharacteristic;
+    	}
+    	return null;
     }
 
     /**
@@ -351,33 +353,30 @@ public class ProductSpecCharacteristic {
      * 
      * @param type
      */
-    public ProductSpecCharacteristic[] getRelatedCharacteristic(String type) {
-        List<ProductSpecCharacteristic> relatedCharacteristic = new ArrayList<ProductSpecCharacteristic>();
-        if (prodSpecCharRelationship != null) {
-            for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-                if (type.equals(productSpecCharRelationship.getCharRelationshipType())) {
-                    relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
-                }
-            }
-            return (ProductSpecCharacteristic[]) relatedCharacteristic
-                    .toArray(new ProductSpecCharacteristic[relatedCharacteristic.size()]);
-        }
-        return null;
+    public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type) {
+    	List<ProductSpecCharacteristic>  relatedCharacteristic=new ArrayList<ProductSpecCharacteristic>();
+    	if(prodSpecCharRelationship!=null){
+    		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
+        		if(type.equals(productSpecCharRelationship.getCharRelationshipType())){
+        			relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        		}
+    		}
+    		return relatedCharacteristic;
+    	}
+    	return null;
     }
 
-    public ProductSpecCharacteristic[] getRelatedCharacteristic(String type, Date time) {
-        List<ProductSpecCharacteristic> relatedCharacteristic = new ArrayList<ProductSpecCharacteristic>();
-        if (prodSpecCharRelationship != null) {
-            for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-                if (type.equals(productSpecCharRelationship.getCharRelationshipType())
-                        && productSpecCharRelationship.getValidFor().isInPeriod(time)) {
-                    relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
-                }
-            }
-            return (ProductSpecCharacteristic[]) relatedCharacteristic
-                    .toArray(new ProductSpecCharacteristic[relatedCharacteristic.size()]);
-        }
-        return null;
+    public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type,Date time) {
+    	List<ProductSpecCharacteristic>  relatedCharacteristic=new ArrayList<ProductSpecCharacteristic>();
+    	if(prodSpecCharRelationship!=null){
+    		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
+        		if(type.equals(productSpecCharRelationship.getCharRelationshipType()) && productSpecCharRelationship.getValidFor().isInPeriod(time)){
+        			relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        		}
+    		}
+    		return relatedCharacteristic;
+    	}
+    	return null;
     }
 
     /**
@@ -385,9 +384,10 @@ public class ProductSpecCharacteristic {
      * @param minCardinality
      * @param maxCardinality
      */
-    public void setCardinality(int minCardinality, int maxCardinality) {
-        this.setMinCardinality(minCardinality);
-        this.setMaxCardinality(maxCardinality);
+
+    public void specifyCardinality(int minCardinality, int maxCardinality) {
+    	this.setMinCardinality(minCardinality);
+    	this.setMaxCardinality(maxCardinality);
     }
 
     public List<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
@@ -407,4 +407,66 @@ public class ProductSpecCharacteristic {
     public String toString() {
         return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+    
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ID == null) ? 0 : ID.hashCode());
+		result = prime * result + maxCardinality;
+		result = prime * result + minCardinality;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((unique == null) ? 0 : unique.hashCode());
+		result = prime * result
+				+ ((validFor == null) ? 0 : validFor.hashCode());
+		result = prime * result
+				+ ((valueType == null) ? 0 : valueType.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductSpecCharacteristic other = (ProductSpecCharacteristic) obj;
+		if (ID == null) {
+			if (other.ID != null)
+				return false;
+		} else if (!ID.equals(other.ID))
+			return false;
+		if (maxCardinality != other.maxCardinality)
+			return false;
+		if (minCardinality != other.minCardinality)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (unique == null) {
+			if (other.unique != null)
+				return false;
+		} else if (!unique.equals(other.unique))
+			return false;
+		if (validFor == null) {
+			if (other.validFor != null)
+				return false;
+		} else {
+			if (!validFor.getStartDateTime().equals(other.validFor.getStartDateTime()))
+				return false;
+			if (!validFor.getEndDateTime().equals(other.validFor.getEndDateTime()))
+				return false;
+		} 
+		if (valueType == null) {
+			if (other.valueType != null)
+				return false;
+		} else if (!valueType.equals(other.valueType))
+			return false;
+		return true;
+	}
+
 }

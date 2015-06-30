@@ -2,6 +2,7 @@ package com.asiainfo.baas.marathon5.specification;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -40,12 +41,12 @@ public class TestProductSpecChar {
 
 		srcCharValue.addRelatedCharValue(targetCharValue, "dependency", validFor);
 		srcCharValue.addRelatedCharValue(targetCharValue2, "dependency", validFor);
-		ProductSpecCharacteristicValue[] charValues=srcCharValue.queryRelatedCharValue("dependency", format.parse("2015-07-20 23:59:59"));
-		for (int i = 0; i < charValues.length; i++) {
-			if(charValues[i].getValue()==null){
-				System.out.println(charValues[i].getValueFrom()+","+charValues[i].getValueTo());
+		List<ProductSpecCharacteristicValue> charValues=srcCharValue.queryRelatedCharValue("dependency", format.parse("2015-07-20 23:59:59"));
+		for (int i = 0; i < charValues.size(); i++) {
+			if(charValues.get(i).getValue()==null){
+				System.out.println(charValues.get(i).getValueFrom()+","+charValues.get(i).getValueTo());
 			}else{
-				System.out.println(charValues[i].getValue());
+				System.out.println(charValues.get(i).getValue());
 			}
 		}
 	}

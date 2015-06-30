@@ -107,7 +107,7 @@ public class TestApple {
 				//Ìí¼Ó³É±¾
 				Money cost=new Money(TestProductSpecificationData.specParameter[8].toString(),Long.parseLong(TestProductSpecificationData.specParameter[9].toString()));
 				productSpec.addCost(cost, (TimePeriod)TestProductSpecificationData.specParameter[4]);
-				productSpec.setVersion(TestProductSpecificationData.specParameter[6].toString(), TestProductSpecificationData.specParameter[7].toString(),new Date(), (TimePeriod)TestProductSpecificationData.specParameter[4]);
+				productSpec.specifyVersion(TestProductSpecificationData.specParameter[6].toString(), TestProductSpecificationData.specParameter[7].toString(),new Date(), (TimePeriod)TestProductSpecificationData.specParameter[4]);
 				
 				
 				 				
