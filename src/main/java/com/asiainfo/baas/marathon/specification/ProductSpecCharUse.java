@@ -168,11 +168,12 @@ public class ProductSpecCharUse {
      * @param validFor
      */
     public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage,
-            TimePeriod validFor) {
+            TimePeriod validFor,String name) {
         this.prodSpecChar = charSpec;
         this.canBeOveridden = canBeOveridden;
         this.isPackage = isPackage;
         this.validFor = validFor;
+        this.name = name;
     }
 
     /**
@@ -250,9 +251,6 @@ public class ProductSpecCharUse {
         		logger.error("该特征没有这个值，不能设置默认值！");
         		return false;
         	}
-        	ProdSpecCharValueUse oldDefaultValueUse = this.retrieveDefaultCharacteristicValueUse();
-        	if(oldDefaultValueUse != null)
-        		oldDefaultValueUse.setIsDefault(false);
         	valueUse.setIsDefault(true);
         	return true;
         }else{
@@ -261,6 +259,25 @@ public class ProductSpecCharUse {
         }
     }
     
+    public boolean clearDefaultValueUse(ProductSpecCharacteristicValue defaultValue){
+    	if(defaultValue == null){
+    		logger.error("传入的默认值不能为空！");
+    		return false;
+    	}
+    	ProdSpecCharValueUse oldDefaultValueUse = this.retrieveProdSpecCharValueUse(defaultValue);
+    	if(oldDefaultValueUse != null){
+    			if(oldDefaultValueUse.isIsDefault()){
+    				oldDefaultValueUse.setIsDefault(false);
+    				return true;
+    			}else{
+    				logger.error("该特征值不是默认值！");
+    	    		return false;
+    			}
+    	}else{
+    		logger.error("该特征值没有被使用！");
+    		return false;
+    	}
+    }
     private ProdSpecCharValueUse retrieveProdSpecCharValueUse(ProductSpecCharacteristicValue charValue){
     	for (ProdSpecCharValueUse valueUse : prodSpecCharValueUse) {
             if (valueUse.getProdSpecCharValue().equals(charValue)) 
@@ -269,13 +286,15 @@ public class ProductSpecCharUse {
     	return null;
     }
 
-    public ProdSpecCharValueUse retrieveDefaultCharacteristicValueUse() {
+    public List<ProdSpecCharValueUse> retrieveDefaultCharacteristicValueUse() {
+    	List<ProdSpecCharValueUse> defaultValueUse = new ArrayList<ProdSpecCharValueUse>();
         if (prodSpecCharValueUse != null) {
             for (int i = 0; i < prodSpecCharValueUse.size(); i++) {
                 ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
                 if (valueUse.isIsDefault())
-                    return valueUse;
+                	defaultValueUse.add(valueUse);
             }
+            return defaultValueUse;
         }
         return null;
 
@@ -291,7 +310,42 @@ public class ProductSpecCharUse {
         this.maxCardinality = maxCardinality;
     }
 
-    /*
+    
+   
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((prodSpecChar == null) ? 0 : prodSpecChar.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductSpecCharUse other = (ProductSpecCharUse) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (prodSpecChar == null) {
+			if (other.prodSpecChar != null)
+				return false;
+		} else if (!prodSpecChar.equals(other.prodSpecChar))
+			return false;
+		return true;
+	}
+
+	/*
      * (non-Javadoc)
      * 
      * @see java.lang.Object#toString()
