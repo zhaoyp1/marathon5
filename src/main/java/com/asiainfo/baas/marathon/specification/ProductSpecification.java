@@ -601,14 +601,46 @@ public abstract class ProductSpecification {
      */
     public boolean specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
+    	if(characteristic == null || defaultValue == null){
+    		logger.error("特征和特征值不能为空！");
+            return false;
+    	}
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
             if (charUse == null) {
                 logger.error("该特征没有被使用！");
                 return false;
             }
-            charUse.specifyDefaultCharacteristicValueUse(defaultValue);
-            return true;
+            boolean flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
+            if(!flag){
+            	 logger.error("该特征值没有被使用！");
+                 return false;
+            }
+            	return true;
+        } else {
+            logger.error("没有添加特征！");
+            return false;
+        }
+    }
+    
+    public boolean clearDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
+            ProductSpecCharacteristicValue defaultValue) {
+    	if(characteristic == null || defaultValue == null){
+    		logger.error("特征和特征值不能为空！");
+            return false;
+    	}
+        if (this.prodSpecCharUse != null) {
+            ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
+            if (charUse == null) {
+                logger.error("该特征没有被使用！");
+                return false;
+            }
+            boolean flag = charUse.clearDefaultValueUse(defaultValue);
+            if(!flag){
+            	 logger.error("该特征值没有被使用！");
+                 return false;
+            }
+            	return true;
         } else {
             logger.error("没有添加特征！");
             return false;
@@ -734,17 +766,18 @@ public abstract class ProductSpecification {
      * @param minCardinality
      * @param maxCardinality
      */
-    public void specifyCardinality(ProductSpecCharacteristic characteristic, int minCardinality, int maxCardinality) {
+    public boolean specifyCardinality(ProductSpecCharacteristic characteristic, int minCardinality, int maxCardinality) {
         if (characteristic == null) {
             logger.info("传入的特征不能为空！");
-            return;
+            return false;
         }
         ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
         if (charUse == null) {
             logger.info("该特征没有被使用！");
-            return;
+            return false;
         }
         charUse.setCardinality(minCardinality, maxCardinality);
+        return true;
     }
 
     /*
