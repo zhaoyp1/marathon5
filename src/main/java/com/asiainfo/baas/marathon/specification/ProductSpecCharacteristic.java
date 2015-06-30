@@ -2,10 +2,7 @@ package com.asiainfo.baas.marathon.specification;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -13,7 +10,6 @@ import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
-import com.asiainfo.baas.marathon5.specification.TestProductCreateSpecification;
  
 
 /**
@@ -28,7 +24,7 @@ public class ProductSpecCharacteristic {
 
 	private   Logger logger = Logger.getLogger(ProductSpecCharacteristic.class);
 
-    private Set<ProductSpecCharacteristicValue> productSpecCharacteristicValue;
+    private List<ProductSpecCharacteristicValue> productSpecCharacteristicValue;
     private List<ProductSpecCharUse> prodSpecCharUse;
     private List<ProductSpecCharRelationship> prodSpecCharRelationship;
     /**
@@ -229,21 +225,25 @@ public class ProductSpecCharacteristic {
      * 
      * @param value
      */
-    public void addValue(ProductSpecCharacteristicValue value) {
+    public boolean addValue(ProductSpecCharacteristicValue value) {
 
     	if(value==null){
     		logger.error("特征值ProductSpecCharacteristicValue为空，不能添加");
-    		return ;
+    		return false;
     	}
     	if(this.productSpecCharacteristicValue==null){
-    		this.productSpecCharacteristicValue=new HashSet<ProductSpecCharacteristicValue>();
+    		this.productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
     	}
     	if(productSpecCharacteristicValue.contains(value)){
     		logger.error("特征值ProductSpecCharacteristicValue已经存在");
-    		return ;
+    		return false;
+    	}
+    	if(value.getValueType()!=null && !this.getValueType().equals(value.getValueType())){
+    		logger.error("特征值ProductSpecCharacteristicValue与特征ProductSpecCharacteristic的valueType不相同");
+    		return false;
     	}
     	productSpecCharacteristicValue.add(value);
-    	logger.info("添加特征值成功");
+    	return true;
     	
     }
 
@@ -260,14 +260,22 @@ public class ProductSpecCharacteristic {
      * @param time
      */
     public List<ProductSpecCharacteristicValue> retrieveValue(Date time) {
-    	List<ProductSpecCharacteristicValue> productSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
-    	if(this.productSpecCharacteristicValue!=null){
-    		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-    			if(validFor.isInPeriod(time)){
-        			productSpecCharValues.add(charValue);
+    	List<ProductSpecCharacteristicValue> productSpecCharValues=null;
+    	if(time==null){
+    		logger.error("时间不能为空");
+    	}else{
+    		if(this.productSpecCharacteristicValue!=null){
+        		productSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
+        		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+        			if(charValue.getValidFor()!=null && charValue.getValidFor().isInPeriod(time)){
+            			productSpecCharValues.add(charValue);
+        			}
     			}
-			}
+        	}else{
+        		logger.warn("productSpecCharacteristic不存在特征值");
+        	}
     	}
+    	
     	return productSpecCharValues;
     }
 
@@ -276,18 +284,38 @@ public class ProductSpecCharacteristic {
      * @param charVal
      */
 
-    public void specifyDefaultValue(ProductSpecCharacteristicValue charVal) {
+    public boolean specifyDefaultValue(ProductSpecCharacteristicValue charVal) {
     	
     	if(this.productSpecCharacteristicValue==null){
-    		productSpecCharacteristicValue=new HashSet<ProductSpecCharacteristicValue>();
+    		 logger.error("当前特征不存在特征值");
+    		 return false;
     	}
-    		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-    			if(charValue.isIsDefault()){
-    				charValue.setIsDefault(false);
-    			}
-			}
-    		charVal.setIsDefault(true);
-    		productSpecCharacteristicValue.add(charVal);
+    	if(!productSpecCharacteristicValue.contains(charVal)){
+    		logger.error("当前特征不包含指定特征值");
+    		return false;
+    	}
+    	ProductSpecCharacteristicValue defaultValue=this.retrieveDefaultValue();
+    	if(defaultValue!=null && defaultValue.equals(charVal)){
+    		logger.warn("指定特征值已经设置为默认值，无需进行重复设置");
+    		return true;
+    	}
+    	boolean oldFlag=false;
+    	boolean newFlag=false;
+    	for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+    		if(charValue.isIsDefault() && !charVal.equals(charValue)){
+    			charValue.setIsDefault(false);
+    			oldFlag=true;
+    		}
+    		if(charValue.equals(charVal)){
+    			charVal.setIsDefault(true);
+    			newFlag=true;
+    		}
+    		if(oldFlag && newFlag){
+    			break;
+    		}
+		}
+    	return false;
+    	
     }
 
 
@@ -401,11 +429,11 @@ public class ProductSpecCharacteristic {
     	this.setMaxCardinality(maxCardinality);
     }
 
-    public Set<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
+    public List<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
         return productSpecCharacteristicValue;
     }
 
-    public void setProductSpecCharacteristicValue(Set<ProductSpecCharacteristicValue> productSpecCharacteristicValue) {
+    public void setProductSpecCharacteristicValue(List<ProductSpecCharacteristicValue> productSpecCharacteristicValue) {
         this.productSpecCharacteristicValue = productSpecCharacteristicValue;
     }
 
