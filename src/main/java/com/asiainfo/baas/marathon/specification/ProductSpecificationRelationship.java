@@ -1,5 +1,8 @@
 package com.asiainfo.baas.marathon.specification;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.asiainfo.baas.marathon.baseType.*;
 
 /**
@@ -65,6 +68,16 @@ public class ProductSpecificationRelationship {
 
     public void setValidFor(TimePeriod validFor) {
         this.validFor = validFor;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
 }

@@ -1,9 +1,14 @@
 package com.asiainfo.baas.marathon.specification;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.asiainfo.baas.marathon.baseType.*;
 
 /**
- * A use of the ProdSpecCharacteristicValue by an ProductSpecification to which additional properties (attributes) apply or override the properties of similar properties contained in ProdSpecCharacteristicValue.
+ * A use of the ProdSpecCharacteristicValue by an ProductSpecification to which
+ * additional properties (attributes) apply or override the properties of
+ * similar properties contained in ProdSpecCharacteristicValue.
  */
 public class ProdSpecCharValueUse {
 
@@ -14,7 +19,8 @@ public class ProdSpecCharValueUse {
      */
     private boolean isDefault;
     /**
-     * The period of time for which the use of the CharacteristicSpecificationValue is applicable.
+     * The period of time for which the use of the
+     * CharacteristicSpecificationValue is applicable.
      */
     private TimePeriod validFor;
 
@@ -50,8 +56,6 @@ public class ProdSpecCharValueUse {
         this.validFor = validFor;
     }
 
-    
-
     /**
      * 
      * @param prodSpecCharVal
@@ -59,9 +63,19 @@ public class ProdSpecCharValueUse {
      * @param validFor
      */
     public ProdSpecCharValueUse(ProductSpecCharacteristicValue prodSpecCharVal, boolean isDefault, TimePeriod validFor) {
-    	this.prodSpecCharValue = prodSpecCharVal;
-    	this.isDefault = isDefault;
-    	this.validFor = validFor;
+        this.prodSpecCharValue = prodSpecCharVal;
+        this.isDefault = isDefault;
+        this.validFor = validFor;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
 }

@@ -5,8 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.asiainfo.baas.common.ProductConst;
+import com.asiainfo.baas.common.ReflectionToStringBuilderBaas;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
@@ -200,7 +203,8 @@ public abstract class ProductSpecification {
      * @param revisionDate
      * @param validFor
      */
-    private void specifyVersion(String verType, String version, String description, Date revisionDate, TimePeriod validFor) {
+    private void specifyVersion(String verType, String version, String description, Date revisionDate,
+            TimePeriod validFor) {
         ProductSpecificationVersion prodSpecversion = new ProductSpecificationVersion(verType, description, version,
                 revisionDate, validFor);
         if (productSpecificationVersion == null) {
@@ -217,7 +221,8 @@ public abstract class ProductSpecification {
      * @param validFor
      * @throws Exception
      */
-    public void specifyVersion(String version, String description, Date revisionDate, TimePeriod validFor) throws Exception {
+    public void specifyVersion(String version, String description, Date revisionDate, TimePeriod validFor)
+            throws Exception {
 
         String versionNumbers[] = version.split("\\.");
         String versionTypes[] = { ProductConst.VERSION_TYPE_MAJOR, ProductConst.VERSION_TYPE_MINOR,
@@ -335,7 +340,7 @@ public abstract class ProductSpecification {
 
         }
         if (validProdSpecCost != null && validProdSpecCost.size() > 0) {
-            return  validProdSpecCost;
+            return validProdSpecCost;
         } else {
             return null;
         }
@@ -577,7 +582,7 @@ public abstract class ProductSpecification {
                 if (charUse.getValidFor().isInPeriod(time))
                     charUseList.add(charUse);
             }
-            return   charUseList;
+            return charUseList;
         }
         return null;
     }
@@ -599,7 +604,7 @@ public abstract class ProductSpecification {
                 if (valueUse.getValidFor().isInPeriod(time))
                     charValueUseList.add(valueUse);
             }
-            return  charValueUseList;
+            return charValueUseList;
         }
         return null;
     }
@@ -627,12 +632,12 @@ public abstract class ProductSpecification {
                 if (prodSpecChar != null) {
                     for (ProductSpecCharacteristic specChar : prodSpecChar) {
                         ProductSpecCharUse subCharUse = this.getProdSpecCharUse(specChar);
-                        if(subCharUse != null)
-                        	charUseList.remove(subCharUse);
+                        if (subCharUse != null)
+                            charUseList.remove(subCharUse);
                     }
                 }
             }
-            return  charUseList;
+            return charUseList;
         }
         return null;
     }
@@ -642,16 +647,17 @@ public abstract class ProductSpecification {
      * @param characteristic
      * @param time
      */
+
     public List<ProductSpecCharUse> retrieveLeafCharacteristic(ProductSpecCharacteristic characteristic, Date time) {
-       List<ProductSpecCharUse> charUses = null;
-       List<ProductSpecCharacteristic> prodSpecChar = characteristic
-                .retrieveRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION,time);
+        List<ProductSpecCharUse> charUses = null;
+        List<ProductSpecCharacteristic> prodSpecChar = characteristic.retrieveRelatedCharacteristic(
+                ProductConst.RELATIONSHIP_TYPE_AGGREGATION, time);
         if (prodSpecChar != null) {
             charUses = new ArrayList<ProductSpecCharUse>();
             for (int i = 0; i < prodSpecChar.size(); i++) {
                 ProductSpecCharUse charUse = this.getProdSpecCharUse(prodSpecChar.get(i));
                 if (charUse != null)
-                	charUses.add(charUse);
+                    charUses.add(charUse);
             }
             return charUses;
         }
@@ -672,71 +678,90 @@ public abstract class ProductSpecification {
         }
     }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((brand == null) ? 0 : brand.hashCode());
-		result = prime * result
-				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result
-				+ ((lifecycleStatus == null) ? 0 : lifecycleStatus.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((prodSpecType == null) ? 0 : prodSpecType.hashCode());
-		result = prime * result
-				+ ((productNumber == null) ? 0 : productNumber.hashCode());
-		result = prime * result
-				+ ((validFor == null) ? 0 : validFor.hashCode());
-		return result;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductSpecification other = (ProductSpecification) obj;
-		if (brand == null) {
-			if (other.brand != null)
-				return false;
-		} else if (!brand.equals(other.brand))
-			return false;
-		
-		if (lifecycleStatus == null) {
-			if (other.lifecycleStatus != null)
-				return false;
-		} else if (!lifecycleStatus.equals(other.lifecycleStatus))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (prodSpecType == null) {
-			if (other.prodSpecType != null)
-				return false;
-		} else if (!prodSpecType.equals(other.prodSpecType))
-			return false;
-		if (productNumber == null) {
-			if (other.productNumber != null)
-				return false;
-		} else if (!productNumber.equals(other.productNumber))
-			return false;
-		if (validFor == null) {
-			if (other.validFor != null)
-				return false;
-		} else {
-			if (!validFor.getStartDateTime().equals(other.validFor.getStartDateTime()))
-				return false;
-			if (!validFor.getEndDateTime().equals(other.validFor.getEndDateTime()))
-				return false;
-		} 
-		return true;
-	}
-    
+        // ReflectionToStringBuilderBaas a = new
+        // ReflectionToStringBuilderBaas(this,
+        // ToStringStyle.SHORT_PREFIX_STYLE);
+        // return a.toString();
+
+        // StringBuildeer = new StringBuilder();
+        // stringBuilder.append(this.getClass().getSimpleName()).append(":\n");
+        // stringBuilder.append("name=").append(name).append(", ");
+        // stringBuilder.append("name=").append(name).append(", ");
+        //
+        // stringBuilder.append("\n");
+        // stringBuilder.append("prodSpecCharUse=");
+        // stringBuilder.append(prodSpecCharUse.toString());
+        // return stringBuilder.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((brand == null) ? 0 : brand.hashCode());
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((lifecycleStatus == null) ? 0 : lifecycleStatus.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((prodSpecType == null) ? 0 : prodSpecType.hashCode());
+        result = prime * result + ((productNumber == null) ? 0 : productNumber.hashCode());
+        result = prime * result + ((validFor == null) ? 0 : validFor.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductSpecification other = (ProductSpecification) obj;
+        if (brand == null) {
+            if (other.brand != null)
+                return false;
+        } else if (!brand.equals(other.brand))
+            return false;
+
+        if (lifecycleStatus == null) {
+            if (other.lifecycleStatus != null)
+                return false;
+        } else if (!lifecycleStatus.equals(other.lifecycleStatus))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (prodSpecType == null) {
+            if (other.prodSpecType != null)
+                return false;
+        } else if (!prodSpecType.equals(other.prodSpecType))
+            return false;
+        if (productNumber == null) {
+            if (other.productNumber != null)
+                return false;
+        } else if (!productNumber.equals(other.productNumber))
+            return false;
+        if (validFor == null) {
+            if (other.validFor != null)
+                return false;
+        } else {
+            if (!validFor.getStartDateTime().equals(other.validFor.getStartDateTime()))
+                return false;
+            if (!validFor.getEndDateTime().equals(other.validFor.getEndDateTime()))
+                return false;
+        }
+        return true;
+    }
 
 }

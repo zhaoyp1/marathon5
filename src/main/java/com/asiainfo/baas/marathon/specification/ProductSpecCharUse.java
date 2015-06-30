@@ -1,6 +1,10 @@
 package com.asiainfo.baas.marathon.specification;
 
 import java.util.*;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.asiainfo.baas.marathon.baseType.*;
 
 public class ProductSpecCharUse {
@@ -9,7 +13,8 @@ public class ProductSpecCharUse {
     private ProductSpecCharacteristic prodSpecChar;
     private List<ProdSpecCharValueUse> prodSpecCharValueUse;
     /**
-     * A word, term, or phrase by which the CharacteristicSpecification is known and distinguished from other CharacteristicSpecifications.
+     * A word, term, or phrase by which the CharacteristicSpecification is known
+     * and distinguished from other CharacteristicSpecifications.
      */
     private String name;
     /**
@@ -19,27 +24,38 @@ public class ProductSpecCharUse {
     /**
      * An indicator that specifies if a value is unique for the specification.
      * 
-     * Possible values are: "unique while value is in effect" and "unique whether value is in effect or not"
+     * Possible values are: "unique while value is in effect" and
+     * "unique whether value is in effect or not"
      */
     private String unique;
     /**
-     * An indicator that specifies if the associated CharacteristicSpecification is a composite.
+     * An indicator that specifies if the associated CharacteristicSpecification
+     * is a composite.
      */
     private boolean isPackage;
     /**
-     * An indicator that specifies that the CharacteristicSpecValues associated with the CharacteristicSpec cannot be changed when instantiating a ServiceCharacteristicValue. For example, a bandwidth of 64 MB cannot be changed.
+     * An indicator that specifies that the CharacteristicSpecValues associated
+     * with the CharacteristicSpec cannot be changed when instantiating a
+     * ServiceCharacteristicValue. For example, a bandwidth of 64 MB cannot be
+     * changed.
      */
     private boolean canBeOveridden;
     /**
-     * The minimum number of instances a CharacteristicValue can take on. For example, zero to five phone numbers in a group calling plan, where zero is the value for the minCardinality.
+     * The minimum number of instances a CharacteristicValue can take on. For
+     * example, zero to five phone numbers in a group calling plan, where zero
+     * is the value for the minCardinality.
      */
     private int minCardinality;
     /**
-     * The maximum number of instances a CharacteristicValue can take on. For example, zero to five phone numbers in a group calling plan, where five is the value for the maxCardinality.
+     * The maximum number of instances a CharacteristicValue can take on. For
+     * example, zero to five phone numbers in a group calling plan, where five
+     * is the value for the maxCardinality.
      */
     private int maxCardinality;
     /**
-     * An indicator that specifies that the values for the characteristic can be extended by adding new values when instantiating a characteristic for a Service.
+     * An indicator that specifies that the values for the characteristic can be
+     * extended by adding new values when instantiating a characteristic for a
+     * Service.
      */
     private boolean extensible;
     private TimePeriod validFor;
@@ -147,11 +163,12 @@ public class ProductSpecCharUse {
      * @param isPackage
      * @param validFor
      */
-    public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage, TimePeriod validFor) {
-    	this.prodSpecChar = charSpec;
-    	this.canBeOveridden = canBeOveridden;
-    	this.isPackage = isPackage;
-    	this.validFor = validFor;
+    public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage,
+            TimePeriod validFor) {
+        this.prodSpecChar = charSpec;
+        this.canBeOveridden = canBeOveridden;
+        this.isPackage = isPackage;
+        this.validFor = validFor;
     }
 
     /**
@@ -167,17 +184,19 @@ public class ProductSpecCharUse {
      * @param extensible
      * @param description
      */
-    public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage, TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality, boolean extensible, String description) {
-    	this.prodSpecChar = charSpec;
-    	this.canBeOveridden = canBeOveridden;
-    	this.isPackage = isPackage;
-    	this.validFor = validFor;
-    	this.name = name;
-    	this.unique = unique;
-    	this.minCardinality = minCardinality;
-    	this.maxCardinality = maxCardinality;
-    	this.extensible = extensible;
-    	this.description = description;
+    public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage,
+            TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality,
+            boolean extensible, String description) {
+        this.prodSpecChar = charSpec;
+        this.canBeOveridden = canBeOveridden;
+        this.isPackage = isPackage;
+        this.validFor = validFor;
+        this.name = name;
+        this.unique = unique;
+        this.minCardinality = minCardinality;
+        this.maxCardinality = maxCardinality;
+        this.extensible = extensible;
+        this.description = description;
     }
 
     /**
@@ -187,11 +206,11 @@ public class ProductSpecCharUse {
      * @param validFor
      */
     public void addValue(ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
-    	ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue,isDefault,validFor);
-    	if(prodSpecCharValueUse == null){
-    		prodSpecCharValueUse = new ArrayList<ProdSpecCharValueUse>();
-    	}
-    	prodSpecCharValueUse.add(charValueUse);
+        ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue, isDefault, validFor);
+        if (prodSpecCharValueUse == null) {
+            prodSpecCharValueUse = new ArrayList<ProdSpecCharValueUse>();
+        }
+        prodSpecCharValueUse.add(charValueUse);
     }
 
     /**
@@ -208,38 +227,59 @@ public class ProductSpecCharUse {
      * @param defaultValue
      */
     public void specifyDefaultCharacteristicValueUse(ProductSpecCharacteristicValue defaultValue) {
-    	if(prodSpecCharValueUse != null){
-    		for(int i = 0 ; i < prodSpecCharValueUse.size() ; i++){
-    			ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
-    			if(valueUse.isIsDefault() && !valueUse.getProdSpecCharValue().equals(defaultValue)){
-    				valueUse.setIsDefault(false);
-    			}
-    			if(valueUse.getProdSpecCharValue().equals(defaultValue)){
-    				valueUse.setIsDefault(true);
-    			}
-    		}
-    	}
+        if (prodSpecCharValueUse != null) {
+            for (int i = 0; i < prodSpecCharValueUse.size(); i++) {
+                ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
+                if (valueUse.isIsDefault() && !valueUse.getProdSpecCharValue().equals(defaultValue)) {
+                    valueUse.setIsDefault(false);
+                }
+                if (valueUse.getProdSpecCharValue().equals(defaultValue)) {
+                    valueUse.setIsDefault(true);
+                }
+            }
+        }
     }
-    
-    public ProdSpecCharValueUse retrieveDefaultCharacteristicValueUse(){
-    	if(prodSpecCharValueUse != null){
-    		for(int i = 0 ; i < prodSpecCharValueUse.size() ; i++){
-    			ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
-    			if(valueUse.isIsDefault())
-    				return valueUse;
-    		}
-    	}
-		return null;
-    	
+
+    public ProdSpecCharValueUse retrieveDefaultCharacteristicValueUse() {
+        if (prodSpecCharValueUse != null) {
+            for (int i = 0; i < prodSpecCharValueUse.size(); i++) {
+                ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
+                if (valueUse.isIsDefault())
+                    return valueUse;
+            }
+        }
+        return null;
+
     }
+
     /**
      * 
      * @param minCardinality
      * @param maxCardinality
      */
     public void setCardinality(int minCardinality, int maxCardinality) {
-    	this.minCardinality = minCardinality;
-    	this.maxCardinality = maxCardinality;
+        this.minCardinality = minCardinality;
+        this.maxCardinality = maxCardinality;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        toStringBuilder.append("description", description);
+        toStringBuilder.append("unique", unique);
+        toStringBuilder.append("isPackage", isPackage);
+        toStringBuilder.append("canBeOveridden", canBeOveridden);
+        toStringBuilder.append("minCardinality", minCardinality);
+        toStringBuilder.append("maxCardinality", maxCardinality);
+        toStringBuilder.append("extensible", extensible);
+        toStringBuilder.append("validFor", validFor);
+
+        return toStringBuilder.toString();
     }
 
 }

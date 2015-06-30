@@ -1,10 +1,13 @@
 package com.asiainfo.baas.marathon.baseType;
 
+import java.security.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.asiainfo.baas.common.DateUtils;
 
@@ -80,6 +83,19 @@ public class TimePeriod {
             return false;
         }
         return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("startDateTime", format.format(this.startDateTime))
+                .append("endDateTime", format.format(this.endDateTime)).toString();
     }
 
 }

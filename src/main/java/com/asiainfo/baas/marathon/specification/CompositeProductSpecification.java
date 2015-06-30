@@ -58,4 +58,6 @@ public class CompositeProductSpecification extends ProductSpecification {
         this.prodSpec.add(prodSpec);
     }
 
+   
+
 }

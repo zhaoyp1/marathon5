@@ -51,4 +51,15 @@ public class ProductSpecificationCost {
     	this.validFor=validFor;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "ProductSpecificationCost [productSpecification=" + productSpecification + ", costToBusiness="
+                + costToBusiness + ", validFor=" + validFor + "]";
+    }
+    
+    
+
 }

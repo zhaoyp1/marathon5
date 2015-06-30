@@ -3,30 +3,33 @@
             "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
-	<!-- 控制台输出 -->
-	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{HH:mm:ss}(%F:%L)[%-5p] %m%n" />
-		</layout>
-	</appender>
-	<!-- 文件输出 -->
-	<appender name="aibaas" class="org.apache.log4j.RollingFileAppender">
-		<!-- 设置通道ID:org.zblog.all和输出方式：org.apache.log4j.RollingFileAppender -->
-		<param name="File" value="E:/aibaas.log" /> <!-- 设置File参数：日志输出文件名 -->
-		<param name="Append" value="true" /> <!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
-		<param name="MaxBackupIndex" value="10" />
-		<param name="" value="INFO" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%p (%c:%L)- %m%n" /> <!-- 设置输出文件项目和格式 -->
-		</layout>
-	</appender>
+ <!-- 控制台输出 -->
+ <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+   <layout class="org.apache.log4j.PatternLayout">
+   <param name="ConversionPattern" value="%d{HH:mm:ss}(%F:%L)[%-5p] %m%n" />
+  </layout>
+ </appender>
+<!-- 文件输出 -->
+ <appender name="aibaas" class="org.apache.log4j.RollingFileAppender">
+<!-- 设置通道ID:org.zblog.all和输出方式：org.apache.log4j.RollingFileAppender -->
+<param name="File" value="E:/aibaas.log" /> <!-- 设置File参数：日志输出文件名 -->
+<param name="Append" value="true" /> <!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+<param name="MaxBackupIndex" value="10" />
+<param name="" value="INFO"/>
+<layout class="org.apache.log4j.PatternLayout">
+<param name="ConversionPattern" value="%p (%c:%L)- %m%n" /> <!-- 设置输出文件项目和格式 -->
+</layout>
+</appender>
+<appender name="" class="">
 
-	<!-- 设置日志输出级别 -->
-	<category name="com.asiainfo.baas.marathon5">
-		<priority value="debug" />
-	</category>
-	<root>
-		<priority value="error" />
-		<appender-ref ref="stdout" />
-	</root>
+</appender>
+ 
+ <!-- 设置日志输出级别 -->
+ <category name="com.asiainfo.baas.marathon5">
+ 	  <priority value="debug" />
+ </category>
+ <root>
+     <priority value="error" />
+     <appender-ref ref="aibaas" />
+ </root>
 </log4j:configuration>

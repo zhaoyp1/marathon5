@@ -4,12 +4,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
  
 
 /**
- * A characteristic quality or distinctive feature of a ProductSpecification. The characteristic can be take on a discrete value, such as color, can take on a range of values, (for example, sensitivity of 100-240 mV), or can be derived from a formula (for example, usage time (hrs) = 30 - talk time *3). Certain characteristics, such as color, may be configured during the ordering or some other process.
+ * A characteristic quality or distinctive feature of a ProductSpecification.
+ * The characteristic can be take on a discrete value, such as color, can take
+ * on a range of values, (for example, sensitivity of 100-240 mV), or can be
+ * derived from a formula (for example, usage time (hrs) = 30 - talk time *3).
+ * Certain characteristics, such as color, may be configured during the ordering
+ * or some other process.
  */
 public class ProductSpecCharacteristic {
 
@@ -17,12 +25,12 @@ public class ProductSpecCharacteristic {
     private List<ProductSpecCharUse> prodSpecCharUse;
     private List<ProductSpecCharRelationship> prodSpecCharRelationship;
     /**
-     * A unique identifier for the ProductSpecCharacteristic.
-     * ?
+     * A unique identifier for the ProductSpecCharacteristic. ?
      */
     private String ID;
     /**
-     * A word, term, or phrase by which the characteristic is known and distinguished from characteristics.
+     * A word, term, or phrase by which the characteristic is known and
+     * distinguished from characteristics.
      */
     private String name;
     /**
@@ -32,27 +40,37 @@ public class ProductSpecCharacteristic {
     /**
      * An indicator that specifies if a value is unique for the specification.
      * 
-     * Possible values are; "unique while value is in effect" and "unique whether value is in effect or not"
+     * Possible values are; "unique while value is in effect" and
+     * "unique whether value is in effect or not"
      */
     private String unique;
     /**
-     * A kind of value that the characteristic can take on, such as numeric, text, and so forth.
+     * A kind of value that the characteristic can take on, such as numeric,
+     * text, and so forth.
      */
     private String valueType;
     /**
-     * The minimum number of instances a CharacteristicValue can take on. For example, zero to five phone numbers in a group calling plan, where zero is the value for the minCardinality.
+     * The minimum number of instances a CharacteristicValue can take on. For
+     * example, zero to five phone numbers in a group calling plan, where zero
+     * is the value for the minCardinality.
      */
     private int minCardinality;
     /**
-     * The maximum number of instances a CharacteristicValue can take on. For example, zero to five phone numbers in a group calling plan, where five is the value for the maxCardinality.
+     * The maximum number of instances a CharacteristicValue can take on. For
+     * example, zero to five phone numbers in a group calling plan, where five
+     * is the value for the maxCardinality.
      */
     private int maxCardinality;
     /**
-     * An indicator that specifies that the values for the characteristic can be extended by adding new values when instantiating a characteristic for an Entity.
+     * An indicator that specifies that the values for the characteristic can be
+     * extended by adding new values when instantiating a characteristic for an
+     * Entity.
      */
     private boolean extensible;
     /**
-     * A rule or principle represented in symbols, numbers, or letters, often in the form of an equation used to derive the value of a characteristic value.
+     * A rule or principle represented in symbols, numbers, or letters, often in
+     * the form of an equation used to derive the value of a characteristic
+     * value.
      */
     private String derivationFormula;
     /**
@@ -162,14 +180,15 @@ public class ProductSpecCharacteristic {
      * @param minCardinality
      * @param maxCardinality
      */
-    public ProductSpecCharacteristic(String id, String name, String valueType, TimePeriod validFor, String unique, int minCardinality, int maxCardinality) {
-       this.ID=id;
-       this.name=name;
-       this.valueType=valueType;
-       this.validFor=validFor;
-       this.unique=unique;
-       this.maxCardinality=maxCardinality;
-       this.minCardinality=minCardinality;
+    public ProductSpecCharacteristic(String id, String name, String valueType, TimePeriod validFor, String unique,
+            int minCardinality, int maxCardinality) {
+        this.ID = id;
+        this.name = name;
+        this.valueType = valueType;
+        this.validFor = validFor;
+        this.unique = unique;
+        this.maxCardinality = maxCardinality;
+        this.minCardinality = minCardinality;
     }
 
     /**
@@ -185,17 +204,18 @@ public class ProductSpecCharacteristic {
      * @param description
      * @param derivationFormula
      */
-    public ProductSpecCharacteristic(String id, String name, String valueType, TimePeriod validFor, String unique, int minCardinality, int maxCardinality, boolean extensible, String description, String derivationFormula) {
-    	 this.ID=id;
-         this.name=name;
-         this.valueType=valueType;
-         this.validFor=validFor;
-         this.unique=unique;
-         this.maxCardinality=maxCardinality;
-         this.minCardinality=minCardinality;
-         this.extensible=extensible;
-         this.derivationFormula=derivationFormula;
-         this.description=description;
+    public ProductSpecCharacteristic(String id, String name, String valueType, TimePeriod validFor, String unique,
+            int minCardinality, int maxCardinality, boolean extensible, String description, String derivationFormula) {
+        this.ID = id;
+        this.name = name;
+        this.valueType = valueType;
+        this.validFor = validFor;
+        this.unique = unique;
+        this.maxCardinality = maxCardinality;
+        this.minCardinality = minCardinality;
+        this.extensible = extensible;
+        this.derivationFormula = derivationFormula;
+        this.description = description;
     }
 
     /**
@@ -204,6 +224,7 @@ public class ProductSpecCharacteristic {
      */
     public void addValue(ProductSpecCharacteristicValue value) {
     	boolean isEquals=false;
+
     	if(this.productSpecCharacteristicValue==null){
     		
     		this.productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
@@ -216,10 +237,14 @@ public class ProductSpecCharacteristic {
     			}
     		}
     	}
+<<<<<<< HEAD
     	if(!isEquals){
     		productSpecCharacteristicValue.add(value);
     	}
     	
+=======
+    	productSpecCharacteristicValue.add(value);
+>>>>>>> branch 'master' of https://github.com/zhaoyp1/marathon5.git
     }
 
     /**
@@ -227,7 +252,7 @@ public class ProductSpecCharacteristic {
      * @param value
      */
     public void removeValue(ProductSpecCharacteristicValue value) {
-    	
+
     }
 
     /**
@@ -235,23 +260,22 @@ public class ProductSpecCharacteristic {
      * @param time
      */
     public List<ProductSpecCharacteristicValue> retrieveValue(Date time) {
-    	List<ProductSpecCharacteristicValue> productSpecCharValues=null;
+    	List<ProductSpecCharacteristicValue> productSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
     	if(this.productSpecCharacteristicValue!=null){
-    		productSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
     		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
     			if(validFor.isInPeriod(time)){
         			productSpecCharValues.add(charValue);
     			}
 			}
-    		return productSpecCharValues;
     	}
-    	return null;
+    	return productSpecCharValues;
     }
 
     /**
      * 
      * @param charVal
      */
+
     public void specifyDefaultValue(ProductSpecCharacteristicValue charVal) {
     	
     	if(this.productSpecCharacteristicValue==null){
@@ -264,8 +288,8 @@ public class ProductSpecCharacteristic {
 			}
     		charVal.setIsDefault(true);
     		productSpecCharacteristicValue.add(charVal);
-    	 
     }
+
 
     public ProductSpecCharacteristicValue retrieveDefaultValue() {
     	if(this.productSpecCharacteristicValue!=null){
@@ -276,19 +300,20 @@ public class ProductSpecCharacteristic {
 			}
     	}
     	return null;
-    	
     }
 
     /**
      * 
      * @param characteristic
      */
-    public void addLeafCharacteristic(ProductSpecCharacteristic characteristic,TimePeriod validFor) {
-    	
-    	ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic, ProductConst.RELATIONSHIP_TYPE_DEPENDENCY, validFor);
-    	if(this.prodSpecCharRelationship==null) prodSpecCharRelationship=new ArrayList<ProductSpecCharRelationship>();
-    	this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
-    	
+    public void addLeafCharacteristic(ProductSpecCharacteristic characteristic, TimePeriod validFor) {
+
+        ProductSpecCharRelationship productSpecCharValueRelationShip = new ProductSpecCharRelationship(this,
+                characteristic, ProductConst.RELATIONSHIP_TYPE_DEPENDENCY, validFor);
+        if (this.prodSpecCharRelationship == null)
+            prodSpecCharRelationship = new ArrayList<ProductSpecCharRelationship>();
+        this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
+
     }
 
     /**
@@ -296,7 +321,7 @@ public class ProductSpecCharacteristic {
      * @param characteristic
      */
     public void removeLeafCharacteristic(ProductSpecCharacteristic characteristic) {
-    	 
+
     }
 
     public List<ProductSpecCharacteristic> retrieveLeafCharacteristic() {
@@ -310,7 +335,6 @@ public class ProductSpecCharacteristic {
     		return leafCharacteristic;
     	}
     	return null;
-    	
     }
 
     /**
@@ -320,10 +344,13 @@ public class ProductSpecCharacteristic {
      * @param charSpecSeq
      * @param validFor
      */
-    public void addRelatedCharacteristic(ProductSpecCharacteristic characteristic, String type, int charSpecSeq, TimePeriod validFor) {
-    	ProductSpecCharRelationship productSpecCharValueRelationShip=new ProductSpecCharRelationship(this,characteristic,type, validFor,charSpecSeq);
-    	if(prodSpecCharRelationship==null) prodSpecCharRelationship=new ArrayList<ProductSpecCharRelationship>();
-    	this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
+    public void addRelatedCharacteristic(ProductSpecCharacteristic characteristic, String type, int charSpecSeq,
+            TimePeriod validFor) {
+        ProductSpecCharRelationship productSpecCharValueRelationShip = new ProductSpecCharRelationship(this,
+                characteristic, type, validFor, charSpecSeq);
+        if (prodSpecCharRelationship == null)
+            prodSpecCharRelationship = new ArrayList<ProductSpecCharRelationship>();
+        this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
     }
 
     /**
@@ -349,6 +376,7 @@ public class ProductSpecCharacteristic {
     	}
     	return null;
     }
+
     public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type,Date time) {
     	List<ProductSpecCharacteristic>  relatedCharacteristic=new ArrayList<ProductSpecCharacteristic>();
     	if(prodSpecCharRelationship!=null){
@@ -367,20 +395,30 @@ public class ProductSpecCharacteristic {
      * @param minCardinality
      * @param maxCardinality
      */
+
     public void specifyCardinality(int minCardinality, int maxCardinality) {
     	this.setMinCardinality(minCardinality);
     	this.setMaxCardinality(maxCardinality);
     }
 
-	public List<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
-		return productSpecCharacteristicValue;
-	}
+    public List<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
+        return productSpecCharacteristicValue;
+    }
 
-	public void setProductSpecCharacteristicValue(
-			List<ProductSpecCharacteristicValue> productSpecCharacteristicValue) {
-		this.productSpecCharacteristicValue = productSpecCharacteristicValue;
-	}
+    public void setProductSpecCharacteristicValue(List<ProductSpecCharacteristicValue> productSpecCharacteristicValue) {
+        this.productSpecCharacteristicValue = productSpecCharacteristicValue;
+    }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
 	@Override
 	public int hashCode() {
 		final int prime = 31;

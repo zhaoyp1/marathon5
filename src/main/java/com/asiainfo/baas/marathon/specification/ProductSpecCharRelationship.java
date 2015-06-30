@@ -1,22 +1,31 @@
 package com.asiainfo.baas.marathon.specification;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.asiainfo.baas.marathon.baseType.*;
 
 /**
- * A aggregation, migration, substitution, dependency, or exclusivity relationship between/among ProductSpecCharacteristics.
+ * A aggregation, migration, substitution, dependency, or exclusivity
+ * relationship between/among ProductSpecCharacteristics.
  */
 public class ProductSpecCharRelationship {
 
     private ProductSpecCharacteristic targetProdSpecChar;
     private ProductSpecCharacteristic srcProdSpecChar;
     /**
-     * A categorization of the relationship, such as aggregation, migration, substitution, dependency, exclusivity.
+     * A categorization of the relationship, such as aggregation, migration,
+     * substitution, dependency, exclusivity.
      */
     private String charRelationshipType;
     /**
-     * The order in which a CharacteristicSpecification appears within another CharacteristicSpecification that defines a grouping of CharacteristicSpecifications.
+     * The order in which a CharacteristicSpecification appears within another
+     * CharacteristicSpecification that defines a grouping of
+     * CharacteristicSpecifications.
      * 
-     * For example, a grouping may represent the name of an individual. The given name is first, the middle name is second, and the last name is third.
+     * For example, a grouping may represent the name of an individual. The
+     * given name is first, the middle name is second, and the last name is
+     * third.
      */
     private int charSpecSeq;
     /**
@@ -71,11 +80,12 @@ public class ProductSpecCharRelationship {
      * @param relationType
      * @param validFor
      */
-    public ProductSpecCharRelationship(ProductSpecCharacteristic srcProdSpecChar, ProductSpecCharacteristic targetProdSpecChar, String relationType, TimePeriod validFor) {
-    	this.srcProdSpecChar=srcProdSpecChar;
-    	this.targetProdSpecChar=targetProdSpecChar;
-    	this.charRelationshipType=relationType;
-    	this.validFor=validFor;
+    public ProductSpecCharRelationship(ProductSpecCharacteristic srcProdSpecChar,
+            ProductSpecCharacteristic targetProdSpecChar, String relationType, TimePeriod validFor) {
+        this.srcProdSpecChar = srcProdSpecChar;
+        this.targetProdSpecChar = targetProdSpecChar;
+        this.charRelationshipType = relationType;
+        this.validFor = validFor;
     }
 
     /**
@@ -86,12 +96,22 @@ public class ProductSpecCharRelationship {
      * @param validFor
      * @param specSeq
      */
-    public ProductSpecCharRelationship(ProductSpecCharacteristic srcProdSpecChar, ProductSpecCharacteristic targetProdSpecChar, String relationType, TimePeriod validFor, int specSeq) {
-    	this.srcProdSpecChar=srcProdSpecChar;
-    	this.targetProdSpecChar=targetProdSpecChar;
-    	this.charRelationshipType=relationType;
-    	this.validFor=validFor;
-    	this.charSpecSeq=specSeq;
+    public ProductSpecCharRelationship(ProductSpecCharacteristic srcProdSpecChar,
+            ProductSpecCharacteristic targetProdSpecChar, String relationType, TimePeriod validFor, int specSeq) {
+        this.srcProdSpecChar = srcProdSpecChar;
+        this.targetProdSpecChar = targetProdSpecChar;
+        this.charRelationshipType = relationType;
+        this.validFor = validFor;
+        this.charSpecSeq = specSeq;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
 }

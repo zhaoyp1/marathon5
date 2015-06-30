@@ -32,4 +32,12 @@ public class SimpleProductOffering extends ProductOffering {
     	this.productSpecification = prodSpec;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "SimpleProductOffering [productSpecification=" + productSpecification + "]";
+    }
+
 }
