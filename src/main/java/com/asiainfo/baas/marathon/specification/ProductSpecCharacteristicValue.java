@@ -283,15 +283,7 @@ public class ProductSpecCharacteristicValue {
                 return false;
         } else if (!unitOfMeasure.equals(other.unitOfMeasure))
             return false;
-        if (validFor == null) {
-            if (other.validFor != null)
-                return false;
-        } else {
-            if (!validFor.getStartDateTime().equals(other.validFor.getStartDateTime()))
-                return false;
-            if (!validFor.getEndDateTime().equals(other.validFor.getEndDateTime()))
-                return false;
-        }
+        
         if (value == null) {
             if (other.value != null)
                 return false;
