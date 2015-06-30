@@ -9,9 +9,11 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
+import com.asiainfo.baas.marathon5.specification.TestProductCreateSpecification;
  
 
 /**
@@ -23,6 +25,8 @@ import com.asiainfo.baas.marathon.baseType.TimePeriod;
  * or some other process.
  */
 public class ProductSpecCharacteristic {
+
+	private   Logger logger = Logger.getLogger(ProductSpecCharacteristic.class);
 
     private Set<ProductSpecCharacteristicValue> productSpecCharacteristicValue;
     private List<ProductSpecCharUse> prodSpecCharUse;
@@ -226,23 +230,20 @@ public class ProductSpecCharacteristic {
      * @param value
      */
     public void addValue(ProductSpecCharacteristicValue value) {
-    	boolean isEquals=false;
 
+    	if(value==null){
+    		logger.info("特征值ProductSpecCharacteristicValue为空，不能添加");
+    		return ;
+    	}
     	if(this.productSpecCharacteristicValue==null){
-    		
     		this.productSpecCharacteristicValue=new HashSet<ProductSpecCharacteristicValue>();
-    	
-    	} else{
-    		for (ProductSpecCharacteristicValue productSpecCharValue : productSpecCharacteristicValue) {
-    			if(value.equals(productSpecCharValue)){
-    				isEquals=true;
-    				break;
-    			}
-    		}
     	}
-    	if(!isEquals){
-    		productSpecCharacteristicValue.add(value);
+    	if(productSpecCharacteristicValue.contains(value)){
+    		logger.info("特征值ProductSpecCharacteristicValue已经存在");
+    		return ;
     	}
+    	productSpecCharacteristicValue.add(value);
+    	logger.info("添加特征值成功");
     	
     }
 
