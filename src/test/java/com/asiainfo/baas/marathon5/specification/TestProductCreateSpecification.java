@@ -117,8 +117,8 @@ public class TestProductCreateSpecification {
 				productSpec.setVersion(TestProductSpecificationData.specParameter[6].toString(), TestProductSpecificationData.specParameter[7].toString(),new Date(), (TimePeriod)TestProductSpecificationData.specParameter[4]);
 				
 				CommonUtils.printPropertyToJson(null,null,productSpec);
+				System.out.println(productSpec.toString());
 		} 
-		
 	}
 	@After
 	public void printSpecInfo(){

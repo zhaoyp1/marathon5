@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
-import com.asiainfo.baas.common.DateUtils;
 import com.asiainfo.baas.common.ProductConst;
+import com.asiainfo.baas.common.ReflectionToStringBuilderBaas;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
@@ -629,8 +631,8 @@ public abstract class ProductSpecification {
                 if (prodSpecChar != null) {
                     for (ProductSpecCharacteristic specChar : prodSpecChar) {
                         ProductSpecCharUse subCharUse = this.getProdSpecCharUse(specChar);
-                        if(subCharUse != null)
-                        	charUseList.remove(subCharUse);
+                        if (subCharUse != null)
+                            charUseList.remove(subCharUse);
                     }
                 }
             }
@@ -646,8 +648,8 @@ public abstract class ProductSpecification {
      */
     public ProductSpecCharUse[] getLeafCharacteristic(ProductSpecCharacteristic characteristic, Date time) {
         ProductSpecCharUse[] charUses = null;
-        ProductSpecCharacteristic[] prodSpecChar = characteristic
-                .getRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_AGGREGATION,time);
+        ProductSpecCharacteristic[] prodSpecChar = characteristic.getRelatedCharacteristic(
+                ProductConst.RELATIONSHIP_TYPE_AGGREGATION, time);
         if (prodSpecChar != null) {
             charUses = new ProductSpecCharUse[prodSpecChar.length];
             for (int i = 0; i < prodSpecChar.length; i++) {
@@ -672,6 +674,31 @@ public abstract class ProductSpecification {
             if (characteristic.getID().equals(charUse.getProdSpecChar().getID()))
                 charUse.setCardinality(minCardinality, maxCardinality);
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+
+        // ReflectionToStringBuilderBaas a = new
+        // ReflectionToStringBuilderBaas(this,
+        // ToStringStyle.SHORT_PREFIX_STYLE);
+        // return a.toString();
+
+        // StringBuildeer = new StringBuilder();
+        // stringBuilder.append(this.getClass().getSimpleName()).append(":\n");
+        // stringBuilder.append("name=").append(name).append(", ");
+        // stringBuilder.append("name=").append(name).append(", ");
+        //
+        // stringBuilder.append("\n");
+        // stringBuilder.append("prodSpecCharUse=");
+        // stringBuilder.append(prodSpecCharUse.toString());
+        // return stringBuilder.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
 }

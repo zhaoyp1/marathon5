@@ -1,11 +1,13 @@
 package com.asiainfo.baas.marathon.specification;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import com.asiainfo.baas.common.DateUtils;
-import com.asiainfo.baas.marathon.baseType.*;
-import com.asiainfo.baas.marathon.dateType.*;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
 
 /**
  * A number or text that can be assigned to a ProductSpecCharacteristic.
@@ -16,7 +18,8 @@ public class ProductSpecCharacteristicValue {
     private ProductSpecCharacteristic productSpecCharacteristic;
     private List<ProdSpecCharValueRelationship> prodSpecCharValueRelationship;
     /**
-     * A kind of value that the characteristic can take on, such as numeric, text, and so forth.
+     * A kind of value that the characteristic can take on, such as numeric,
+     * text, and so forth.
      */
     private String valueType;
     /**
@@ -28,7 +31,11 @@ public class ProductSpecCharacteristicValue {
      */
     private String value;
     /**
-     * A length, surface, volume, dry measure, liquid measure, money, weight, time, and the like. Iin general, a determinate quantity or magnitude of the kind designated, taken as a standard of comparison for others of the same kind, in assigning to them numerical values, as 1 foot, 1 yard, 1 mile, 1 square foot.
+     * A length, surface, volume, dry measure, liquid measure, money, weight,
+     * time, and the like. Iin general, a determinate quantity or magnitude of
+     * the kind designated, taken as a standard of comparison for others of the
+     * same kind, in assigning to them numerical values, as 1 foot, 1 yard, 1
+     * mile, 1 square foot.
      */
     private String unitOfMeasure;
     /**
@@ -40,7 +47,8 @@ public class ProductSpecCharacteristicValue {
      */
     private String valueTo;
     /**
-     * An indicator that specifies the inclusion or exclusion of the valueFrom and valueTo attributes.
+     * An indicator that specifies the inclusion or exclusion of the valueFrom
+     * and valueTo attributes.
      * 
      * Possible values are "open", "closed", "closedBottom" and "closedTop".
      */
@@ -138,12 +146,13 @@ public class ProductSpecCharacteristicValue {
      * @param validFor
      * @param value
      */
-    public ProductSpecCharacteristicValue(String valueType, boolean isDefault, String unitOfMeasure, TimePeriod validFor, String value) {
-    	this.valueType=valueType;
-    	this.isDefault=isDefault;
-    	this.unitOfMeasure=unitOfMeasure;
-    	this.validFor=validFor;
-    	this.value=value;
+    public ProductSpecCharacteristicValue(String valueType, boolean isDefault, String unitOfMeasure,
+            TimePeriod validFor, String value) {
+        this.valueType = valueType;
+        this.isDefault = isDefault;
+        this.unitOfMeasure = unitOfMeasure;
+        this.validFor = validFor;
+        this.value = value;
     }
 
     /**
@@ -156,14 +165,15 @@ public class ProductSpecCharacteristicValue {
      * @param valueTo
      * @param rangeInterval
      */
-    public ProductSpecCharacteristicValue(String valueType, boolean isDefault, String unitOfMeasure, TimePeriod validFor, String valueFrom, String valueTo, String rangeInterval) {
-    	this.valueType=valueType;
-    	this.isDefault=isDefault;
-    	this.unitOfMeasure=unitOfMeasure;
-    	this.validFor=validFor;
-    	this.valueFrom=valueFrom;
-    	this.valueTo=valueTo;
-    	this.rangeInterval=rangeInterval;
+    public ProductSpecCharacteristicValue(String valueType, boolean isDefault, String unitOfMeasure,
+            TimePeriod validFor, String valueFrom, String valueTo, String rangeInterval) {
+        this.valueType = valueType;
+        this.isDefault = isDefault;
+        this.unitOfMeasure = unitOfMeasure;
+        this.validFor = validFor;
+        this.valueFrom = valueFrom;
+        this.valueTo = valueTo;
+        this.rangeInterval = rangeInterval;
     }
 
     /**
@@ -172,8 +182,8 @@ public class ProductSpecCharacteristicValue {
      * @param value
      */
     public void setValue(String unitOfMeasure, String value) {
-    	this.unitOfMeasure=unitOfMeasure;
-    	this.value=value;
+        this.unitOfMeasure = unitOfMeasure;
+        this.value = value;
     }
 
     /**
@@ -184,10 +194,10 @@ public class ProductSpecCharacteristicValue {
      * @param rangeInterval
      */
     public void setValue(String unitOfMeasure, String valueFrom, String valueTo, String rangeInterval) {
-    	this.unitOfMeasure=unitOfMeasure;
-    	this.valueFrom=valueFrom;
-    	this.valueTo=valueTo;
-    	this.rangeInterval=rangeInterval;
+        this.unitOfMeasure = unitOfMeasure;
+        this.valueFrom = valueFrom;
+        this.valueTo = valueTo;
+        this.rangeInterval = rangeInterval;
     }
 
     /**
@@ -197,9 +207,11 @@ public class ProductSpecCharacteristicValue {
      * @param validFor
      */
     public void addRelatedCharValue(ProductSpecCharacteristicValue charValue, String relationType, TimePeriod validFor) {
-    	if(this.prodSpecCharValueRelationship==null) prodSpecCharValueRelationship=new ArrayList<ProdSpecCharValueRelationship>();
-    	ProdSpecCharValueRelationship relationShip=new ProdSpecCharValueRelationship(this,charValue,relationType,validFor); 
-    	prodSpecCharValueRelationship.add(relationShip);
+        if (this.prodSpecCharValueRelationship == null)
+            prodSpecCharValueRelationship = new ArrayList<ProdSpecCharValueRelationship>();
+        ProdSpecCharValueRelationship relationShip = new ProdSpecCharValueRelationship(this, charValue, relationType,
+                validFor);
+        prodSpecCharValueRelationship.add(relationShip);
     }
 
     /**
@@ -207,14 +219,12 @@ public class ProductSpecCharacteristicValue {
      * @param charValue
      */
     public void removeRelatedCharValue(ProductSpecCharacteristicValue charValue) {
-    	
-    	if(prodSpecCharValueRelationship != null){
-        	prodSpecCharValueRelationship.remove(charValue);
-    	}
-    	
-    }
 
-   
+        if (prodSpecCharValueRelationship != null) {
+            prodSpecCharValueRelationship.remove(charValue);
+        }
+
+    }
 
     /**
      * 
@@ -222,53 +232,70 @@ public class ProductSpecCharacteristicValue {
      * @param time
      */
     public ProductSpecCharacteristicValue[] queryRelatedCharValue(String type, Date time) {
-    	
-    	List<ProductSpecCharacteristicValue> prodSpecCharValues=null;
-    	if(this.prodSpecCharValueRelationship != null && prodSpecCharValueRelationship.size() > 0){
-    		prodSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
-    		for (ProdSpecCharValueRelationship relationship : prodSpecCharValueRelationship) {
-    			if(relationship.getCharValueRelationshipType() != null && type.equals(relationship.getCharValueRelationshipType()) && relationship.getValidFor().isInPeriod(time )){
-    				prodSpecCharValues.add(relationship.getTargetCharValue());
-    			}
-			}
-    		return (ProductSpecCharacteristicValue[])prodSpecCharValues.toArray(new ProductSpecCharacteristicValue[prodSpecCharValues.size()]);
-    	}else{
-    		return null;
-    	}
-    	
+
+        List<ProductSpecCharacteristicValue> prodSpecCharValues = null;
+        if (this.prodSpecCharValueRelationship != null && prodSpecCharValueRelationship.size() > 0) {
+            prodSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
+            for (ProdSpecCharValueRelationship relationship : prodSpecCharValueRelationship) {
+                if (relationship.getCharValueRelationshipType() != null
+                        && type.equals(relationship.getCharValueRelationshipType())
+                        && relationship.getValidFor().isInPeriod(time)) {
+                    prodSpecCharValues.add(relationship.getTargetCharValue());
+                }
+            }
+            return (ProductSpecCharacteristicValue[]) prodSpecCharValues
+                    .toArray(new ProductSpecCharacteristicValue[prodSpecCharValues.size()]);
+        } else {
+            return null;
+        }
+
     }
 
-    public boolean equals(ProductSpecCharacteristicValue value){
-    	if(this == value) return true;
-    	if(! (value instanceof ProductSpecCharacteristicValue)) return false;
-    	final ProductSpecCharacteristicValue newValue = value;
-    	if(!newValue.getValue().isEmpty() && !this.getValue().isEmpty()){
-    		if(newValue.getValue().equals(this.getValue())) 
-    			return true;
-    		else
-    			return false;
-    	}
-    	if(!newValue.getValueFrom().isEmpty() && !this.getValueFrom().isEmpty()){
-    		if(!newValue.getValueTo().isEmpty() && !this.getValueTo().isEmpty()){
-    			if(newValue.getValueFrom().equals(this.getValueFrom()) && newValue.getValueTo().equals(this.getValueTo())) 
-        			return true;
-        		else
-        			return false;
-    		}else{
-	    		if(newValue.getValueFrom().equals(this.getValueFrom())) 
-	    			return true;
-	    		else
-	    			return false;
-    		}
-    	}
-    	return false;
+    public boolean equals(ProductSpecCharacteristicValue value) {
+        if (this == value)
+            return true;
+        if (!(value instanceof ProductSpecCharacteristicValue))
+            return false;
+        final ProductSpecCharacteristicValue newValue = value;
+        if (!newValue.getValue().isEmpty() && !this.getValue().isEmpty()) {
+            if (newValue.getValue().equals(this.getValue()))
+                return true;
+            else
+                return false;
+        }
+        if (!newValue.getValueFrom().isEmpty() && !this.getValueFrom().isEmpty()) {
+            if (!newValue.getValueTo().isEmpty() && !this.getValueTo().isEmpty()) {
+                if (newValue.getValueFrom().equals(this.getValueFrom())
+                        && newValue.getValueTo().equals(this.getValueTo()))
+                    return true;
+                else
+                    return false;
+            } else {
+                if (newValue.getValueFrom().equals(this.getValueFrom()))
+                    return true;
+                else
+                    return false;
+            }
+        }
+        return false;
     }
 
-	public ProductSpecCharacteristic getProductSpecCharacteristic() {
-		return productSpecCharacteristic;
-	}
+    public ProductSpecCharacteristic getProductSpecCharacteristic() {
+        return productSpecCharacteristic;
+    }
 
-	public void setProductSpecCharacteristic(ProductSpecCharacteristic productSpecCharacteristic) {
-		this.productSpecCharacteristic = productSpecCharacteristic;
-	}
+    public void setProductSpecCharacteristic(ProductSpecCharacteristic productSpecCharacteristic) {
+        this.productSpecCharacteristic = productSpecCharacteristic;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
 }
