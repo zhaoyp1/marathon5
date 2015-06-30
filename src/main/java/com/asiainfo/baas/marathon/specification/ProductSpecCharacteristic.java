@@ -387,7 +387,7 @@ public class ProductSpecCharacteristic {
     		logger.error("当前特征与指定特征相同，不能创建关系");
     		return false;
     	}
-    	ProductSpecCharRelationship leafRelationship=this.retrieveRelatedCharacteristic(RelationshipType.AGGREGATION.getValue(),characteristic);
+    	ProductSpecCharRelationship leafRelationship=this.retrieveRelatedCharacteristic(characteristic);
     	if(leafRelationship!=null){
     		//比较是否有重复
     		if(leafRelationship.getValidFor().isOverlap(validFor)){
@@ -449,7 +449,7 @@ public class ProductSpecCharacteristic {
 	   		logger.error("当前特征与指定特征相同，不能创建关系");
 	   		return false;
 	   	}
-	   	ProductSpecCharRelationship relationship=this.retrieveRelatedCharacteristic(type,characteristic);
+	   	ProductSpecCharRelationship relationship=this.retrieveRelatedCharacteristic(characteristic);
 	   	if(relationship!=null){
 	   		//比较是否有重复
 	   		if(relationship.getValidFor().isOverlap(validFor)){
@@ -499,16 +499,17 @@ public class ProductSpecCharacteristic {
     	return null;
  
     }
-    private ProductSpecCharRelationship retrieveRelatedCharacteristic(String type,ProductSpecCharacteristic characteristic ){
+    private ProductSpecCharRelationship retrieveRelatedCharacteristic(ProductSpecCharacteristic characteristic ){
     	if(prodSpecCharRelationship!=null){
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-        		if(type.equals(productSpecCharRelationship.getCharRelationshipType()) && productSpecCharRelationship.getTargetProdSpecChar().equals(characteristic)){
+        		if( productSpecCharRelationship.getTargetProdSpecChar().equals(characteristic)){
         			return productSpecCharRelationship;
         		}
     		}
     	}
     	return null;
     }
+    
     public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type,Date time) {
     	List<ProductSpecCharacteristic>  characteristic=null;
     	if(StringUtils.isEmpty(type)){
