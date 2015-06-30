@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.asiainfo.baas.common.ProductConst;
+import com.asiainfo.baas.common.RelationshipType;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
@@ -94,7 +94,7 @@ public class TestProductSpecCharacteristic {
 			for (ProductSpecCharacteristic subProdSpecChar : subProdSpecChars) {
 				System.out.println(subProdSpecChar.getName());
 			}
-			List<ProductSpecCharacteristic> relatedProdSpecChars=productSpecCharacteristic.retrieveRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_DEPENDENCY);
+			List<ProductSpecCharacteristic> relatedProdSpecChars=productSpecCharacteristic.retrieveRelatedCharacteristic(RelationshipType.DEPENDENCY.getValue());
 			for (ProductSpecCharacteristic relatedProdSpecChar : relatedProdSpecChars) {
 				System.out.println(relatedProdSpecChar.getName());
 			}
@@ -112,7 +112,7 @@ public class TestProductSpecCharacteristic {
 			productSpecCharacteristic.addLeafCharacteristic(subProductSpecCharLength, validFor);
 			productSpecCharacteristic.addLeafCharacteristic(subproductSpecCharWidth, validFor);
 			 
-			List<ProductSpecCharacteristic> relatedProdSpecChars=productSpecCharacteristic.retrieveRelatedCharacteristic(ProductConst.RELATIONSHIP_TYPE_DEPENDENCY);
+			List<ProductSpecCharacteristic> relatedProdSpecChars=productSpecCharacteristic.retrieveRelatedCharacteristic(RelationshipType.DEPENDENCY.getValue());
 			for (ProductSpecCharacteristic relatedProdSpecChar : relatedProdSpecChars) {
 				System.out.println(relatedProdSpecChar.getName());
 			}
