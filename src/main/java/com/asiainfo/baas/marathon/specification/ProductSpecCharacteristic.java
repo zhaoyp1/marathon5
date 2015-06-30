@@ -448,34 +448,7 @@ public class ProductSpecCharacteristic {
 				return false;
 		} else if (!ID.equals(other.ID))
 			return false;
-		if (maxCardinality != other.maxCardinality)
-			return false;
-		if (minCardinality != other.minCardinality)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (unique == null) {
-			if (other.unique != null)
-				return false;
-		} else if (!unique.equals(other.unique))
-			return false;
-		if (validFor == null) {
-			if (other.validFor != null)
-				return false;
-		} else {
-			if (!validFor.getStartDateTime().equals(other.validFor.getStartDateTime()))
-				return false;
-			if (!validFor.getEndDateTime().equals(other.validFor.getEndDateTime()))
-				return false;
-		} 
-		if (valueType == null) {
-			if (other.valueType != null)
-				return false;
-		} else if (!valueType.equals(other.valueType))
-			return false;
+		
 		return true;
 	}
 
