@@ -1,14 +1,18 @@
 package com.asiainfo.baas.marathon.specification;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.log4j.Logger;
 
-import com.asiainfo.baas.marathon.baseType.*;
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
 
 public class ProductSpecCharUse {
 
+	private static Logger logger = Logger.getLogger(ProductSpecCharUse.class);
+	
     private ProductSpecification prodSpec;
     private ProductSpecCharacteristic prodSpecChar;
     private List<ProdSpecCharValueUse> prodSpecCharValueUse;
@@ -205,12 +209,21 @@ public class ProductSpecCharUse {
      * @param isDefault
      * @param validFor
      */
-    public void addValue(ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
+    public boolean addValue(ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
+    	if(charValue == null){
+    		logger.error("添加的值不能为空！");
+    		return false;
+    	}
         ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue, isDefault, validFor);
-        if (prodSpecCharValueUse == null) {
-            prodSpecCharValueUse = new ArrayList<ProdSpecCharValueUse>();
+        if (this.prodSpecCharValueUse == null) {
+            this.prodSpecCharValueUse = new ArrayList<ProdSpecCharValueUse>();
         }
-        prodSpecCharValueUse.add(charValueUse);
+        if(this.prodSpecCharValueUse.contains(charValueUse)){
+        	logger.error("所添加的值已经存在，不能重复添加！");
+    		return false;
+        }
+        this.prodSpecCharValueUse.add(charValueUse);
+        return true;
     }
 
     /**
@@ -226,18 +239,34 @@ public class ProductSpecCharUse {
      * 
      * @param defaultValue
      */
-    public void specifyDefaultCharacteristicValueUse(ProductSpecCharacteristicValue defaultValue) {
-        if (prodSpecCharValueUse != null) {
-            for (int i = 0; i < prodSpecCharValueUse.size(); i++) {
-                ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
-                if (valueUse.isIsDefault() && !valueUse.getProdSpecCharValue().equals(defaultValue)) {
-                    valueUse.setIsDefault(false);
-                }
-                if (valueUse.getProdSpecCharValue().equals(defaultValue)) {
-                    valueUse.setIsDefault(true);
-                }
-            }
+    public boolean specifyDefaultCharacteristicValueUse(ProductSpecCharacteristicValue defaultValue) {
+        if (this.prodSpecCharValueUse != null) {
+        	if(defaultValue == null){
+        		logger.error("指定的特征值为空，不能设置默认值！");
+        		return false;
+        	}
+        	ProdSpecCharValueUse valueUse = this.retrieveProdSpecCharValueUse(defaultValue);
+        	if(valueUse == null ){
+        		logger.error("该特征没有这个值，不能设置默认值！");
+        		return false;
+        	}
+        	ProdSpecCharValueUse oldDefaultValueUse = this.retrieveDefaultCharacteristicValueUse();
+        	if(oldDefaultValueUse != null)
+        		oldDefaultValueUse.setIsDefault(false);
+        	valueUse.setIsDefault(true);
+        	return true;
+        }else{
+        	logger.error("该特征没有值，不能设置默认值！");
+        	return false;
         }
+    }
+    
+    private ProdSpecCharValueUse retrieveProdSpecCharValueUse(ProductSpecCharacteristicValue charValue){
+    	for (ProdSpecCharValueUse valueUse : prodSpecCharValueUse) {
+            if (valueUse.getProdSpecCharValue().equals(charValue)) 
+                return valueUse;
+        }
+    	return null;
     }
 
     public ProdSpecCharValueUse retrieveDefaultCharacteristicValueUse() {
