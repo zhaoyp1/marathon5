@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.common.ProductConst;
+import com.asiainfo.baas.common.RelationshipType;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
  
 
@@ -286,6 +288,10 @@ public class ProductSpecCharacteristic {
 
     public boolean specifyDefaultValue(ProductSpecCharacteristicValue charVal) {
     	
+    	if(charVal==null){
+    		 logger.error("特征值不能设置为空");
+    		 return false;
+    	}
     	if(this.productSpecCharacteristicValue==null){
     		 logger.error("当前特征不存在特征值");
     		 return false;
@@ -294,54 +300,106 @@ public class ProductSpecCharacteristic {
     		logger.error("当前特征不包含指定特征值");
     		return false;
     	}
-    	ProductSpecCharacteristicValue defaultValue=this.retrieveDefaultValue();
-    	if(defaultValue!=null && defaultValue.equals(charVal)){
+    	List<ProductSpecCharacteristicValue> defaultValue=this.retrieveDefaultValue();
+    	if(defaultValue!=null && defaultValue.contains(charVal)){
     		logger.warn("指定特征值已经设置为默认值，无需进行重复设置");
     		return true;
     	}
-    	boolean oldFlag=false;
-    	boolean newFlag=false;
+
     	for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-    		if(charValue.isIsDefault() && !charVal.equals(charValue)){
-    			charValue.setIsDefault(false);
-    			oldFlag=true;
-    		}
+    		 
     		if(charValue.equals(charVal)){
     			charVal.setIsDefault(true);
-    			newFlag=true;
-    		}
-    		if(oldFlag && newFlag){
-    			break;
-    		}
-		}
-    	return false;
+    		} 
+    	}
+    	return true;
     	
     }
 
 
-    public ProductSpecCharacteristicValue retrieveDefaultValue() {
+    public List<ProductSpecCharacteristicValue> retrieveDefaultValue() {
+    	List<ProductSpecCharacteristicValue> defaultSpecCharValue=null;
     	if(this.productSpecCharacteristicValue!=null){
+    		defaultSpecCharValue=new ArrayList<ProductSpecCharacteristicValue>();
     		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
     			if(charValue.isIsDefault()){
-    				 return charValue;
+    				defaultSpecCharValue.add(charValue);
     			}
 			}
+    		if(defaultSpecCharValue.size()==0){
+    			logger.info("\t特征没有设置默认值");
+    			return null;
+    		}else{
+    			return defaultSpecCharValue;
+    		}
     	}
+    	logger.info("\t特征没有特征值");
     	return null;
+    }
+    public boolean clearDefaultValue(ProductSpecCharacteristicValue value){
+    	
+    	if(value==null){
+    		logger.error("特征值为空");
+    		return false;
+    	}
+    	if(productSpecCharacteristicValue==null){
+    		logger.error("当前特征没有特征值");
+    		return false;
+    	}
+    	if(!productSpecCharacteristicValue.contains(value)){
+    		logger.error("当前特征不包含指定特征值");
+    		return false;
+    	}
+    	List<ProductSpecCharacteristicValue> defaults=this.retrieveDefaultValue();
+    	if(defaults==null){
+    		return false;
+    	}else{
+    		if(!defaults.contains(value)){
+    			logger.error("指定特征值不是当前特征的默认值");
+    			return false;
+    		}
+    		for (ProductSpecCharacteristicValue productSpecCharacteristicValue : defaults) {
+				if(productSpecCharacteristicValue.equals(value)){
+					productSpecCharacteristicValue.setIsDefault(false);
+					break;
+				}
+			}
+    		
+    	}
+		return true;
+    	
     }
 
     /**
      * 
      * @param characteristic
+     * @throws Exception 
      */
-    public void addLeafCharacteristic(ProductSpecCharacteristic characteristic, TimePeriod validFor) {
-
+    public boolean addLeafCharacteristic(ProductSpecCharacteristic characteristic, TimePeriod validFor){
+    	 if (this.prodSpecCharRelationship == null)
+             prodSpecCharRelationship = new ArrayList<ProductSpecCharRelationship>();
+    	 
+    	if(characteristic==null||validFor==null){
+    		logger.error("特征时有效期不能为空");
+    		return false;
+    	}
+    	if(this.equals(characteristic)){
+    		logger.error("当前特征与指定特征相同，不能创建关系");
+    		return false;
+    	}
+    	ProductSpecCharRelationship leafRelationship=this.retrieveRelatedCharacteristic(RelationshipType.AGGREGATION.getValue(),characteristic);
+    	if(leafRelationship!=null){
+    		//比较是否有重复
+    		if(leafRelationship.getValidFor().isOverlap(validFor)){
+    			logger.error("当前特征已与指定特征创建聚合关系，无需在重新创建");
+    			return false;
+    		}
+    	}
         ProductSpecCharRelationship productSpecCharValueRelationShip = new ProductSpecCharRelationship(this,
-                characteristic, ProductConst.RELATIONSHIP_TYPE_DEPENDENCY, validFor);
-        if (this.prodSpecCharRelationship == null)
-            prodSpecCharRelationship = new ArrayList<ProductSpecCharRelationship>();
+                characteristic, RelationshipType.AGGREGATION.getValue(), validFor);
+       
         this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
-
+        return true;
     }
 
     /**
@@ -353,14 +411,21 @@ public class ProductSpecCharacteristic {
     }
 
     public List<ProductSpecCharacteristic> retrieveLeafCharacteristic() {
-    	List<ProductSpecCharacteristic>  leafCharacteristic=new ArrayList<ProductSpecCharacteristic>();
+    	List<ProductSpecCharacteristic>  leafCharacteristic=null;
     	if(prodSpecCharRelationship!=null){
+    		leafCharacteristic=new ArrayList<ProductSpecCharacteristic>();
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-        		if(ProductConst.RELATIONSHIP_TYPE_AGGREGATION.equals(productSpecCharRelationship.getCharRelationshipType())){
+        		if(RelationshipType.AGGREGATION.getValue().equals(productSpecCharRelationship.getCharRelationshipType())){
         			leafCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
         		}
     		}
+    		if(leafCharacteristic.size()==0){
+    			logger.info("当前特征没有聚合关系的特征");
+    			return null;
+    		}
     		return leafCharacteristic;
+    	}else{
+    		logger.info("当前特征没有相关联的特征");
     	}
     	return null;
     }
@@ -372,13 +437,30 @@ public class ProductSpecCharacteristic {
      * @param charSpecSeq
      * @param validFor
      */
-    public void addRelatedCharacteristic(ProductSpecCharacteristic characteristic, String type, int charSpecSeq,
+    public boolean  addRelatedCharacteristic(ProductSpecCharacteristic characteristic, String type, int charSpecSeq,
             TimePeriod validFor) {
-        ProductSpecCharRelationship productSpecCharValueRelationShip = new ProductSpecCharRelationship(this,
-                characteristic, type, validFor, charSpecSeq);
-        if (prodSpecCharRelationship == null)
-            prodSpecCharRelationship = new ArrayList<ProductSpecCharRelationship>();
-        this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
+           	 
+	   	if(characteristic==null||validFor==null||type==null){
+	   		logger.error("特征时有效期不能为空");
+	   		return false;
+	   	}
+	   	if(this.equals(characteristic)){
+	   		logger.error("当前特征与指定特征相同，不能创建关系");
+	   		return false;
+	   	}
+	   	ProductSpecCharRelationship relationship=this.retrieveRelatedCharacteristic(type,characteristic);
+	   	if(relationship!=null){
+	   		//比较是否有重复
+	   		if(relationship.getValidFor().isOverlap(validFor)){
+	   			logger.error("当前特征已与指定特征创建了指定的关系，无需在重新创建");
+	   			return false;
+	   		}
+	   	}
+       ProductSpecCharRelationship productSpecCharValueRelationShip = new ProductSpecCharRelationship(this,
+               characteristic, type, validFor,charSpecSeq);
+      
+       this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
+       return true;
     }
 
     /**
@@ -393,27 +475,62 @@ public class ProductSpecCharacteristic {
      * @param type
      */
     public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type) {
-    	List<ProductSpecCharacteristic>  relatedCharacteristic=new ArrayList<ProductSpecCharacteristic>();
+    	List<ProductSpecCharacteristic>  characteristic=null;
+    	if(StringUtils.isEmpty(type)){
+    		logger.error("指定的关系类型为空");
+    		return null;
+    	}
     	if(prodSpecCharRelationship!=null){
+    		characteristic=new ArrayList<ProductSpecCharacteristic>();
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
         		if(type.equals(productSpecCharRelationship.getCharRelationshipType())){
-        			relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        			characteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
         		}
     		}
-    		return relatedCharacteristic;
+    		if(characteristic.size()==0){
+    			logger.info("当前特征没有指定关系的特征");
+    			return null;
+    		}
+    		return characteristic;
+    	}else{
+    		logger.info("当前特征没有相关联的特征");
     	}
     	return null;
     }
-
-    public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type,Date time) {
-    	List<ProductSpecCharacteristic>  relatedCharacteristic=new ArrayList<ProductSpecCharacteristic>();
+    private ProductSpecCharRelationship retrieveRelatedCharacteristic(String type,ProductSpecCharacteristic characteristic ){
     	if(prodSpecCharRelationship!=null){
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-        		if(type.equals(productSpecCharRelationship.getCharRelationshipType()) && productSpecCharRelationship.getValidFor().isInPeriod(time)){
-        			relatedCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        		if(type.equals(productSpecCharRelationship.getCharRelationshipType()) && productSpecCharRelationship.getTargetProdSpecChar().equals(characteristic)){
+        			return productSpecCharRelationship;
         		}
     		}
-    		return relatedCharacteristic;
+    	}
+    	return null;
+    }
+    public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type,Date time) {
+    	List<ProductSpecCharacteristic>  characteristic=null;
+    	if(StringUtils.isEmpty(type)){
+    		logger.error("指定的关系类型为空");
+    		return null;
+    	}
+    	if(time==null){
+    		logger.error("查询时间点为空");
+    		return null;
+    	}
+    	if(prodSpecCharRelationship!=null){
+    		characteristic=new ArrayList<ProductSpecCharacteristic>();
+    		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
+        		if(type.equals(productSpecCharRelationship.getCharRelationshipType()) && productSpecCharRelationship.getValidFor().isInPeriod(time)){
+        			characteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        		}
+    		}
+    		if(characteristic.size()==0){
+    			logger.info("当前特征在指定时间点内没有指定关系的特征");
+    			return null;
+    		}
+    		return characteristic;
+    	}else{
+    		logger.info("当前特征没有相关联的特征");
     	}
     	return null;
     }

@@ -64,8 +64,8 @@ public class TestProductSpecCharacteristic {
 			ProductSpecCharacteristic productSpecCharacteristic=new ProductSpecCharacteristic("1","ÑÕÉ«", "",validFor , "",1,6,true, "", "");
 			ProductSpecCharacteristicValue value=new ProductSpecCharacteristicValue("",true,"",validFor,"ºÚÉ«");
 			productSpecCharacteristic.specifyDefaultValue(value);
-			ProductSpecCharacteristicValue defaultValue=productSpecCharacteristic.retrieveDefaultValue();
-			System.out.println(defaultValue.getValue());
+			List<ProductSpecCharacteristicValue> defaultValues=productSpecCharacteristic.retrieveDefaultValue();
+			//System.out.println(defaultValue);
          
 	}
 	public void setLeafValue(){

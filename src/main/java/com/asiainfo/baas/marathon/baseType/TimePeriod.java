@@ -1,6 +1,5 @@
 package com.asiainfo.baas.marathon.baseType;
 
-import java.security.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -85,6 +84,11 @@ public class TimePeriod {
         return true;
     }
 
+    public  boolean isOverlap(TimePeriod validFor){  
+        if (endDateTime.compareTo(validFor.getStartDateTime())>=0) return true;  
+        
+        else return false;  
+    }  
     /*
      * (non-Javadoc)
      * 
