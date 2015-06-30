@@ -237,14 +237,10 @@ public class ProductSpecCharacteristic {
     			}
     		}
     	}
-<<<<<<< HEAD
     	if(!isEquals){
     		productSpecCharacteristicValue.add(value);
     	}
     	
-=======
-    	productSpecCharacteristicValue.add(value);
->>>>>>> branch 'master' of https://github.com/zhaoyp1/marathon5.git
     }
 
     /**
