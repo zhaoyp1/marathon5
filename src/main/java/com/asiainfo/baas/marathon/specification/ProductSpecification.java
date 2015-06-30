@@ -2,17 +2,20 @@ package com.asiainfo.baas.marathon.specification;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.common.ProductConst;
-import com.asiainfo.baas.common.ReflectionToStringBuilderBaas;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
+import com.asiainfo.baas.marathon5.specification.TestProductCreateSpecification;
 
 /**
  * A detailed description of a tangible or intangible object made available
@@ -24,6 +27,8 @@ import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
  * ProductTypes.
  */
 public abstract class ProductSpecification {
+
+    private static Logger logger = Logger.getLogger(ProductSpecification.class);
 
     private List<ProductSpecificationCost> productSpecificationCost;
     private List<SimpleProductOffering> productOffering;
@@ -332,13 +337,13 @@ public abstract class ProductSpecification {
      */
     public List<ProductSpecificationCost> queryCost(Date time) {
         List<ProductSpecificationCost> validProdSpecCost = new ArrayList<ProductSpecificationCost>();
-        for (int i = 0; i < productSpecificationCost.size(); i++) {
-            ProductSpecificationCost cost = productSpecificationCost.get(i);
-            if (cost.getValidFor().isInPeriod(time)) {
-                validProdSpecCost.add(productSpecificationCost.get(i));
-            }
-
-        }
+        // for (int i = 0; i < productSpecificationCost.size(); i++) {
+        // ProductSpecificationCost cost = productSpecificationCost.get(i);
+        // if (cost.getValidFor().isInPeriod(time)) {
+        // validProdSpecCost.add(productSpecificationCost.get(i));
+        // }
+        //
+        // }
         if (validProdSpecCost != null && validProdSpecCost.size() > 0) {
             return validProdSpecCost;
         } else {
@@ -357,8 +362,20 @@ public abstract class ProductSpecification {
         if (this.prodSpecRelationship == null) {
             this.prodSpecRelationship = new ArrayList<ProductSpecificationRelationship>();
         }
+        if (prodSpec == null) {
+            logger.error("方法addRelatedProdSpec的参数不正确。prodSpec=" + prodSpec);
+            return;
+        }
+        if (type == null) {
+            logger.error("方法addRelatedProdSpec的参数不正确。type=" + type);
+            return;
+        }
         ProductSpecificationRelationship productSpecificationRelationship = new ProductSpecificationRelationship(this,
                 prodSpec, type, validFor);
+        if (this.prodSpecRelationship.contains(productSpecificationRelationship)) {
+            logger.error("已存在此关联类型的规格关系，不能再次关联。ProductNumber=" + prodSpec.getProductNumber() + "type=" + type);
+            return;
+        }
         this.prodSpecRelationship.add(productSpecificationRelationship);
     }
 
@@ -378,10 +395,18 @@ public abstract class ProductSpecification {
      */
     public List<ProductSpecification> queryRelatedProdSpec(String type) {
         List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
-        int len = this.prodSpecRelationship.size();
-        for (int i = 0; i < len; i++) {
-            if (type.equals(this.prodSpecRelationship.get(i).getType())) {
-                productSpecifications.add(this.prodSpecRelationship.get(i).getTargetProdSpec());
+
+        if (this.prodSpecRelationship != null) {
+            Iterator<ProductSpecificationRelationship> iterator = this.prodSpecRelationship.iterator();
+            while (iterator.hasNext()) {
+                ProductSpecificationRelationship productSpecRelationship = iterator.next();
+                if (StringUtils.isNotEmpty(type)) {
+                    if (type.equals(productSpecRelationship.getType())) {
+                        productSpecifications.add(productSpecRelationship.getTargetProdSpec());
+                    }
+                } else {
+                    productSpecifications.add(productSpecRelationship.getTargetProdSpec());
+                }
             }
         }
         return productSpecifications;
@@ -703,20 +728,25 @@ public abstract class ProductSpecification {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((brand == null) ? 0 : brand.hashCode());
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + ((lifecycleStatus == null) ? 0 : lifecycleStatus.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((prodSpecType == null) ? 0 : prodSpecType.hashCode());
         result = prime * result + ((productNumber == null) ? 0 : productNumber.hashCode());
-        result = prime * result + ((validFor == null) ? 0 : validFor.hashCode());
+        result = prime * result + ((productSpecificationVersion == null) ? 0 : productSpecificationVersion.hashCode());
         return result;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -726,41 +756,16 @@ public abstract class ProductSpecification {
         if (getClass() != obj.getClass())
             return false;
         ProductSpecification other = (ProductSpecification) obj;
-        if (brand == null) {
-            if (other.brand != null)
-                return false;
-        } else if (!brand.equals(other.brand))
-            return false;
-
-        if (lifecycleStatus == null) {
-            if (other.lifecycleStatus != null)
-                return false;
-        } else if (!lifecycleStatus.equals(other.lifecycleStatus))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (prodSpecType == null) {
-            if (other.prodSpecType != null)
-                return false;
-        } else if (!prodSpecType.equals(other.prodSpecType))
-            return false;
         if (productNumber == null) {
             if (other.productNumber != null)
                 return false;
         } else if (!productNumber.equals(other.productNumber))
             return false;
-        if (validFor == null) {
-            if (other.validFor != null)
+        if (productSpecificationVersion == null) {
+            if (other.productSpecificationVersion != null)
                 return false;
-        } else {
-            if (!validFor.getStartDateTime().equals(other.validFor.getStartDateTime()))
-                return false;
-            if (!validFor.getEndDateTime().equals(other.validFor.getEndDateTime()))
-                return false;
-        }
+        } else if (!productSpecificationVersion.equals(other.productSpecificationVersion))
+            return false;
         return true;
     }
 
