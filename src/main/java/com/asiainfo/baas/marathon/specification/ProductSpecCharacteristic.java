@@ -8,11 +8,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
-
-import com.asiainfo.baas.common.ProductConst;
 import com.asiainfo.baas.common.RelationshipType;
+import com.asiainfo.baas.common.ReflectionToStringBuilderBaas;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
- 
 
 /**
  * A characteristic quality or distinctive feature of a ProductSpecification.
@@ -24,7 +22,7 @@ import com.asiainfo.baas.marathon.baseType.TimePeriod;
  */
 public class ProductSpecCharacteristic {
 
-	private   Logger logger = Logger.getLogger(ProductSpecCharacteristic.class);
+    private Logger logger = Logger.getLogger(ProductSpecCharacteristic.class);
 
     private List<ProductSpecCharacteristicValue> productSpecCharacteristicValue;
     private List<ProductSpecCharUse> prodSpecCharUse;
@@ -229,24 +227,24 @@ public class ProductSpecCharacteristic {
      */
     public boolean addValue(ProductSpecCharacteristicValue value) {
 
-    	if(value==null){
-    		logger.error("特征值ProductSpecCharacteristicValue为空，不能添加");
-    		return false;
-    	}
-    	if(this.productSpecCharacteristicValue==null){
-    		this.productSpecCharacteristicValue=new ArrayList<ProductSpecCharacteristicValue>();
-    	}
-    	if(productSpecCharacteristicValue.contains(value)){
-    		logger.error("特征值ProductSpecCharacteristicValue已经存在");
-    		return false;
-    	}
-    	if(value.getValueType()!=null && !this.getValueType().equals(value.getValueType())){
-    		logger.error("特征值ProductSpecCharacteristicValue与特征ProductSpecCharacteristic的valueType不相同");
-    		return false;
-    	}
-    	productSpecCharacteristicValue.add(value);
-    	return true;
-    	
+        if (value == null) {
+            logger.error("特征值ProductSpecCharacteristicValue为空，不能添加");
+            return false;
+        }
+        if (this.productSpecCharacteristicValue == null) {
+            this.productSpecCharacteristicValue = new ArrayList<ProductSpecCharacteristicValue>();
+        }
+        if (productSpecCharacteristicValue.contains(value)) {
+            logger.error("特征值ProductSpecCharacteristicValue已经存在");
+            return false;
+        }
+        if (value.getValueType() != null && !this.getValueType().equals(value.getValueType())) {
+            logger.error("特征值ProductSpecCharacteristicValue与特征ProductSpecCharacteristic的valueType不相同");
+            return false;
+        }
+        productSpecCharacteristicValue.add(value);
+        return true;
+
     }
 
     /**
@@ -262,23 +260,23 @@ public class ProductSpecCharacteristic {
      * @param time
      */
     public List<ProductSpecCharacteristicValue> retrieveValue(Date time) {
-    	List<ProductSpecCharacteristicValue> productSpecCharValues=null;
-    	if(time==null){
-    		logger.error("时间不能为空");
-    	}else{
-    		if(this.productSpecCharacteristicValue!=null){
-        		productSpecCharValues=new ArrayList<ProductSpecCharacteristicValue>();
-        		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-        			if(charValue.getValidFor()!=null && charValue.getValidFor().isInPeriod(time)){
-            			productSpecCharValues.add(charValue);
-        			}
-    			}
-        	}else{
-        		logger.warn("productSpecCharacteristic不存在特征值");
-        	}
-    	}
-    	
-    	return productSpecCharValues;
+        List<ProductSpecCharacteristicValue> productSpecCharValues = null;
+        if (time == null) {
+            logger.error("时间不能为空");
+        } else {
+            if (this.productSpecCharacteristicValue != null) {
+                productSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
+                for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+                    if (charValue.getValidFor() != null && charValue.getValidFor().isInPeriod(time)) {
+                        productSpecCharValues.add(charValue);
+                    }
+                }
+            } else {
+                logger.warn("productSpecCharacteristic不存在特征值");
+            }
+        }
+
+        return productSpecCharValues;
     }
 
     /**
@@ -314,6 +312,7 @@ public class ProductSpecCharacteristic {
     	}
     	return true;
     	
+
     }
 
 
@@ -368,6 +367,7 @@ public class ProductSpecCharacteristic {
     	}
 		return true;
     	
+ 
     }
 
     /**
@@ -428,6 +428,7 @@ public class ProductSpecCharacteristic {
     		logger.info("当前特征没有相关联的特征");
     	}
     	return null;
+
     }
 
     /**
@@ -496,6 +497,7 @@ public class ProductSpecCharacteristic {
     		logger.info("当前特征没有相关联的特征");
     	}
     	return null;
+ 
     }
     private ProductSpecCharRelationship retrieveRelatedCharacteristic(String type,ProductSpecCharacteristic characteristic ){
     	if(prodSpecCharRelationship!=null){
@@ -542,8 +544,8 @@ public class ProductSpecCharacteristic {
      */
 
     public void specifyCardinality(int minCardinality, int maxCardinality) {
-    	this.setMinCardinality(minCardinality);
-    	this.setMaxCardinality(maxCardinality);
+        this.setMinCardinality(minCardinality);
+        this.setMaxCardinality(maxCardinality);
     }
 
     public List<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
@@ -561,41 +563,41 @@ public class ProductSpecCharacteristic {
      */
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        ReflectionToStringBuilderBaas stringBuilder = new ReflectionToStringBuilderBaas(this,
+                ToStringStyle.SHORT_PREFIX_STYLE);
+        return stringBuilder.toString();
     }
-    
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((ID == null) ? 0 : ID.hashCode());
-		result = prime * result + maxCardinality;
-		result = prime * result + minCardinality;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((unique == null) ? 0 : unique.hashCode());
-		result = prime * result
-				+ ((validFor == null) ? 0 : validFor.hashCode());
-		result = prime * result
-				+ ((valueType == null) ? 0 : valueType.hashCode());
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductSpecCharacteristic other = (ProductSpecCharacteristic) obj;
-		if (ID == null) {
-			if (other.ID != null)
-				return false;
-		} else if (!ID.equals(other.ID))
-			return false;
-		
-		return true;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((ID == null) ? 0 : ID.hashCode());
+        result = prime * result + maxCardinality;
+        result = prime * result + minCardinality;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((unique == null) ? 0 : unique.hashCode());
+        result = prime * result + ((validFor == null) ? 0 : validFor.hashCode());
+        result = prime * result + ((valueType == null) ? 0 : valueType.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductSpecCharacteristic other = (ProductSpecCharacteristic) obj;
+        if (ID == null) {
+            if (other.ID != null)
+                return false;
+        } else if (!ID.equals(other.ID))
+            return false;
+
+        return true;
+    }
 
 }

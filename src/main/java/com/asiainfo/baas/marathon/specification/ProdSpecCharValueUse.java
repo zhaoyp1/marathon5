@@ -78,4 +78,32 @@ public class ProdSpecCharValueUse {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((prodSpecCharValue == null) ? 0 : prodSpecCharValue
+						.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProdSpecCharValueUse other = (ProdSpecCharValueUse) obj;
+		if (prodSpecCharValue == null) {
+			if (other.prodSpecCharValue != null)
+				return false;
+		} else if (!prodSpecCharValue.equals(other.prodSpecCharValue))
+			return false;
+		return true;
+	}
+
 }

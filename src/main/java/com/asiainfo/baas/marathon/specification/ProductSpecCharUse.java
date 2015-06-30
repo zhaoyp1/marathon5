@@ -1,14 +1,18 @@
 package com.asiainfo.baas.marathon.specification;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.log4j.Logger;
 
-import com.asiainfo.baas.marathon.baseType.*;
+import com.asiainfo.baas.common.ReflectionToStringBuilderBaas;
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
 
 public class ProductSpecCharUse {
 
+	private static Logger logger = Logger.getLogger(ProductSpecCharUse.class);
+	
     private ProductSpecification prodSpec;
     private ProductSpecCharacteristic prodSpecChar;
     private List<ProdSpecCharValueUse> prodSpecCharValueUse;
@@ -164,11 +168,12 @@ public class ProductSpecCharUse {
      * @param validFor
      */
     public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage,
-            TimePeriod validFor) {
+            TimePeriod validFor,String name) {
         this.prodSpecChar = charSpec;
         this.canBeOveridden = canBeOveridden;
         this.isPackage = isPackage;
         this.validFor = validFor;
+        this.name = name;
     }
 
     /**
@@ -205,12 +210,21 @@ public class ProductSpecCharUse {
      * @param isDefault
      * @param validFor
      */
-    public void addValue(ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
+    public boolean addValue(ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
+    	if(charValue == null){
+    		logger.error("添加的值不能为空！");
+    		return false;
+    	}
         ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue, isDefault, validFor);
-        if (prodSpecCharValueUse == null) {
-            prodSpecCharValueUse = new ArrayList<ProdSpecCharValueUse>();
+        if (this.prodSpecCharValueUse == null) {
+            this.prodSpecCharValueUse = new ArrayList<ProdSpecCharValueUse>();
         }
-        prodSpecCharValueUse.add(charValueUse);
+        if(this.prodSpecCharValueUse.contains(charValueUse)){
+        	logger.error("所添加的值已经存在，不能重复添加！");
+    		return false;
+        }
+        this.prodSpecCharValueUse.add(charValueUse);
+        return true;
     }
 
     /**
@@ -226,27 +240,61 @@ public class ProductSpecCharUse {
      * 
      * @param defaultValue
      */
-    public void specifyDefaultCharacteristicValueUse(ProductSpecCharacteristicValue defaultValue) {
-        if (prodSpecCharValueUse != null) {
-            for (int i = 0; i < prodSpecCharValueUse.size(); i++) {
-                ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
-                if (valueUse.isIsDefault() && !valueUse.getProdSpecCharValue().equals(defaultValue)) {
-                    valueUse.setIsDefault(false);
-                }
-                if (valueUse.getProdSpecCharValue().equals(defaultValue)) {
-                    valueUse.setIsDefault(true);
-                }
-            }
+    public boolean specifyDefaultCharacteristicValueUse(ProductSpecCharacteristicValue defaultValue) {
+        if (this.prodSpecCharValueUse != null) {
+        	if(defaultValue == null){
+        		logger.error("指定的特征值为空，不能设置默认值！");
+        		return false;
+        	}
+        	ProdSpecCharValueUse valueUse = this.retrieveProdSpecCharValueUse(defaultValue);
+        	if(valueUse == null ){
+        		logger.error("该特征没有这个值，不能设置默认值！");
+        		return false;
+        	}
+        	valueUse.setIsDefault(true);
+        	return true;
+        }else{
+        	logger.error("该特征没有值，不能设置默认值！");
+        	return false;
         }
     }
+    
+    public boolean clearDefaultValueUse(ProductSpecCharacteristicValue defaultValue){
+    	if(defaultValue == null){
+    		logger.error("传入的默认值不能为空！");
+    		return false;
+    	}
+    	ProdSpecCharValueUse oldDefaultValueUse = this.retrieveProdSpecCharValueUse(defaultValue);
+    	if(oldDefaultValueUse != null){
+    			if(oldDefaultValueUse.isIsDefault()){
+    				oldDefaultValueUse.setIsDefault(false);
+    				return true;
+    			}else{
+    				logger.error("该特征值不是默认值！");
+    	    		return false;
+    			}
+    	}else{
+    		logger.error("该特征值没有被使用！");
+    		return false;
+    	}
+    }
+    private ProdSpecCharValueUse retrieveProdSpecCharValueUse(ProductSpecCharacteristicValue charValue){
+    	for (ProdSpecCharValueUse valueUse : prodSpecCharValueUse) {
+            if (valueUse.getProdSpecCharValue().equals(charValue)) 
+                return valueUse;
+        }
+    	return null;
+    }
 
-    public ProdSpecCharValueUse retrieveDefaultCharacteristicValueUse() {
+    public List<ProdSpecCharValueUse> retrieveDefaultCharacteristicValueUse() {
+    	List<ProdSpecCharValueUse> defaultValueUse = new ArrayList<ProdSpecCharValueUse>();
         if (prodSpecCharValueUse != null) {
             for (int i = 0; i < prodSpecCharValueUse.size(); i++) {
                 ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
                 if (valueUse.isIsDefault())
-                    return valueUse;
+                	defaultValueUse.add(valueUse);
             }
+            return defaultValueUse;
         }
         return null;
 
@@ -262,24 +310,51 @@ public class ProductSpecCharUse {
         this.maxCardinality = maxCardinality;
     }
 
-    /*
+    
+   
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((prodSpecChar == null) ? 0 : prodSpecChar.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductSpecCharUse other = (ProductSpecCharUse) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (prodSpecChar == null) {
+			if (other.prodSpecChar != null)
+				return false;
+		} else if (!prodSpecChar.equals(other.prodSpecChar))
+			return false;
+		return true;
+	}
+
+	/*
      * (non-Javadoc)
      * 
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-        toStringBuilder.append("description", description);
-        toStringBuilder.append("unique", unique);
-        toStringBuilder.append("isPackage", isPackage);
-        toStringBuilder.append("canBeOveridden", canBeOveridden);
-        toStringBuilder.append("minCardinality", minCardinality);
-        toStringBuilder.append("maxCardinality", maxCardinality);
-        toStringBuilder.append("extensible", extensible);
-        toStringBuilder.append("validFor", validFor);
-
-        return toStringBuilder.toString();
+        ReflectionToStringBuilderBaas stringBuilder = new ReflectionToStringBuilderBaas(this,
+                ToStringStyle.SHORT_PREFIX_STYLE);
+        return stringBuilder.toString();
     }
 
 }

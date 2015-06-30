@@ -20,7 +20,9 @@ public class ReflectionToStringBuilderBaas extends ReflectionToStringBuilder {
         fillterList.add("productOffering");
         fillterList.add("productSpecificationVersion");
         fillterList.add("prodSpecType");
-        return super.accept(field) && !fillterList.contains(field.getName());
-    }
+        fillterList.add("logger");
 
+        return super.accept(field) && !"List".equals(field.getType().getSimpleName())
+                && !fillterList.contains(field.getName());
+    }
 }
