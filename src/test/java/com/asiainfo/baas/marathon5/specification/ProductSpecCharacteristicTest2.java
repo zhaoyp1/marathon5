@@ -157,7 +157,7 @@ public class ProductSpecCharacteristicTest2 {
 		assertEquals(true,result);
 		logger.info("清除成功");
 	}
-	
+	@Test
 	public void testAddRelatedCharacteristic(){
 		logger.info("ProductSpecCharacteristic添加相关联的特征：");
 		
@@ -168,10 +168,16 @@ public class ProductSpecCharacteristicTest2 {
 		logger.info("\t2.ProductSpecCharacteristic添加相关联的特征,指定特征与当前特征相同");
 		result=specChar.addRelatedCharacteristic(specChar, RelationshipType.AGGREGATION.getValue(), 1, validFor);
 		assertEquals(false, result);
+		
 		logger.info("\t3.ProductSpecCharacteristic添加相关联的特征,指定特征与当前特征不相同");
 		result=specChar.addRelatedCharacteristic(configSpecChar, RelationshipType.AGGREGATION.getValue(), 1, validFor);
 		assertEquals(true, result);
+		logger.info("添加成功");
+		logger.info("\t4.ProductSpecCharacteristic添加相关联的特征,指定特征已经建立聚合关系");
 		result=specChar.addRelatedCharacteristic(configSpecChar, RelationshipType.AGGREGATION.getValue(), 1, validFor);
+		assertEquals(false, result);
+		logger.info("\t5.ProductSpecCharacteristic添加相关联的特征,指定特征已经建立聚合关系,是否可以建立其他关系");
+		result=specChar.addRelatedCharacteristic(configSpecChar, RelationshipType.DEPENDENCY.getValue(), 1, validFor);
 		assertEquals(false, result);
 		
 	}

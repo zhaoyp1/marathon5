@@ -380,7 +380,7 @@ public class ProductSpecCharacteristic {
              prodSpecCharRelationship = new ArrayList<ProductSpecCharRelationship>();
     	 
     	if(characteristic==null||validFor==null){
-    		logger.error("特征时有效期不能为空");
+    		logger.error("特征和有效期不能为空");
     		return false;
     	}
     	if(this.equals(characteristic)){
@@ -397,7 +397,7 @@ public class ProductSpecCharacteristic {
     	}
         ProductSpecCharRelationship productSpecCharValueRelationShip = new ProductSpecCharRelationship(this,
                 characteristic, RelationshipType.AGGREGATION.getValue(), validFor);
-       
+        if(prodSpecCharRelationship==null) prodSpecCharRelationship=new ArrayList<ProductSpecCharRelationship>();
         this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
         return true;
     }
@@ -442,7 +442,7 @@ public class ProductSpecCharacteristic {
             TimePeriod validFor) {
            	 
 	   	if(characteristic==null||validFor==null||type==null){
-	   		logger.error("特征时有效期不能为空");
+	   		logger.error("特征、有效期和类型、不能为空");
 	   		return false;
 	   	}
 	   	if(this.equals(characteristic)){
@@ -459,7 +459,7 @@ public class ProductSpecCharacteristic {
 	   	}
        ProductSpecCharRelationship productSpecCharValueRelationShip = new ProductSpecCharRelationship(this,
                characteristic, type, validFor,charSpecSeq);
-      
+      if(prodSpecCharRelationship==null) prodSpecCharRelationship=new ArrayList<ProductSpecCharRelationship>();
        this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
        return true;
     }
