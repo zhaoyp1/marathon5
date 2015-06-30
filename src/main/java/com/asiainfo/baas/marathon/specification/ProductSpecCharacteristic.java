@@ -232,14 +232,14 @@ public class ProductSpecCharacteristic {
     public void addValue(ProductSpecCharacteristicValue value) {
 
     	if(value==null){
-    		logger.info("特征值ProductSpecCharacteristicValue为空，不能添加");
+    		logger.error("特征值ProductSpecCharacteristicValue为空，不能添加");
     		return ;
     	}
     	if(this.productSpecCharacteristicValue==null){
     		this.productSpecCharacteristicValue=new HashSet<ProductSpecCharacteristicValue>();
     	}
     	if(productSpecCharacteristicValue.contains(value)){
-    		logger.info("特征值ProductSpecCharacteristicValue已经存在");
+    		logger.error("特征值ProductSpecCharacteristicValue已经存在");
     		return ;
     	}
     	productSpecCharacteristicValue.add(value);
