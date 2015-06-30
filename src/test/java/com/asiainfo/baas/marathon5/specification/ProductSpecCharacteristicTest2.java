@@ -1,6 +1,7 @@
 package com.asiainfo.baas.marathon5.specification;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.Date;
 import java.util.List;
@@ -180,6 +181,26 @@ public class ProductSpecCharacteristicTest2 {
 		result=specChar.addRelatedCharacteristic(configSpecChar, RelationshipType.DEPENDENCY.getValue(), 1, validFor);
 		assertEquals(false, result);
 		
+	}
+	@Test
+	public void testRetrieveRelatedCharacteristic(){
+		logger.info("ProductSpecCharacteristic查询相关联的特征：");
+		
+		logger.info("\t1.ProductSpecCharacteristic查询相关联的特征,指定特征为null");
+		List<ProductSpecCharacteristic> specChars=specChar.retrieveRelatedCharacteristic(null);
+		assertNull(specChars);
+		
+		logger.info("\t2.ProductSpecCharacteristic查询相关联的特征,当前特征没有指定关系的特征");
+		specChars=specChar.retrieveRelatedCharacteristic(RelationshipType.AGGREGATION.getValue());
+		assertNull(specChars);
+		
+		logger.info("\t3.ProductSpecCharacteristic查询相关联的特征,当前特征存在聚合关系特征");
+		specChar.addRelatedCharacteristic(configSpecChar, RelationshipType.AGGREGATION.getValue(), 1, validFor);
+		specChars=specChar.retrieveRelatedCharacteristic(RelationshipType.AGGREGATION.getValue());
+		assertNotNull(specChars);
+		logger.info("\t4.ProductSpecCharacteristic查询相关联的特征,当前特征存在聚合关系特征,不存在依赖关系");
+		specChars=specChar.retrieveRelatedCharacteristic(RelationshipType.DEPENDENCY.getValue());
+		assertNull(specChars);
 	}
 	
 
