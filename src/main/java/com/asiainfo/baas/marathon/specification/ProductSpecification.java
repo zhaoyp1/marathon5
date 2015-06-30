@@ -28,7 +28,7 @@ import com.asiainfo.baas.marathon5.specification.TestProductCreateSpecification;
  */
 public abstract class ProductSpecification {
 
-    private static Logger logger = Logger.getLogger(TestProductCreateSpecification.class);
+    private static Logger logger = Logger.getLogger(ProductSpecification.class);
 
     private List<ProductSpecificationCost> productSpecificationCost;
     private List<SimpleProductOffering> productOffering;
