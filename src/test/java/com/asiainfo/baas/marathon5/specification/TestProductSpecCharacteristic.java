@@ -25,7 +25,6 @@ public class TestProductSpecCharacteristic {
 		productSpecCharacteristic=new ProductSpecCharacteristic("1","ÑÕÉ«", "",validFor , "",1,6,true, "", "");
 
 	}
-	public void setUp
 
 	@Test
 	public void  addValue(){
