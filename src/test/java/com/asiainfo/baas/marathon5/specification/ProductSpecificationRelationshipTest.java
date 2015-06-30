@@ -92,7 +92,7 @@ public class ProductSpecificationRelationshipTest {
         logger.info("***********testAddRelatedProdSpec Case3 end**************");
 
         logger.info("\n");
-        logger.info("***********testAddRelatedProdSpec Case3（添加同样数据，不同关联类型） start**************");
+        logger.info("***********testAddRelatedProdSpec Case4（添加同样数据，不同关联类型） start**************");
         // 再次添加一条不同数据,相同类型
         String type4 = RelationshipType.AGGREGATION.getValue();
         ProductSpecification targetProdSpec4 = new AtomicProductSpecification("T001", "AppleCare For iPhone2",
@@ -108,7 +108,20 @@ public class ProductSpecificationRelationshipTest {
         for (int i = 0; i < this.srcProdSpec.getProdSpecRelationship().size(); i++) {
             logger.info(this.srcProdSpec.getProdSpecRelationship().get(i).toString());
         }
-        logger.info("***********testAddRelatedProdSpec Case3 end**************");
+        logger.info("***********testAddRelatedProdSpec Case4 end**************");
+        
+        logger.info("\n");
+        logger.info("***********testAddRelatedProdSpec Case4（添加同样数据，不同关联类型） start**************");
+        // 再次添加一条不同数据,相同类型
+        this.srcProdSpec.addRelatedProdSpec(this.srcProdSpec, type4, validFor);
+        assertEquals(3, this.srcProdSpec.getProdSpecRelationship().size());
+        // 构造期待数据
+        assertEquals(expectedRelatedSpecList, srcProdSpec.getProdSpecRelationship());
+        logger.info("添加后src内的relationship：");
+        for (int i = 0; i < this.srcProdSpec.getProdSpecRelationship().size(); i++) {
+            logger.info(this.srcProdSpec.getProdSpecRelationship().get(i).toString());
+        }
+        logger.info("***********testAddRelatedProdSpec Case4 end**************");
         logger.info("-------------testAddRelatedProdSpec end---------------");
     }
 

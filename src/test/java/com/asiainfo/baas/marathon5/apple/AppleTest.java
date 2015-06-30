@@ -1,7 +1,6 @@
 package com.asiainfo.baas.marathon5.apple;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -9,19 +8,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.asiainfo.baas.common.ProductConst;
-import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.BundledProductOffering;
 import com.asiainfo.baas.marathon.offering.ProductOffering;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
 import com.asiainfo.baas.marathon.offering.catalog.ProductCatalog;
 import com.asiainfo.baas.marathon.specification.AtomicProductSpecification;
+import com.asiainfo.baas.marathon.specification.ConfigurableProductSpecCharacteristic;
+import com.asiainfo.baas.marathon.specification.ProdSpecCharValueUse;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 import com.asiainfo.baas.marathon.specification.ProductSpecification;
 import com.asiainfo.baas.marathon5.common.CommonUtils;
-import com.asiainfo.baas.marathon5.common.ProdSpecCharParameter;
-import com.asiainfo.baas.marathon5.specification.ProductSpecificationRelationshipTest;
 
 public class AppleTest {
 
@@ -32,19 +30,35 @@ public class AppleTest {
     @Before
     public void createProductSpecChar() {
 
+        logger.info("准备特征/特征值数据----------start");
         productSpecChars = new ArrayList<ProductSpecCharacteristic>();
         for (int i = 0; i < TestProductSpecificationData.specChar.length; i++) {
+            String ID = TestProductSpecificationData.specChar[i][0].toString();
+            logger.info("创建特征：" + "ID=" + ID + ",   " + TestProductSpecificationData.specChar[i][1].toString()
+                    + "是否可配置：" + TestProductSpecificationData.specChar[i][7].toString());
+            ProductSpecCharacteristic productSpecCharProcessor1 = null;
+            if (Boolean.parseBoolean(TestProductSpecificationData.specChar[i][7].toString())) {
+                productSpecCharProcessor1 = new ConfigurableProductSpecCharacteristic(ID,
+                        TestProductSpecificationData.specChar[i][1].toString(),
+                        TestProductSpecificationData.specChar[i][2].toString(),
+                        (TimePeriod) TestProductSpecificationData.specChar[i][3],
+                        TestProductSpecificationData.specChar[i][4].toString(),
+                        (int) TestProductSpecificationData.specChar[i][5],
+                        (int) TestProductSpecificationData.specChar[i][6]);
+            } else {
+                productSpecCharProcessor1 = new ProductSpecCharacteristic(ID,
+                        TestProductSpecificationData.specChar[i][1].toString(),
+                        TestProductSpecificationData.specChar[i][2].toString(),
+                        (TimePeriod) TestProductSpecificationData.specChar[i][3],
+                        TestProductSpecificationData.specChar[i][4].toString(),
+                        (int) TestProductSpecificationData.specChar[i][5],
+                        (int) TestProductSpecificationData.specChar[i][6]);
+            }
 
-            ProductSpecCharacteristic productSpecCharProcessor1 = new ProductSpecCharacteristic(
-                    TestProductSpecificationData.specChar[i][0].toString(),
-                    TestProductSpecificationData.specChar[i][1].toString(),
-                    TestProductSpecificationData.specChar[i][2].toString(),
-                    (TimePeriod) TestProductSpecificationData.specChar[i][3],
-                    TestProductSpecificationData.specChar[i][4].toString(),
-                    (int) TestProductSpecificationData.specChar[i][5],
-                    (int) TestProductSpecificationData.specChar[i][6]);
             for (int j = 0; j < TestProductSpecificationData.specCharValue.length; j++) {
                 if ((int) TestProductSpecificationData.specCharValue[j][0] == i) {
+                    logger.info("      添加特征值：value=" + TestProductSpecificationData.specCharValue[j][5].toString()
+                            + "， unitOfMeasure=" + TestProductSpecificationData.specCharValue[j][3].toString());
                     ProductSpecCharacteristicValue oneprocessorValue1 = new ProductSpecCharacteristicValue(
                             TestProductSpecificationData.specCharValue[j][1].toString(),
                             (boolean) TestProductSpecificationData.specCharValue[j][2],
@@ -56,7 +70,20 @@ public class AppleTest {
             }
             productSpecChars.add(productSpecCharProcessor1);
         }
+        logger.info("建立特征关系：");
+        for (int i = 0; i < TestProductSpecificationData.relateSpecChar.length; i++) {
+            String srcId = TestProductSpecificationData.relateSpecChar[i][0].toString();
+            String targetId = TestProductSpecificationData.relateSpecChar[i][1].toString();
+            ProductSpecCharacteristic srcChar = this.getProdSpecCharById(srcId);
+            ProductSpecCharacteristic targetChar = this.getProdSpecCharById(targetId);
 
+            logger.info("    建立特征关系：srcCharName:" + srcChar.getName() + ",  targetCharName：" + targetChar.getName()
+                    + ",   关联类型：" + TestProductSpecificationData.relateSpecChar[i][2].toString());
+            srcChar.addRelatedCharacteristic(targetChar, TestProductSpecificationData.relateSpecChar[i][2].toString(),
+                    Integer.parseInt(TestProductSpecificationData.relateSpecChar[i][3].toString()),
+                    (TimePeriod) TestProductSpecificationData.relateSpecChar[i][4]);
+        }
+        logger.info("准备特征/特征值数据----------end");
     }
 
     @Test
@@ -99,7 +126,7 @@ public class AppleTest {
     }
 
     /**
-     * 创建两个规格
+     * 创建规格
      * 
      * @return
      * @throws Exception
@@ -108,21 +135,24 @@ public class AppleTest {
             throws Exception {
 
         if (specParameter != null) {
+
             ProductSpecification productSpec = new AtomicProductSpecification(
                     TestProductSpecificationData.specParameter[0].toString(),
                     TestProductSpecificationData.specParameter[1].toString(),
                     TestProductSpecificationData.specParameter[2].toString(),
                     TestProductSpecificationData.specParameter[3].toString());
+            logger.info("创建规格:" + productSpec.toString());
+            logger.info("    添加特征/特征值:");
             for (int i = 0; i < charData.length; i++) {
                 ProductSpecCharacteristic prodSpecChar = null;
-                prodSpecChar = this.getCharByCharName(charData[i][0].toString());
-
-                productSpec.addCharacteristic(prodSpecChar, (boolean) charData[i][1], (boolean) charData[i][2],
-                        (TimePeriod) charData[i][3], charData[i][6].toString(), charData[i][7].toString(),
-                        (int) charData[i][8], (int) charData[i][9], (boolean) charData[i][10],
-                        charData[i][11].toString());
-                if (Boolean.parseBoolean(charData[i][4].toString())) {
-                    ProductSpecCharacteristicValue[] values = this.getCharValue(prodSpecChar, (int[]) charData[i][5]);
+                prodSpecChar = this.getCharByCharId(charData[i][0].toString());
+                productSpec
+                        .addCharacteristic(prodSpecChar, (boolean) charData[i][1], (boolean) charData[i][2],
+                                (TimePeriod) charData[i][3], charData[i][4].toString(), charData[i][5].toString(),
+                                (int) charData[i][6], (int) charData[i][7], (boolean) charData[i][8],
+                                charData[i][9].toString());
+                if (Boolean.parseBoolean(charData[i][10].toString())) {
+                    ProductSpecCharacteristicValue[] values = this.getCharValue(prodSpecChar, (int[]) charData[i][11]);
                     if (values != null) {
                         for (ProductSpecCharacteristicValue productSpecCharacteristicValue : values) {
                             productSpec.attachCharacteristicValue(prodSpecChar, productSpecCharacteristicValue, true,
@@ -130,15 +160,19 @@ public class AppleTest {
                         }
                     }
                 }
+                logger.info("    特征" + (i + 1) + "：");
+                logger.info(productSpec.getProdSpecCharUse().get(i).toString());
+                logger.info("    特征" + (i + 1) + "的所用特征值：");
+                List<ProdSpecCharValueUse> prodSpecCharValueUseList = productSpec.getProdSpecCharUse().get(i)
+                        .getProdSpecCharValueUse();
+                if (prodSpecCharValueUseList == null || prodSpecCharValueUseList.size() == 0) {
+                    logger.info("null");
+                } else {
+                    for (ProdSpecCharValueUse prodSpecCharValueUse : prodSpecCharValueUseList) {
+                        logger.info(prodSpecCharValueUse.toString());
+                    }
+                }
             }
-
-            // 添加成本
-            Money cost = new Money(TestProductSpecificationData.specParameter[8].toString(),
-                    Long.parseLong(TestProductSpecificationData.specParameter[9].toString()));
-            productSpec.addCost(cost, (TimePeriod) TestProductSpecificationData.specParameter[4]);
-            productSpec.specifyVersion(TestProductSpecificationData.specParameter[6].toString(),
-                    TestProductSpecificationData.specParameter[7].toString(), new Date(),
-                    (TimePeriod) TestProductSpecificationData.specParameter[4]);
 
             return productSpec;
         }
@@ -167,11 +201,11 @@ public class AppleTest {
         return bundledProductOffering;
     }
 
-    public ProductSpecCharacteristic getCharByCharName(String name) {
+    public ProductSpecCharacteristic getCharByCharId(String id) {
         ProductSpecCharacteristic prodSpecChar = null;
         for (int i = 0; i < productSpecChars.size(); i++) {
             prodSpecChar = productSpecChars.get(i);
-            if (name.equals(prodSpecChar.getName())) {
+            if (id.equals(prodSpecChar.getID())) {
                 return prodSpecChar;
             }
         }
@@ -199,4 +233,14 @@ public class AppleTest {
 
     }
 
+    public ProductSpecCharacteristic getProdSpecCharById(String id) {
+        if (productSpecChars != null) {
+            for (ProductSpecCharacteristic productSpecCharacteristic : productSpecChars) {
+                if (id.equals(productSpecCharacteristic.getID())) {
+                    return productSpecCharacteristic;
+                }
+            }
+        }
+        return null;
+    }
 }

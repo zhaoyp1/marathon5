@@ -5,6 +5,7 @@ import java.util.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import com.asiainfo.baas.common.ReflectionToStringBuilderBaas;
 import com.asiainfo.baas.marathon.baseType.*;
 
 public class ProductSpecCharUse {
@@ -269,17 +270,10 @@ public class ProductSpecCharUse {
      */
     @Override
     public String toString() {
-        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-        toStringBuilder.append("description", description);
-        toStringBuilder.append("unique", unique);
-        toStringBuilder.append("isPackage", isPackage);
-        toStringBuilder.append("canBeOveridden", canBeOveridden);
-        toStringBuilder.append("minCardinality", minCardinality);
-        toStringBuilder.append("maxCardinality", maxCardinality);
-        toStringBuilder.append("extensible", extensible);
-        toStringBuilder.append("validFor", validFor);
 
-        return toStringBuilder.toString();
+        ReflectionToStringBuilderBaas stringBuilder = new ReflectionToStringBuilderBaas(this,
+                ToStringStyle.SHORT_PREFIX_STYLE);
+        return stringBuilder.toString();
     }
 
 }

@@ -19,7 +19,6 @@ public class ConfigurableProductSpecCharacteristic extends ProductSpecCharacteri
      */
     public ConfigurableProductSpecCharacteristic(String id, String name, String valueType, TimePeriod validFor, String unique, int minCardinality, int maxCardinality) {
     	super(id, name, valueType, validFor, unique, minCardinality, maxCardinality);
-    	throw new UnsupportedOperationException();
     }
 
     /**
@@ -37,7 +36,6 @@ public class ConfigurableProductSpecCharacteristic extends ProductSpecCharacteri
      */
     public ConfigurableProductSpecCharacteristic(String id, String name, String valueType, TimePeriod validFor, String unique, int minCardinality, int maxCardinality, boolean extensible, String description, String derivationFormula) {
     	super(id, name, valueType, validFor, unique, minCardinality, maxCardinality, extensible, description, derivationFormula);   
-    	throw new UnsupportedOperationException();
     }
 
 }

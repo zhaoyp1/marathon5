@@ -4,18 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.common.ProductConst;
+import com.asiainfo.baas.common.ReflectionToStringBuilderBaas;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
-import com.asiainfo.baas.marathon5.specification.TestProductCreateSpecification;
 
 /**
  * A detailed description of a tangible or intangible object made available
@@ -370,6 +368,10 @@ public abstract class ProductSpecification {
             logger.error("方法addRelatedProdSpec的参数不正确。type=" + type);
             return;
         }
+        if (this.equals(prodSpec)) {
+            logger.error("方法addRelatedProdSpec的参数不正确。不能与自规格建立关系");
+            return;
+        }
         ProductSpecificationRelationship productSpecificationRelationship = new ProductSpecificationRelationship(this,
                 prodSpec, type, validFor);
         if (this.prodSpecRelationship.contains(productSpecificationRelationship)) {
@@ -711,21 +713,9 @@ public abstract class ProductSpecification {
     @Override
     public String toString() {
 
-        // ReflectionToStringBuilderBaas a = new
-        // ReflectionToStringBuilderBaas(this,
-        // ToStringStyle.SHORT_PREFIX_STYLE);
-        // return a.toString();
-
-        // StringBuildeer = new StringBuilder();
-        // stringBuilder.append(this.getClass().getSimpleName()).append(":\n");
-        // stringBuilder.append("name=").append(name).append(", ");
-        // stringBuilder.append("name=").append(name).append(", ");
-        //
-        // stringBuilder.append("\n");
-        // stringBuilder.append("prodSpecCharUse=");
-        // stringBuilder.append(prodSpecCharUse.toString());
-        // return stringBuilder.toString();
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        ReflectionToStringBuilderBaas stringBuilder = new ReflectionToStringBuilderBaas(this,
+                ToStringStyle.SHORT_PREFIX_STYLE);
+        return stringBuilder.toString();
     }
 
     /*
