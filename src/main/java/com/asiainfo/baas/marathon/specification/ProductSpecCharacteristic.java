@@ -272,7 +272,7 @@ public class ProductSpecCharacteristic {
                     }
                 }
             } else {
-                logger.warn("productSpecCharacteristic不存在特征值");
+                logger.warn("当前特征在不存在特征值");
             }
         }
 
@@ -325,12 +325,8 @@ public class ProductSpecCharacteristic {
     				defaultSpecCharValue.add(charValue);
     			}
 			}
-    		if(defaultSpecCharValue.size()==0){
-    			logger.info("\t特征没有设置默认值");
-    			return null;
-    		}else{
+    		 
     			return defaultSpecCharValue;
-    		}
     	}
     	logger.info("\t特征没有特征值");
     	return null;
