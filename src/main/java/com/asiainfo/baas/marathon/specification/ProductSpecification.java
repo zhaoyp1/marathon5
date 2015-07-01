@@ -398,15 +398,15 @@ public abstract class ProductSpecification {
     public List<ProductSpecification> queryRelatedProdSpec(String type) {
         List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
 
+        if (StringUtils.isEmpty(type)) {
+            logger.error("传入的关系类型为空。");
+            return productSpecifications;
+        }
         if (this.prodSpecRelationship != null) {
             Iterator<ProductSpecificationRelationship> iterator = this.prodSpecRelationship.iterator();
             while (iterator.hasNext()) {
                 ProductSpecificationRelationship productSpecRelationship = iterator.next();
-                if (StringUtils.isNotEmpty(type)) {
-                    if (type.equals(productSpecRelationship.getType())) {
-                        productSpecifications.add(productSpecRelationship.getTargetProdSpec());
-                    }
-                } else {
+                if (type.equals(productSpecRelationship.getType())) {
                     productSpecifications.add(productSpecRelationship.getTargetProdSpec());
                 }
             }
