@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 
@@ -601,10 +602,10 @@ public abstract class ProductSpecification {
      */
     public boolean specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-    	if(characteristic == null || defaultValue == null){
-    		logger.error("特征和特征值不能为空！");
+        if (characteristic == null || defaultValue == null) {
+            logger.error("特征和特征值不能为空！");
             return false;
-    	}
+        }
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
             if (charUse == null) {
@@ -612,23 +613,23 @@ public abstract class ProductSpecification {
                 return false;
             }
             boolean flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
-            if(!flag){
-            	 logger.error("该特征值没有被使用！");
-                 return false;
+            if (!flag) {
+                logger.error("该特征值没有被使用！");
+                return false;
             }
-            	return true;
+            return true;
         } else {
             logger.error("没有添加特征！");
             return false;
         }
     }
-    
+
     public boolean clearDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-    	if(characteristic == null || defaultValue == null){
-    		logger.error("特征和特征值不能为空！");
+        if (characteristic == null || defaultValue == null) {
+            logger.error("特征和特征值不能为空！");
             return false;
-    	}
+        }
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
             if (charUse == null) {
@@ -636,11 +637,11 @@ public abstract class ProductSpecification {
                 return false;
             }
             boolean flag = charUse.clearDefaultValueUse(defaultValue);
-            if(!flag){
-            	 logger.error("该特征值没有被使用！");
-                 return false;
+            if (!flag) {
+                logger.error("该特征值没有被使用！");
+                return false;
             }
-            	return true;
+            return true;
         } else {
             logger.error("没有添加特征！");
             return false;
@@ -791,6 +792,17 @@ public abstract class ProductSpecification {
         ReflectionToStringBuilderBaas stringBuilder = new ReflectionToStringBuilderBaas(this,
                 ToStringStyle.SHORT_PREFIX_STYLE);
         return stringBuilder.toString();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toStringWithSubObject() {
+        ReflectionToStringBuilder stringBuilder = new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return stringBuilder.toString();
+
     }
 
     /*

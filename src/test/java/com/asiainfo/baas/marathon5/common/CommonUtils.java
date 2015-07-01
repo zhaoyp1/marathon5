@@ -87,4 +87,38 @@ public class CommonUtils {
         }
         System.out.println(outText.toString());
     }
+
+    public static String getPropertyToJson(Object[] beanArray, List printBeanList, Object beanObject) {
+
+        // ≥ı ºªØconfig
+        JsonConfig config = new JsonConfig();
+        config.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd hh:mm:ss"));
+        String[] excudes = { "price", "historyVersion", "currentVersion", "currentVersionString", "leafCharacteristic",
+                "defaultCharacteristicValueUse", "rootCharacteristic", "subOffering", "cardinality" };
+        config.setExcludes(excudes);
+        config.setIgnoreDefaultExcludes(false);
+        config.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
+
+        List<Object> beanList = printBeanList;
+        StringBuilder outText = new StringBuilder();
+        if (beanArray != null) {
+            beanList = Arrays.asList(beanArray);
+        }
+        if (beanObject != null) {
+            if (beanList == null)
+                beanList = new ArrayList<Object>();
+            beanList.add(beanObject);
+        }
+        try {
+            if (beanList != null && beanList.size() > 0) {
+                for (Object bean : beanList) {
+                    JSONObject json = JSONObject.fromObject(bean, config);
+                    System.out.println(json.toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return outText.toString();
+    }
 }

@@ -18,6 +18,7 @@ import com.asiainfo.baas.marathon.specification.ProdSpecCharValueUse;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 import com.asiainfo.baas.marathon.specification.ProductSpecification;
+import com.asiainfo.baas.marathon5.common.CommonUtils;
 
 public class AppleTest {
 
@@ -28,7 +29,6 @@ public class AppleTest {
     @Before
     public void createProductSpecChar() {
 
-        
         logger.info("准备特征/特征值数据----------start");
         productSpecChars = new ArrayList<ProductSpecCharacteristic>();
         for (int i = 0; i < TestProductSpecificationData.specChar.length; i++) {
@@ -100,6 +100,18 @@ public class AppleTest {
         ProductSpecification productSpecification3 = createProductSpecification(
                 TestProductSpecificationData.specParameter3, TestProductSpecificationData.three_charData);
 
+        // 创建复合规格
+        CompositeProductSpecification productSpecification4 = (CompositeProductSpecification) createProductSpecification(
+                TestProductSpecificationData.specParameter4, new Object[][] {});
+
+        // 添加子规格
+        this.addSubspec(productSpecification4, productSpecification1, productSpecification2, productSpecification3,
+                productSpecification4);
+        // 打印符合规格
+        logger.info("符合规格整体内容：" + productSpecification4.toStringWithSubObject());
+        // logger.info(CommonUtils.getPropertyToJson(null, null,
+        // productSpecification4));
+
     }
 
     /**
@@ -113,20 +125,21 @@ public class AppleTest {
         ProductSpecification productSpec = null;
         if (specParameter != null) {
             if ("AtomicProductSpecification".equals(specParameter[10].toString())) {
-                productSpec = new AtomicProductSpecification(TestProductSpecificationData.specParameter[0].toString(),
-                        TestProductSpecificationData.specParameter[1].toString(),
-                        TestProductSpecificationData.specParameter[2].toString(),
-                        TestProductSpecificationData.specParameter[3].toString());
+                productSpec = new AtomicProductSpecification(specParameter[0].toString(), specParameter[1].toString(),
+                        specParameter[2].toString(), specParameter[3].toString());
             } else {
-                productSpec = new CompositeProductSpecification(
-                        TestProductSpecificationData.specParameter[0].toString(),
-                        TestProductSpecificationData.specParameter[1].toString(),
-                        TestProductSpecificationData.specParameter[2].toString(),
-                        TestProductSpecificationData.specParameter[3].toString());
+                productSpec = new CompositeProductSpecification(specParameter[0].toString(),
+                        specParameter[1].toString(), specParameter[2].toString(), specParameter[3].toString());
             }
 
             logger.info("创建规格:" + productSpec.toString());
-            logger.info("    添加特征/特征值:");
+            if (charData != null && charData.length > 0) {
+
+                logger.info("    添加特征/特征值:");
+            } else {
+                logger.info("    无特征/特征值");
+
+            }
             for (int i = 0; i < charData.length; i++) {
 
                 ProductSpecCharacteristic prodSpecChar = null;
@@ -142,8 +155,7 @@ public class AppleTest {
                     if (values != null) {
                         for (int j = 0; j < values.length; j++) {
                             productSpec.attachCharacteristicValue(prodSpecChar, values[j],
-                                    ((boolean[]) charData[i][12])[j],
-                                    (TimePeriod) TestProductSpecificationData.specParameter[4]);
+                                    ((boolean[]) charData[i][12])[j], (TimePeriod) specParameter[4]);
                         }
                     }
                 }
@@ -164,6 +176,25 @@ public class AppleTest {
             return productSpec;
         }
         return null;
+    }
+
+    /**
+     * 添加子规格
+     * 
+     * @return
+     * @throws Exception
+     */
+    public void addSubspec(CompositeProductSpecification parentSpec, ProductSpecification... productSpecs)
+            throws Exception {
+        logger.info("**********添加子规格   start*************");
+        logger.info("复合规格：" + parentSpec.getName());
+        if (productSpecs != null && productSpecs.length > 0) {
+            for (int i = 0; i < productSpecs.length; i++) {
+                logger.info("    子规格" + i + "：" + productSpecs[i].getName());
+                parentSpec.addSubProdSpec(productSpecs[i]);
+            }
+        }
+        logger.info("**********添加子规格   end*************");
     }
 
     public ProductCatalog createProductCatalog(String[] catalogData) {
