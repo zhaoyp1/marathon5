@@ -33,8 +33,8 @@ public class AppleTest {
         productSpecChars = new ArrayList<ProductSpecCharacteristic>();
         for (int i = 0; i < TestProductSpecificationData.specChar.length; i++) {
             String ID = TestProductSpecificationData.specChar[i][0].toString();
-            logger.info("创建特征：" + "ID=" + ID + ",   " + TestProductSpecificationData.specChar[i][1].toString()
-                    + "是否可配置：" + TestProductSpecificationData.specChar[i][7].toString());
+            logger.info("创建特征：" + "ID=" + ID + ",   name=" + TestProductSpecificationData.specChar[i][1].toString()
+                    + "  是否可配置：" + TestProductSpecificationData.specChar[i][7].toString());
             ProductSpecCharacteristic productSpecCharProcessor1 = null;
             if (Boolean.parseBoolean(TestProductSpecificationData.specChar[i][7].toString())) {
                 productSpecCharProcessor1 = new ConfigurableProductSpecCharacteristic(ID,

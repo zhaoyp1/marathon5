@@ -33,7 +33,7 @@ public class ProductSpecificationRelationshipTest {
 
         logger.info("-------------testAddRelatedProdSpec start---------------");
 
-        logger.info("***********testAddRelatedProdSpec Case1（正常分支） start**************");
+        logger.info("*********** Case1（正常分支） start**************");
         ProductSpecification targetProdSpec = new AtomicProductSpecification("T001", "AppleCare For iPhone",
                 "AppleCare", ProductSpecificationStatus.PLANNED.getValue());
         String type = RelationshipType.DEPENDENCY.getValue();
@@ -50,17 +50,16 @@ public class ProductSpecificationRelationshipTest {
             assertEquals(expectedRelatedSpecList.get(i).getTargetProdSpec().getName(), this.srcProdSpec
                     .getProdSpecRelationship().get(i).getTargetProdSpec().getName());
         }
-        assertEquals(expectedRelatedSpecList.toArray(new ProductSpecificationRelationship[0]), srcProdSpec
-                .getProdSpecRelationship().toArray(new ProductSpecificationRelationship[0]));
+        assertEquals(expectedRelatedSpecList, srcProdSpec.getProdSpecRelationship());
 
         logger.info("添加后src内的relationship：");
         for (int i = 0; i < this.srcProdSpec.getProdSpecRelationship().size(); i++) {
             logger.info(this.srcProdSpec.getProdSpecRelationship().get(i).toString());
         }
-        logger.info("***********testAddRelatedProdSpec Case1 end**************");
+        logger.info("*********** Case1 end**************");
 
         logger.info("\n");
-        logger.info("***********testAddRelatedProdSpec Case2（添加同样数据，同一关联类型） start**************");
+        logger.info("*********** Case2（添加同样数据，同一关联类型） start**************");
         // 再次添加一条同样数据
         ProductSpecification targetProdSpec2 = new AtomicProductSpecification("T001", "AppleCare For iPhone2",
                 "AppleCare", ProductSpecificationStatus.PLANNED.getValue());
@@ -89,10 +88,10 @@ public class ProductSpecificationRelationshipTest {
         for (int i = 0; i < this.srcProdSpec.getProdSpecRelationship().size(); i++) {
             logger.info(this.srcProdSpec.getProdSpecRelationship().get(i).toString());
         }
-        logger.info("***********testAddRelatedProdSpec Case3 end**************");
+        logger.info("*********** Case3 end**************");
 
         logger.info("\n");
-        logger.info("***********testAddRelatedProdSpec Case4（添加同样数据，不同关联类型） start**************");
+        logger.info("*********** Case4（添加同样数据，不同关联类型） start**************");
         // 再次添加一条不同数据,相同类型
         String type4 = RelationshipType.AGGREGATION.getValue();
         ProductSpecification targetProdSpec4 = new AtomicProductSpecification("T001", "AppleCare For iPhone2",
@@ -108,10 +107,10 @@ public class ProductSpecificationRelationshipTest {
         for (int i = 0; i < this.srcProdSpec.getProdSpecRelationship().size(); i++) {
             logger.info(this.srcProdSpec.getProdSpecRelationship().get(i).toString());
         }
-        logger.info("***********testAddRelatedProdSpec Case4 end**************");
-        
+        logger.info("*********** Case4 end**************");
+
         logger.info("\n");
-        logger.info("***********testAddRelatedProdSpec Case4（添加同样数据，不同关联类型） start**************");
+        logger.info("*********** Case4（添加同样数据，不同关联类型） start**************");
         // 再次添加一条不同数据,相同类型
         this.srcProdSpec.addRelatedProdSpec(this.srcProdSpec, type4, validFor);
         assertEquals(3, this.srcProdSpec.getProdSpecRelationship().size());
@@ -121,8 +120,59 @@ public class ProductSpecificationRelationshipTest {
         for (int i = 0; i < this.srcProdSpec.getProdSpecRelationship().size(); i++) {
             logger.info(this.srcProdSpec.getProdSpecRelationship().get(i).toString());
         }
-        logger.info("***********testAddRelatedProdSpec Case4 end**************");
+        logger.info("*********** Case4 end**************");
         logger.info("-------------testAddRelatedProdSpec end---------------");
+    }
+
+    @Test
+    public void testQueryRelatedProdSpec() {
+
+        logger.info("-------------testQueryRelatedProdSpec start---------------");
+
+        logger.info("*********** Case1（2个不同类型，取其中一种） start**************");
+        String dependencyType = RelationshipType.DEPENDENCY.getValue();
+        String aggregationType = RelationshipType.AGGREGATION.getValue();
+        ProductSpecification targetProdSpecDependency1 = new AtomicProductSpecification("T001", "AppleCare For iPhone",
+                "AppleCare", ProductSpecificationStatus.PLANNED.getValue());
+        ProductSpecification targetProdSpecAggregation1 = new AtomicProductSpecification("T002",
+                "AppleCare For iPhone", "AppleCare", ProductSpecificationStatus.PLANNED.getValue());
+        TimePeriod validFor = new TimePeriod();
+
+        List<ProductSpecification> expectedRelatedSpecList = new ArrayList<ProductSpecification>();
+        ProductSpecification expectedTargetProdSpec = new AtomicProductSpecification("T002", "AppleCare For iPhone",
+                "AppleCare", ProductSpecificationStatus.PLANNED.getValue());
+        expectedRelatedSpecList.add(expectedTargetProdSpec);
+
+        this.srcProdSpec.addRelatedProdSpec(targetProdSpecDependency1, dependencyType, validFor);
+        this.srcProdSpec.addRelatedProdSpec(targetProdSpecAggregation1, aggregationType, validFor);
+        List<ProductSpecification> productSpecificationList = this.srcProdSpec.queryRelatedProdSpec(aggregationType);
+        assertEquals(1, productSpecificationList.size());
+        assertEquals(expectedRelatedSpecList, productSpecificationList);
+
+        logger.info("*********** Case1 end**************");
+
+        logger.info("\n");
+        logger.info("*********** Case2（查询不存在该类型的数据） start**************");
+        List<ProductSpecification> productSpecificationList2 = this.srcProdSpec
+                .queryRelatedProdSpec(RelationshipType.EXCLUSIVITY.getValue());
+        assertEquals(0, productSpecificationList2.size());
+
+        logger.info("*********** Case2 end**************");
+
+        logger.info("\n");
+        logger.info("*********** Case3（传入类型为null） start**************");
+        List<ProductSpecification> productSpecificationList3 = this.srcProdSpec.queryRelatedProdSpec(null);
+        assertEquals(0, productSpecificationList3.size());
+
+        logger.info("*********** Case3 end**************");
+
+        logger.info("\n");
+        logger.info("*********** Case4（没有关系数据，查询某类型的spec） start**************");
+        this.srcProdSpec.getProdSpecRelationship().clear();
+        List<ProductSpecification> productSpecificationList4 = this.srcProdSpec.queryRelatedProdSpec(aggregationType);
+        assertEquals(0, productSpecificationList4.size());
+        logger.info("*********** Case4 end**************");
+        logger.info("-------------testQueryRelatedProdSpec end---------------");
     }
 
 }
