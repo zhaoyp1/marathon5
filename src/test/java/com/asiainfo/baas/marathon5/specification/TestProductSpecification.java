@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.asiainfo.baas.common.ProductConst;
+import com.asiainfo.baas.common.RelationshipType;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.specification.AtomicProductSpecification;
@@ -164,7 +164,7 @@ public class TestProductSpecification {
         AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
                 brand1, lifecycleStatus1);
 
-        String type = ProductConst.RELATIONSHIP_TYPE_DEPENDENCY;
+        String type = RelationshipType.AGGREGATION.getValue();
         TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
         try {
             iPhone5SSpecification.addRelatedProdSpec(appleCareSpecification, type, validFor);
@@ -192,7 +192,7 @@ public class TestProductSpecification {
         AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
                 brand1, lifecycleStatus1);
 
-        String type = ProductConst.RELATIONSHIP_TYPE_EXCLUSIVITY;
+        String type = RelationshipType.AGGREGATION.getValue();
         TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
         try {
             iPhone5SSpecification.addRelatedProdSpec(appleCareSpecification, type, validFor);
@@ -263,7 +263,7 @@ public class TestProductSpecification {
             String lifecycleStatus1 = "1";
             AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
                     brand1, lifecycleStatus1);
-            appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+            appleCareSpecification.addCharacteristic(specChar, false, false, validFor,"");
             CommonUtils.printProperty(null, null, appleCareSpecification);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -285,7 +285,7 @@ public class TestProductSpecification {
             String lifecycleStatus1 = "1";
             AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
                     brand1, lifecycleStatus1);
-            appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+            appleCareSpecification.addCharacteristic(specChar, false, false, validFor,"");
 
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
 
@@ -311,7 +311,7 @@ public class TestProductSpecification {
             String lifecycleStatus1 = "1";
             AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
                     brand1, lifecycleStatus1);
-            appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+            appleCareSpecification.addCharacteristic(specChar, false, false, validFor,"");
 
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
@@ -337,7 +337,7 @@ public class TestProductSpecification {
             String lifecycleStatus1 = "1";
             AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
                     brand1, lifecycleStatus1);
-            appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+            appleCareSpecification.addCharacteristic(specChar, false, false, validFor,"");
 
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
@@ -364,7 +364,7 @@ public class TestProductSpecification {
             String lifecycleStatus1 = "1";
             AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
                     brand1, lifecycleStatus1);
-            appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+            appleCareSpecification.addCharacteristic(specChar, false, false, validFor,"");
 
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
@@ -396,11 +396,11 @@ public class TestProductSpecification {
             String lifecycleStatus1 = "1";
             AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
                     brand1, lifecycleStatus1);
-            appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
-            appleCareSpecification.addCharacteristic(specChar2, false, false, validFor);
-            appleCareSpecification.addCharacteristic(subSpecChar1, false, false, validFor);
-            appleCareSpecification.addCharacteristic(subSpecChar2, false, false, validFor);
-            appleCareSpecification.addCharacteristic(subSpecChar3, false, false, validFor);
+            appleCareSpecification.addCharacteristic(specChar, false, false, validFor,"");
+            appleCareSpecification.addCharacteristic(specChar2, false, false, validFor,"");
+            appleCareSpecification.addCharacteristic(subSpecChar1, false, false, validFor,"");
+            appleCareSpecification.addCharacteristic(subSpecChar2, false, false, validFor,"");
+            appleCareSpecification.addCharacteristic(subSpecChar3, false, false, validFor,"");
 
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
@@ -429,9 +429,9 @@ public class TestProductSpecification {
             String lifecycleStatus1 = "1";
             AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
                     brand1, lifecycleStatus1);
-            appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
-            appleCareSpecification.addCharacteristic(specChar2, false, false, validFor);
-            appleCareSpecification.addCharacteristic(specChar3, false, false, validFor);
+            appleCareSpecification.addCharacteristic(specChar, false, false, validFor,"");
+            appleCareSpecification.addCharacteristic(specChar2, false, false, validFor,"");
+            appleCareSpecification.addCharacteristic(specChar3, false, false, validFor,"");
 
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
@@ -458,7 +458,7 @@ public class TestProductSpecification {
             String lifecycleStatus1 = "1";
             AtomicProductSpecification appleCareSpecification = new AtomicProductSpecification(productNumber1, name1,
                     brand1, lifecycleStatus1);
-            appleCareSpecification.addCharacteristic(specChar, false, false, validFor);
+            appleCareSpecification.addCharacteristic(specChar, false, false, validFor,"");
 
             ProductSpecCharacteristicValue charValue = createValue("ºì", "", false);
             appleCareSpecification.attachCharacteristicValue(specChar, charValue, false, validFor);
@@ -502,9 +502,9 @@ public class TestProductSpecification {
         ProductSpecCharacteristic subSpecChar1 = createChar("11231", "³¤", "Number", "Ã×", 1, 1);
         ProductSpecCharacteristic subSpecChar2 = createChar("11232", "¿í", "Number", "Ã×", 1, 1);
         ProductSpecCharacteristic subSpecChar3 = createChar("11233", "¸ß", "Number", "Ã×", 1, 1);
-        specChar.addRelatedCharacteristic(subSpecChar1, ProductConst.RELATIONSHIP_TYPE_AGGREGATION, 1, validFor);
-        specChar.addRelatedCharacteristic(subSpecChar2, ProductConst.RELATIONSHIP_TYPE_AGGREGATION, 2, validFor);
-        specChar.addRelatedCharacteristic(subSpecChar3, ProductConst.RELATIONSHIP_TYPE_AGGREGATION, 3, validFor);
+        specChar.addRelatedCharacteristic(subSpecChar1,RelationshipType.AGGREGATION.getValue(), 1, validFor);
+        specChar.addRelatedCharacteristic(subSpecChar2,RelationshipType.AGGREGATION.getValue(), 2, validFor);
+        specChar.addRelatedCharacteristic(subSpecChar3,RelationshipType.AGGREGATION.getValue(), 3, validFor);
         return specChar;
     }
 }

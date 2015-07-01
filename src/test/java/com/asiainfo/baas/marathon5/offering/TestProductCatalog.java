@@ -2,7 +2,7 @@ package com.asiainfo.baas.marathon5.offering;
 
 import org.junit.Test;
 
-import com.asiainfo.baas.common.ProductConst;
+import com.asiainfo.baas.common.CatalogType;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.ProductOffering;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
@@ -37,7 +37,7 @@ public class TestProductCatalog {
 
         String catalogId = "1";
         String catalogName = "日常";
-        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_REGULAR;
+        String catalogType = CatalogType.PROMOTION.getValue();
         TimePeriod validForCatalog = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
 
         ProductCatalog catalog = new ProductCatalog(catalogId, catalogName, catalogType, validForCatalog);
@@ -78,7 +78,7 @@ public class TestProductCatalog {
 
         String catalogId = "1";
         String catalogName = "日常";
-        String catalogType = ProductConst.PRODUCT_CATALOG_TYPE_REGULAR;
+        String catalogType = CatalogType.PROMOTION.getValue();
         TimePeriod validForCatalog = new TimePeriod("2015-02-03 12:00:00", "2015-09-21 23:59:59");
 
         ProductCatalog catalog = new ProductCatalog(catalogId, catalogName, catalogType, validForCatalog);

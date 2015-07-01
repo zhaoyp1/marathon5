@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.asiainfo.baas.common.ProductConst;
+import com.asiainfo.baas.common.OfferingStatus;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.BundledProductOffering;
 import com.asiainfo.baas.marathon.offering.ProductOffering;
@@ -118,7 +118,7 @@ public class AppleTest {
         catalog.publishOffering(bundledOffering, validFor1);
 
         //
-        ProductOffering[] productOfferings = catalog.getProductOffering(ProductConst.OFFERING_STATUS_ACTIVE);
+        ProductOffering[] productOfferings = catalog.getProductOffering(OfferingStatus.ACTIVE.getValue());
 
         CommonUtils.printPropertyToJson(null, null, catalog);
         // CommonUtils.printPropertyToJson(productOfferings, null, null);

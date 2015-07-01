@@ -1,85 +1,91 @@
 package com.asiainfo.baas.marathon5.specification;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
-import java.util.Date;
-import java.util.List;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-import com.asiainfo.baas.common.CharacristicValueType;
-import com.asiainfo.baas.common.RelationshipType;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
-import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 
+@RunWith(Parameterized.class)
 public class ProductSpecCharacteristicValueTest2 {
-	
-
-	private ProductSpecCharacteristic specChar;
-	private ProductSpecCharacteristicValue memoryCharValue;
-	private ProductSpecCharacteristicValue charValue;
-	private static TimePeriod validFor;
-	private Logger logger=Logger.getLogger(ProductSpecCharacteristicValueTest2.class);
-
-	@BeforeClass
-	public static void setUpBeforeClass(){
-		  validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
-		  
-	}
+	private Logger logger = Logger.getLogger(ProductSpecCharacteristicValueTest2.class);
+	private ProductSpecCharacteristicValue specCharValue = null;
+	private ProductSpecCharacteristicValue specCharValueFromTo = null;
+	private ProductSpecCharacteristicValue targetSpecCharValue = null;
+	private boolean retFlag = false;
+	private String retMsg = "";
+	private String valueFlag = "";
 	@Before
-	public void initValue(){
-		specChar = new ProductSpecCharacteristic("1", "摄像头", CharacristicValueType.NUMBER.getValue(),validFor, "unique",1,1);
-		memoryCharValue=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",validFor,"2.7");
-		charValue=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",validFor,"2.9");
+	public  void initSpecCharValue(){
+		TimePeriod validFor1 = new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59");
+		specCharValue = new ProductSpecCharacteristicValue("Text",false,"",validFor1,"红");
+		specCharValueFromTo = new ProductSpecCharacteristicValue("Number",false,"GB",validFor1,"5","15","open");
+	}
+	@Parameters
+	public static Iterable<Object[]> data() {  
+       return Arrays.asList(new Object[][] { 
+    		    {"value",true,"两个对象值相同比较", "Text", false, "", new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"), "红","","",""},
+    		    {"value",false,"两个对象值不相同比较","Text", false, "", new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"), "蓝","","",""},
+    		    {"notValue",true,"两个对象值区间相同比较","Number",false,"GB",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),"","5","15","open"},
+    		    {"notValue",false,"两个对象值不相同比较","Number",false,"GB",new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"),"","10","20","open"}
+               });  
+	}  
+	
+	public ProductSpecCharacteristicValueTest2(String valueFlag,boolean retFlag,String retMsg,String valueType,boolean isDefault,String unitOfMeasure,TimePeriod validFor,String value,String valueFrom,String valueTo,String rangeInterval){
+		if("value".equals(valueFlag)){
+		this.targetSpecCharValue = new ProductSpecCharacteristicValue( valueType, isDefault, unitOfMeasure, validFor, value);
+		}else{
+			this.targetSpecCharValue = new ProductSpecCharacteristicValue( valueType, isDefault, unitOfMeasure, validFor, valueFrom,valueTo,rangeInterval);	
+		}
+		this.retFlag = retFlag;
+		this.retMsg = retMsg;
+		this.valueFlag = valueFlag;
+	}
 
-	}
+
 	@Test
-	public void testAddRelatedCharacteristic(){
-		logger.info("ProductSpecCharacteristicValue添加相关联的特征值：");
+	public void testEquals() {
+		//TimePeriod validFor = new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59");
+		//ProductSpecCharacteristicValue charValue = new ProductSpecCharacteristicValue("Text",false,"",validFor,"红");
+		boolean realRetFlag = false;
+		if("value".equals(this.valueFlag)){
+			realRetFlag = specCharValue.equals(targetSpecCharValue);
+		}else{
+			realRetFlag = specCharValueFromTo.equals(targetSpecCharValue);
+		}
+		assertEquals(this.retFlag,realRetFlag);
+		System.out.println(this.retMsg+" 比较结果："+realRetFlag);
 		
-		logger.info("\t1.ProductSpecCharacteristicValue添加相关联的特征值,指定特征值为null");
-		boolean result=memoryCharValue.addRelatedCharValue(null, RelationshipType.EXCLUSIVITY.getValue(), validFor);
-		assertEquals(false, result);
+		/*logger.info("两个对象值不相同比较");
+		ProductSpecCharacteristicValue diffcharValue = new ProductSpecCharacteristicValue("Text",false,"",validFor,"黄");
+		boolean diffRetFlag = specCharValue.equals(diffcharValue);
+		assertEquals(false,diffRetFlag);
+		//fail("对象不一样");
 		
-		logger.info("\t2.ProductSpecCharacteristicValue添加相关联的特征值,指定特征值与当前特征值相同");
-		 result=memoryCharValue.addRelatedCharValue(memoryCharValue, RelationshipType.EXCLUSIVITY.getValue(), validFor);
-		assertEquals(false, result);
+		logger.info("两个对象值区间相同比较");
+		ProductSpecCharacteristicValue charValueFormTo = new ProductSpecCharacteristicValue("Number",false,"GB",validFor,"5","15","open");
+		boolean fromToDiffRetFlag = specCharValueFromTo.equals(charValueFormTo);
+		assertEquals(true,fromToDiffRetFlag);
 		
-		logger.info("\t3.ProductSpecCharacteristicValue添加相关联的特征值,指定特征值与当前特征值不相同");
-		result=memoryCharValue.addRelatedCharValue(charValue, RelationshipType.EXCLUSIVITY.getValue(), validFor);
-		assertEquals(true, result);
-		logger.info("添加成功");
-		logger.info("\t4.ProductSpecCharacteristicValue添加相关联的特征值,指定特征值已经建立互斥关系");
-		result=memoryCharValue.addRelatedCharValue(charValue, RelationshipType.EXCLUSIVITY.getValue(), validFor);		
-		assertEquals(false, result);
-		logger.info("\t5.ProductSpecCharacteristicValue添加相关联的特征值,指定特征值已经建立互斥关系,是否可以建立其他关系");
-		result=memoryCharValue.addRelatedCharValue(charValue, RelationshipType.DEPENDENCY.getValue(), validFor);	
-		assertEquals(false, result);
-	}
-	@Test
-	public void testQueryRelatedCharValue(){
-		logger.info("ProductSpecCharacteristicValue查询相关联的特征值：");
+		logger.info("一个值对象和值区间对象相同比较");
+		ProductSpecCharacteristicValue charValueFormTo2 = new ProductSpecCharacteristicValue("Number",false,"GB",validFor,"5","15","open");
+		boolean fromToRetFlag = specCharValue.equals(charValueFormTo2);
+		assertEquals(false,fromToRetFlag);
+		//fail("对象不一样");
 		
-		logger.info("\t1.ProductSpecCharacteristicValue查询相关联的特征,指定类型和时间为null");
-		List<ProductSpecCharacteristicValue> charValues=memoryCharValue.queryRelatedCharValue(null,null);
-		assertNull(charValues);
-		
-		logger.info("\t2.ProductSpecCharacteristicValue查询相关联的特征,当前特征值没有指定关系的特征");
-		 charValues=memoryCharValue.queryRelatedCharValue(RelationshipType.EXCLUSIVITY.getValue(),new Date());
-		assertNull(charValues);
-		
-		logger.info("\t3.ProductSpecCharacteristicValue查询相关联的特征,当前特征值存在互斥关系特征");
-		memoryCharValue.addRelatedCharValue(charValue, RelationshipType.EXCLUSIVITY.getValue(), validFor);
-		charValues=memoryCharValue.queryRelatedCharValue(RelationshipType.EXCLUSIVITY.getValue(),new Date());
-		assertNotNull(charValues);
-		logger.info("\t4.ProductSpecCharacteristicValue查询相关联的特征值,当前特征值存在互斥关系特征,不存在依赖关系");
-		charValues=memoryCharValue.queryRelatedCharValue(RelationshipType.DEPENDENCY.getValue(),new Date());
-		assertNull(charValues);
-	}
+		logger.info("两个对象值不相同比较");
+		ProductSpecCharacteristicValue diffcharValueFormTo = new ProductSpecCharacteristicValue("Number",false,"GB",validFor,"10","20","open");
+		boolean fromToDiffRetFlag2 = specCharValueFromTo.equals(diffcharValueFormTo);
+		assertEquals(false,fromToDiffRetFlag2);
+		//fail("对象不一样");
+*/	}
+
 }
