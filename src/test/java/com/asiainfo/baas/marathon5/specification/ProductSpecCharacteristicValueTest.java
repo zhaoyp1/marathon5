@@ -1,8 +1,6 @@
 package com.asiainfo.baas.marathon5.specification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import java.util.Date;
 import java.util.List;
@@ -38,6 +36,32 @@ public class ProductSpecCharacteristicValueTest {
 		memoryCharValue=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",validFor,"2.7");
 		charValue=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",validFor,"2.9");
 
+	}
+	@Test
+	public void testProductSpecCharacteristicValue(){
+		logger.info("ProductSpecCharacteristicValue构造函数：");
+		logger.info("1.validType为空");
+		try{
+			memoryCharValue=new ProductSpecCharacteristicValue(null,false,"GHz",validFor,"2.7");
+	    } catch (IllegalArgumentException ex) {
+	    	assertNotNull(ex);
+		    assertTrue(ex instanceof IllegalArgumentException);
+		    assertTrue(ex.getMessage().contains("valueType should not be null"));
+	    }
+		//fail("expected IllegalArgumentException for validType");
+		logger.info("2.validFor为空");
+		try{
+			memoryCharValue=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",null,"2.9");
+	    } catch (IllegalArgumentException ex) {
+	    	assertNotNull(ex);
+		    assertTrue(ex instanceof IllegalArgumentException);
+		    assertTrue(ex.getMessage().contains("validFor should not be null"));
+	    }
+		//fail("expected IllegalArgumentException for validFor");
+		logger.info("3.正常情况");
+		memoryCharValue=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",validFor,"2.9");
+		assertNotNull(memoryCharValue);
+		
 	}
 	@Test
 	public void testAddRelatedCharacteristic(){

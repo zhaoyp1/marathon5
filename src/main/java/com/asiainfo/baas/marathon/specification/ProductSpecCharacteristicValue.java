@@ -81,10 +81,6 @@ public class ProductSpecCharacteristicValue {
         return this.valueType;
     }
 
-    public void setValueType(String valueType) {
-        this.valueType = valueType;
-    }
-
     public boolean isIsDefault() {
         return this.isDefault;
     }
@@ -136,11 +132,7 @@ public class ProductSpecCharacteristicValue {
     public TimePeriod getValidFor() {
         return this.validFor;
     }
-
-    public void setValidFor(TimePeriod validFor) {
-        this.validFor = validFor;
-    }
-
+ 
     /**
      * 
      * @param valueType
@@ -151,12 +143,15 @@ public class ProductSpecCharacteristicValue {
      */
     public ProductSpecCharacteristicValue(String valueType, boolean isDefault, String unitOfMeasure,
             TimePeriod validFor, String value) {
+    	 if(validFor==null)throw new IllegalArgumentException("validFor should not be null");
+         if(valueType==null)throw new IllegalArgumentException("valueType should not be null");
+
         this.valueType = valueType;
         this.isDefault = isDefault;
         this.unitOfMeasure = unitOfMeasure;
         this.validFor = validFor;
         this.value = value;
-    }
+     }
 
     /**
      * 
@@ -170,6 +165,10 @@ public class ProductSpecCharacteristicValue {
      */
     public ProductSpecCharacteristicValue(String valueType, boolean isDefault, String unitOfMeasure,
             TimePeriod validFor, String valueFrom, String valueTo, String rangeInterval) {
+    	
+    	if(validFor==null)throw new IllegalArgumentException("validFor should not be null");
+        if(valueType==null)throw new IllegalArgumentException("valueType should not be null");
+        
         this.valueType = valueType;
         this.isDefault = isDefault;
         this.unitOfMeasure = unitOfMeasure;
