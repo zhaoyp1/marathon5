@@ -287,8 +287,9 @@ public class ProductSpecCharUse {
     }
 
     public List<ProdSpecCharValueUse> retrieveDefaultCharacteristicValueUse() {
-    	List<ProdSpecCharValueUse> defaultValueUse = new ArrayList<ProdSpecCharValueUse>();
+    	List<ProdSpecCharValueUse> defaultValueUse = null;
         if (prodSpecCharValueUse != null) {
+        	defaultValueUse = new ArrayList<ProdSpecCharValueUse>();
             for (int i = 0; i < prodSpecCharValueUse.size(); i++) {
                 ProdSpecCharValueUse valueUse = prodSpecCharValueUse.get(i);
                 if (valueUse.isIsDefault())
@@ -296,6 +297,7 @@ public class ProductSpecCharUse {
             }
             return defaultValueUse;
         }
+        logger.info("没有使用的特征值");
         return null;
 
     }

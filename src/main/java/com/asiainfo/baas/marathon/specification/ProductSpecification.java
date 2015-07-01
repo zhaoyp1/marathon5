@@ -613,11 +613,7 @@ public abstract class ProductSpecification {
                 return false;
             }
             boolean flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
-            if (!flag) {
-                logger.error("该特征值没有被使用！");
-                return false;
-            }
-            return true;
+            return flag;
         } else {
             logger.error("没有添加特征！");
             return false;
@@ -637,17 +633,31 @@ public abstract class ProductSpecification {
                 return false;
             }
             boolean flag = charUse.clearDefaultValueUse(defaultValue);
-            if (!flag) {
-                logger.error("该特征值没有被使用！");
-                return false;
-            }
-            return true;
+            return flag;
         } else {
             logger.error("没有添加特征！");
             return false;
         }
     }
-
+    
+    public List<ProdSpecCharValueUse> retrieveDefaultCharacteristicValue(ProductSpecCharacteristic characteristic) {
+        if (characteristic == null) {
+            logger.error("传入的特征不能为空！");
+            return null;
+        }
+        if (this.prodSpecCharUse != null) {
+            ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
+            if (charUse == null) {
+                logger.error("该特征没有被使用！");
+                return null;
+            }
+            List<ProdSpecCharValueUse> defaultValues = charUse.retrieveDefaultCharacteristicValueUse();
+            return defaultValues;
+        } else {
+            logger.error("没有添加特征！");
+            return null;
+        }
+    }
     /**
      * 
      * @param time
