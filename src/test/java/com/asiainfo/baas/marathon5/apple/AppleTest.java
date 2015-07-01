@@ -28,6 +28,7 @@ public class AppleTest {
     @Before
     public void createProductSpecChar() {
 
+        
         logger.info("准备特征/特征值数据----------start");
         productSpecChars = new ArrayList<ProductSpecCharacteristic>();
         for (int i = 0; i < TestProductSpecificationData.specChar.length; i++) {
