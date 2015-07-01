@@ -100,4 +100,54 @@ public class ProductSpecificationVersion {
         this.validFor = validFor;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((prodSpecRevisionDate == null) ? 0 : prodSpecRevisionDate.hashCode());
+        result = prime * result + ((prodSpecRevisionNumber == null) ? 0 : prodSpecRevisionNumber.hashCode());
+        result = prime * result + ((prodSpecRevisionType == null) ? 0 : prodSpecRevisionType.hashCode());
+        result = prime * result + ((productSpecification == null) ? 0 : productSpecification.hashCode());
+        result = prime * result + ((validFor == null) ? 0 : validFor.hashCode());
+        return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductSpecificationVersion other = (ProductSpecificationVersion) obj;
+        if (prodSpecRevisionDate == null) {
+            if (other.prodSpecRevisionDate != null)
+                return false;
+        } else if (!prodSpecRevisionDate.equals(other.prodSpecRevisionDate))
+            return false;
+        if (prodSpecRevisionNumber == null) {
+            if (other.prodSpecRevisionNumber != null)
+                return false;
+        } else if (!prodSpecRevisionNumber.equals(other.prodSpecRevisionNumber))
+            return false;
+        if (prodSpecRevisionType == null) {
+            if (other.prodSpecRevisionType != null)
+                return false;
+        } else if (!prodSpecRevisionType.equals(other.prodSpecRevisionType))
+            return false;
+        return true;
+    }
+
 }
