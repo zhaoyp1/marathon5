@@ -194,6 +194,7 @@ public class TestProductSpecificationData {
 
     // 使用特征值
     public static Object[][] three_charData = {
+        
             { "6", false, true, new TimePeriod("2015-02-03 12:00:00", "2019-07-21 23:59:59"), "基础服务", "unique", 1, 1,
                     true, "", true, new int[] { 0 }, new boolean[] { true } },
             { "7", false, true, new TimePeriod("2015-02-03 12:00:00", "2019-07-21 23:59:59"), "有偿服务", "unique", 1, 1,

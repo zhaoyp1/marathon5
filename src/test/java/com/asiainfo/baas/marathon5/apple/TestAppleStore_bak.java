@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.asiainfo.baas.common.ProductConst;
+import com.asiainfo.baas.common.OfferingStatus;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.BundledProductOffering;
@@ -74,7 +74,7 @@ public class TestAppleStore_bak {
         }
 
         //
-        ProductOffering[] productOfferings = catalog.getProductOffering(ProductConst.OFFERING_STATUS_ACTIVE);
+        ProductOffering[] productOfferings = catalog.getProductOffering(OfferingStatus.ACTIVE.getValue());
 
         CommonUtils.printProperty(null, null, catalog);
         CommonUtils.printProperty(productOfferings, null, null);
@@ -97,7 +97,7 @@ public class TestAppleStore_bak {
         ProductSpecification productSpec = new AtomicProductSpecification("11", "2.7GHz 处理器 128 GB 存储容量", "apple",
                 "in_active");
         ProductSpecCharacteristic prodSpecChar = this.getCharByCharName("processor(处理器)");
-        productSpec.addCharacteristic(prodSpecChar, true, true, validFor);
+        productSpec.addCharacteristic(prodSpecChar, true, true, validFor,"处理器");
 
         ProductSpecCharacteristicValue[] values = this.getCharValue(prodSpecChar, new int[] { 1 });
         if (values != null) {
@@ -108,7 +108,7 @@ public class TestAppleStore_bak {
 
         // 内存
         prodSpecChar = this.getCharByCharName("memory");
-        productSpec.addCharacteristic(prodSpecChar, true, true, validFor);
+        productSpec.addCharacteristic(prodSpecChar, true, true, validFor,"");
         values = this.getCharValue(prodSpecChar, new int[] { 0 });
         if (values != null) {
             for (ProductSpecCharacteristicValue productSpecCharacteristicValue : values) {
@@ -127,7 +127,7 @@ public class TestAppleStore_bak {
         ProductSpecification productSpec1 = new AtomicProductSpecification("11", "2.7GHz 处理器 256 GB 存储容量", "apple",
                 "in_active");
         ProductSpecCharacteristic prodSpecChar1 = this.getCharByCharName("processor(处理器)");
-        productSpec1.addCharacteristic(prodSpecChar1, true, true, validFor1);
+        productSpec1.addCharacteristic(prodSpecChar1, true, true, validFor1,"");
 
         ProductSpecCharacteristicValue[] values1 = this.getCharValue(prodSpecChar1, new int[] { 1 });
         if (values1 != null) {
@@ -138,7 +138,7 @@ public class TestAppleStore_bak {
 
         // 内存
         prodSpecChar1 = this.getCharByCharName("memory");
-        productSpec1.addCharacteristic(prodSpecChar1, true, true, validFor1);
+        productSpec1.addCharacteristic(prodSpecChar1, true, true, validFor1,"");
         values1 = this.getCharValue(prodSpecChar1, new int[] { 1 });
         if (values1 != null) {
             for (ProductSpecCharacteristicValue productSpecCharacteristicValue : values1) {
@@ -200,7 +200,7 @@ public class TestAppleStore_bak {
 
         TimePeriod validFor1 = new TimePeriod("2013-01-01 00:00:00", null);
         SimpleProductOffering simpleProductOffering1 = new SimpleProductOffering("11", "2.7GHz 处理器\n128 GB 存储容量",
-                validFor1, ProductConst.OFFERING_STATUS_ACTIVE, productSpecifications.get(0), description1.toString());
+                validFor1, OfferingStatus.ACTIVE.getValue(), productSpecifications.get(0), description1.toString());
 
         StringBuilder description2 = new StringBuilder();
         description2.append("2.7GHz 双核 Intel Core i5 处理器");
@@ -220,18 +220,18 @@ public class TestAppleStore_bak {
 
         TimePeriod validFor2 = new TimePeriod("2013-01-01 00:00:00", null);
         SimpleProductOffering simpleProductOffering2 = new SimpleProductOffering("12", "2.7GHz 处理器\n256 GB 存储容量",
-                validFor2, ProductConst.OFFERING_STATUS_ACTIVE, productSpecifications.get(1), description2.toString());
+                validFor2, OfferingStatus.ACTIVE.getValue(), productSpecifications.get(1), description2.toString());
 
         TimePeriod validFor4 = new TimePeriod("2013-01-01 00:00:00", null);
         BundledProductOffering bundledProductOffering = new BundledProductOffering("1",
-                "13 英寸配备 Retina 显示屏的 MacBook Pro", validFor4, ProductConst.OFFERING_STATUS_ACTIVE, "");
+                "13 英寸配备 Retina 显示屏的 MacBook Pro", validFor4, OfferingStatus.ACTIVE.getValue(), "");
         bundledProductOffering.addSubOffering(simpleProductOffering1);
         bundledProductOffering.addSubOffering(simpleProductOffering2);
 
         // 两个原子Offering是互斥关系
-        simpleProductOffering1.addRelatedOffering(simpleProductOffering2, ProductConst.RELATIONSHIP_TYPE_EXCLUSIVITY,
+        simpleProductOffering1.addRelatedOffering(simpleProductOffering2, OfferingStatus.ACTIVE.getValue(),
                 validFor1);
-        simpleProductOffering2.addRelatedOffering(simpleProductOffering1, ProductConst.RELATIONSHIP_TYPE_EXCLUSIVITY,
+        simpleProductOffering2.addRelatedOffering(simpleProductOffering1, OfferingStatus.ACTIVE.getValue(),
                 validFor2);
 
         productOfferings.add(simpleProductOffering1);

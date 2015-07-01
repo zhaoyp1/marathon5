@@ -31,7 +31,7 @@ public class CharUserTest {
 			int minCardinality = 1; 
 			int maxCardinality = 3;
 			ProductSpecCharacteristic specChar = new ProductSpecCharacteristic(id,name,valueType,validFor,unique,minCardinality,maxCardinality);
-			ProductSpecCharUse charUse = new ProductSpecCharUse(specChar,false,false,validFor);
+			ProductSpecCharUse charUse = new ProductSpecCharUse(specChar,false,false,validFor,"ÑÕÉ«");
 			boolean isDefault = false;
 			String unitOfMeasure = "";
 			String value = "ºì";
@@ -58,7 +58,7 @@ public class CharUserTest {
 			int minCardinality = 1; 
 			int maxCardinality = 3;
 			ProductSpecCharacteristic specChar = new ProductSpecCharacteristic(id,name,valueType,validFor,unique,minCardinality,maxCardinality);
-			ProductSpecCharUse charUse = new ProductSpecCharUse(specChar,false,false,validFor);
+			ProductSpecCharUse charUse = new ProductSpecCharUse(specChar,false,false,validFor,"ÑÕÉ«");
 			boolean isDefault = false;
 			String unitOfMeasure = "";
 			String value = "ºì";
@@ -85,7 +85,7 @@ public class CharUserTest {
 			int minCardinality = 1; 
 			int maxCardinality = 3;
 			ProductSpecCharacteristic specChar = new ProductSpecCharacteristic(id,name,valueType,validFor,unique,minCardinality,maxCardinality);
-			ProductSpecCharUse charUse = new ProductSpecCharUse(specChar,false,false,validFor);
+			ProductSpecCharUse charUse = new ProductSpecCharUse(specChar,false,false,validFor,"ÑÕÉ«");
 			int minCardinality2 = 2; 
 			int maxCardinality2 = 4;
 			charUse.setCardinality(minCardinality2, maxCardinality2);

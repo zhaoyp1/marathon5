@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 
@@ -14,6 +16,7 @@ import com.asiainfo.baas.marathon.baseType.TimePeriod;
  */
 public class ProductSpecCharacteristicValue {
 
+	private Logger logger = Logger.getLogger(ProductSpecCharacteristicValue.class);
     private List<ProdSpecCharValueUse> prodSpecCharValueUse;
     private ProductSpecCharacteristic productSpecCharacteristic;
     private List<ProdSpecCharValueRelationship> prodSpecCharValueRelationship;
@@ -207,12 +210,41 @@ public class ProductSpecCharacteristicValue {
      * @param relationType
      * @param validFor
      */
-    public void addRelatedCharValue(ProductSpecCharacteristicValue charValue, String relationType, TimePeriod validFor) {
-        if (this.prodSpecCharValueRelationship == null)
-            prodSpecCharValueRelationship = new ArrayList<ProdSpecCharValueRelationship>();
-        ProdSpecCharValueRelationship relationShip = new ProdSpecCharValueRelationship(this, charValue, relationType,
-                validFor);
-        prodSpecCharValueRelationship.add(relationShip);
+    public boolean addRelatedCharValue(ProductSpecCharacteristicValue charValue, String relationType, TimePeriod validFor) {
+        
+        if(charValue==null||validFor==null||relationType==null){
+	   		logger.error("特征值、有效期和类型、不能为空");
+	   		return false;
+	   	}
+        if(this.equals(charValue)){
+        	logger.error("当前特征值与指定特征值相同，不能创建关系");
+        	return false;
+        }
+        ProdSpecCharValueRelationship productSpecCharValueRelationShip=this.retrieveRelatedCharacteristicValue(charValue);
+	   	if(productSpecCharValueRelationShip!=null){
+	   		//比较是否有重复
+	   		if(productSpecCharValueRelationShip.getValidFor().isOverlap(validFor)){
+	   			logger.error("当前特征已与指定特征创建了指定的关系，无需在重新创建");
+	   			return false;
+	   		}
+	   	}
+	   	ProdSpecCharValueRelationship specCharValueRelationShip = new ProdSpecCharValueRelationship(this,
+	   			charValue, relationType, validFor);
+	   	if(prodSpecCharValueRelationship==null) prodSpecCharValueRelationship=new ArrayList<ProdSpecCharValueRelationship>();
+        this.prodSpecCharValueRelationship.add(specCharValueRelationShip);
+        return true;
+     
+    }
+    
+    private ProdSpecCharValueRelationship retrieveRelatedCharacteristicValue(ProductSpecCharacteristicValue charValue ){
+    	if(this.prodSpecCharValueRelationship!=null){
+    		for (ProdSpecCharValueRelationship productSpecCharRelationship : prodSpecCharValueRelationship) {
+        		if( productSpecCharRelationship.getTargetCharValue().equals(charValue)){
+        			return productSpecCharRelationship;
+        		}
+    		}
+    	}
+    	return null;
     }
 
     /**
@@ -233,7 +265,11 @@ public class ProductSpecCharacteristicValue {
      * @param time
      */
     public List<ProductSpecCharacteristicValue> queryRelatedCharValue(String type, Date time) {
-
+    	
+    	if(StringUtils.isEmpty(type)||time==null){
+    		logger.error("特征关系类型或时间点不能为空");
+    		return null;
+    	}
         List<ProductSpecCharacteristicValue> prodSpecCharValues = null;
         if (this.prodSpecCharValueRelationship != null && prodSpecCharValueRelationship.size() > 0) {
             prodSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
@@ -244,8 +280,12 @@ public class ProductSpecCharacteristicValue {
                     prodSpecCharValues.add(relationship.getTargetCharValue());
                 }
             }
+            if(prodSpecCharValues.size()>0){
+            	logger.info("当前特征值没有指定类型的关联值");
+            }
             return prodSpecCharValues;
         } else {
+        	logger.warn("当前特征值没有相关系的特征值");
             return null;
         }
     }
