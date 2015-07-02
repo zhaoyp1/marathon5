@@ -2,6 +2,7 @@ package com.asiainfo.baas.marathon.specification;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.marathon.baseType.*;
 
@@ -11,7 +12,7 @@ import com.asiainfo.baas.marathon.baseType.*;
  * similar properties contained in ProdSpecCharacteristicValue.
  */
 public class ProdSpecCharValueUse {
-
+	private static Logger logger = Logger.getLogger(ProductSpecCharUse.class);
     private ProductSpecCharUse prodSpecCharUse;
     private ProductSpecCharacteristicValue prodSpecCharValue;
     /**
@@ -63,11 +64,18 @@ public class ProdSpecCharValueUse {
      * @param validFor
      */
     public ProdSpecCharValueUse(ProductSpecCharacteristicValue prodSpecCharVal, boolean isDefault, TimePeriod validFor) {
+    	this.isEmpty(this.prodSpecCharValue);
         this.prodSpecCharValue = prodSpecCharVal;
         this.isDefault = isDefault;
         this.validFor = validFor;
     }
-
+    
+    private void isEmpty(Object obj){
+    	if(null == obj ){
+    		logger.error(obj);
+    		throw new UnsupportedOperationException();
+    	}
+    }
     /*
      * (non-Javadoc)
      * 
@@ -84,7 +92,7 @@ public class ProdSpecCharValueUse {
 		int result = 1;
 		result = prime
 				* result
-				+ ((prodSpecCharValue == null) ? 0 : prodSpecCharValue
+				+ ((null == this.prodSpecCharValue) ? 0 : this.prodSpecCharValue
 						.hashCode());
 		return result;
 	}
@@ -98,10 +106,10 @@ public class ProdSpecCharValueUse {
 		if (getClass() != obj.getClass())
 			return false;
 		ProdSpecCharValueUse other = (ProdSpecCharValueUse) obj;
-		if (prodSpecCharValue == null) {
-			if (other.prodSpecCharValue != null)
+		if (null == this.prodSpecCharValue) {
+			if (null != other.prodSpecCharValue)
 				return false;
-		} else if (!prodSpecCharValue.equals(other.prodSpecCharValue))
+		} else if (!this.prodSpecCharValue.equals(other.prodSpecCharValue))
 			return false;
 		return true;
 	}
