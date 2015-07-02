@@ -100,7 +100,7 @@ public class CommonUtils {
         config.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
 
         List<Object> beanList = printBeanList;
-        StringBuilder outText = new StringBuilder();
+        String outText = "";
         if (beanArray != null) {
             beanList = Arrays.asList(beanArray);
         }
@@ -113,12 +113,57 @@ public class CommonUtils {
             if (beanList != null && beanList.size() > 0) {
                 for (Object bean : beanList) {
                     JSONObject json = JSONObject.fromObject(bean, config);
-                    System.out.println(json.toString());
+                    outText = json.toString();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return outText.toString();
+        return format(outText);
+    }
+
+    /**
+     * 得到格式化json数据 退格用\t 换行用\r
+     */
+    public static String format(String jsonStr) {
+        int level = 0;
+        StringBuffer jsonForMatStr = new StringBuffer();
+        for (int i = 0; i < jsonStr.length(); i++) {
+            char c = jsonStr.charAt(i);
+            if (level > 0 && '\n' == jsonForMatStr.charAt(jsonForMatStr.length() - 1)) {
+                jsonForMatStr.append(getLevelStr(level));
+            }
+            switch (c) {
+            case '{':
+            case '[':
+                jsonForMatStr.append(c + "\n");
+                level++;
+                break;
+            case ',':
+                jsonForMatStr.append(c + "\n");
+                break;
+            case '}':
+            case ']':
+                jsonForMatStr.append("\n");
+                level--;
+                jsonForMatStr.append(getLevelStr(level));
+                jsonForMatStr.append(c);
+                break;
+            default:
+                jsonForMatStr.append(c);
+                break;
+            }
+        }
+
+        return jsonForMatStr.toString();
+
+    }
+
+    private static String getLevelStr(int level) {
+        StringBuffer levelStr = new StringBuffer();
+        for (int levelI = 0; levelI < level; levelI++) {
+            levelStr.append("\t");
+        }
+        return levelStr.toString();
     }
 }

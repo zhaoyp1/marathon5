@@ -56,10 +56,10 @@ public class CompositeProductSpecification extends ProductSpecification {
      * @param prodSpec
      */
     public void addSubProdSpec(ProductSpecification prodSpec) {
-        if (this.prodSpec == null) {
+        if (null == this.prodSpec) {
             this.prodSpec = new ArrayList<ProductSpecification>();
         }
-        if (prodSpec == null) {
+        if (null == prodSpec) {
             logger.error("方法addSubProdSpec的参数不正确。prodSpec=" + prodSpec);
             return;
         }

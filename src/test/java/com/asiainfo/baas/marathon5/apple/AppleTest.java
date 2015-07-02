@@ -107,10 +107,8 @@ public class AppleTest {
         // 添加子规格
         this.addSubspec(productSpecification4, productSpecification1, productSpecification2, productSpecification3,
                 productSpecification4);
-        // 打印符合规格
-        logger.info("符合规格整体内容：" + productSpecification4.toStringWithSubObject());
-        // logger.info(CommonUtils.getPropertyToJson(null, null,
-        // productSpecification4));
+        // 打印复合规格
+        logger.info("复合规格整体内容：" + productSpecification4.toString());
 
     }
 
