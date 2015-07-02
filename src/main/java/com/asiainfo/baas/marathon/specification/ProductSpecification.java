@@ -8,15 +8,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 
-import com.asiainfo.baas.common.ReflectionToStringBuilderBaas;
 import com.asiainfo.baas.common.RelationshipType;
 import com.asiainfo.baas.marathon.baseType.Money;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon.offering.SimpleProductOffering;
+import com.asiainfo.baas.marathon5.common.CommonUtils;
 
 /**
  * A detailed description of a tangible or intangible object made available
@@ -104,17 +102,15 @@ public abstract class ProductSpecification {
         this.prodSpecRelationship = prodSpecRelationship;
     }
 
-    
-
     public Set<ProductSpecCharUse> getProdSpecCharUse() {
-		return prodSpecCharUse;
-	}
+        return prodSpecCharUse;
+    }
 
-	public void setProdSpecCharUse(Set<ProductSpecCharUse> prodSpecCharUse) {
-		this.prodSpecCharUse = prodSpecCharUse;
-	}
+    public void setProdSpecCharUse(Set<ProductSpecCharUse> prodSpecCharUse) {
+        this.prodSpecCharUse = prodSpecCharUse;
+    }
 
-	public List<ProductSpecificationType> getProdSpecType() {
+    public List<ProductSpecificationType> getProdSpecType() {
         return this.prodSpecType;
     }
 
@@ -359,28 +355,30 @@ public abstract class ProductSpecification {
      * @param prodSpec
      * @param type
      * @param validFor
+     * @throws Exception
      */
-    public void addRelatedProdSpec(ProductSpecification prodSpec, String type, TimePeriod validFor) {
-        if (this.prodSpecRelationship == null) {
+    public void addRelatedProdSpec(ProductSpecification prodSpec, String type, TimePeriod validFor) throws Exception {
+        if (null == this.prodSpecRelationship) {
             this.prodSpecRelationship = new ArrayList<ProductSpecificationRelationship>();
         }
-        if (prodSpec == null) {
-            logger.error("方法addRelatedProdSpec的参数不正确。prodSpec=" + prodSpec);
-            return;
+        if (null == prodSpec) {
+            throw new IllegalArgumentException("Parameter [prodSpec] cannot be null.");
         }
-        if (type == null) {
-            logger.error("方法addRelatedProdSpec的参数不正确。type=" + type);
-            return;
+        if (null == type) {
+            throw new IllegalArgumentException("Parameter [type] cannot be null. ProductNumber="
+                    + prodSpec.getProductNumber() + "type=" + type);
         }
         if (this.equals(prodSpec)) {
-            logger.error("方法addRelatedProdSpec的参数不正确。不能与自规格建立关系");
-            return;
+            logger.error("Cannot add relationship with it self!");
+            throw new IllegalArgumentException("Cannot add relationship with it self!");
         }
         ProductSpecificationRelationship productSpecificationRelationship = new ProductSpecificationRelationship(this,
                 prodSpec, type, validFor);
         if (this.prodSpecRelationship.contains(productSpecificationRelationship)) {
-            logger.error("已存在此关联类型的规格关系，不能再次关联。ProductNumber=" + prodSpec.getProductNumber() + "type=" + type);
-            return;
+            logger.error("the relationship already exist, Cannot repeatedly create relationship by the same type. ProductNumber="
+                    + prodSpec.getProductNumber() + "type=" + type);
+            throw new IllegalArgumentException(
+                    "the relationship already exist, Cannot repeatedly create relationship by the same type.");
         }
         this.prodSpecRelationship.add(productSpecificationRelationship);
     }
@@ -399,14 +397,13 @@ public abstract class ProductSpecification {
      * 
      * @param type
      */
-    public List<ProductSpecification> queryRelatedProdSpec(String type) {
+    public List<ProductSpecification> retrieveRelatedProdSpec(String type) {
         List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
 
         if (StringUtils.isEmpty(type)) {
-            logger.error("传入的关系类型为空。");
-            return productSpecifications;
+            throw new IllegalArgumentException("Parameter [prodSpec] cannot be null.");
         }
-        if (this.prodSpecRelationship != null) {
+        if (null != this.prodSpecRelationship) {
             Iterator<ProductSpecificationRelationship> iterator = this.prodSpecRelationship.iterator();
             while (iterator.hasNext()) {
                 ProductSpecificationRelationship productSpecRelationship = iterator.next();
@@ -488,6 +485,7 @@ public abstract class ProductSpecification {
         }
         this.prodSpecCharUse.add(charUse);
     }
+
     /**
      * 
      * @param characteristic A characteristic quality or distinctive feature of
@@ -555,14 +553,14 @@ public abstract class ProductSpecification {
      */
     public boolean attachCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
-    	this.isEmpty(characteristic);
+        this.isEmpty(characteristic);
         this.isEmpty(charValue);
         boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
             this.isEmpty(charUse);
             flag = charUse.addValue(charValue, isDefault, validFor);
-        } 
+        }
         return flag;
     }
 
@@ -584,30 +582,30 @@ public abstract class ProductSpecification {
      */
     public boolean specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-    	this.isEmpty(characteristic);
+        this.isEmpty(characteristic);
         this.isEmpty(defaultValue);
         boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
             this.isEmpty(charUse);
             flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
-        } 
+        }
         return flag;
     }
 
     public boolean clearDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-       this.isEmpty(characteristic);
-       this.isEmpty(defaultValue);
-       boolean flag = false;
+        this.isEmpty(characteristic);
+        this.isEmpty(defaultValue);
+        boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
             this.isEmpty(charUse);
             flag = charUse.clearDefaultValueUse(defaultValue);
-        } 
+        }
         return flag;
     }
-    
+
     public List<ProdSpecCharValueUse> retrieveDefaultCharacteristicValue(ProductSpecCharacteristic characteristic) {
         this.isEmpty(characteristic);
         List<ProdSpecCharValueUse> defaultValues = new ArrayList<ProdSpecCharValueUse>();
@@ -615,9 +613,10 @@ public abstract class ProductSpecification {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
             this.isEmpty(charUse);
             defaultValues = charUse.retrieveDefaultCharacteristicValueUse();
-        } 
+        }
         return defaultValues;
     }
+
     /**
      * 
      * @param time
@@ -646,18 +645,18 @@ public abstract class ProductSpecification {
         Set<ProdSpecCharValueUse> valueUseAllList = new HashSet<ProdSpecCharValueUse>();
         valueUseAllList = charUse.getProdSpecCharValueUse();
         if (null != valueUseAllList) {
-            for ( ProdSpecCharValueUse valueUse : valueUseAllList) {
+            for (ProdSpecCharValueUse valueUse : valueUseAllList) {
                 if (valueUse.getValidFor().isInPeriod(time))
                     charValueUseList.add(valueUse);
             }
-        } 
+        }
         return charValueUseList;
     }
 
     private ProductSpecCharUse retrieveProdSpecCharUse(ProductSpecCharacteristic characteristic) {
         if (null != this.prodSpecCharUse) {
             for (ProductSpecCharUse charUse : this.prodSpecCharUse) {
-                if (characteristic.equals(charUse.getProdSpecChar())) 
+                if (characteristic.equals(charUse.getProdSpecChar()))
                     return charUse;
             }
         }
@@ -679,8 +678,8 @@ public abstract class ProductSpecification {
                     }
                 }
             }
-            
-        } else 
+
+        } else
             logger.error(prodSpecCharUse);
         return charUseList;
     }
@@ -720,12 +719,13 @@ public abstract class ProductSpecification {
         return true;
     }
 
-    private void isEmpty(Object obj){
-    	if(null == obj ){
-    		logger.error(obj);
-    		throw new UnsupportedOperationException();
-    	}
+    private void isEmpty(Object obj) {
+        if (null == obj) {
+            logger.error("is null!");
+            throw new UnsupportedOperationException();
+        }
     }
+
     /*
      * (non-Javadoc)
      * 
@@ -733,21 +733,7 @@ public abstract class ProductSpecification {
      */
     @Override
     public String toString() {
-
-        ReflectionToStringBuilderBaas stringBuilder = new ReflectionToStringBuilderBaas(this,
-                ToStringStyle.SHORT_PREFIX_STYLE);
-        return stringBuilder.toString();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    public String toStringWithSubObject() {
-        ReflectionToStringBuilder stringBuilder = new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-        return stringBuilder.toString();
-
+        return CommonUtils.getPropertyToJson(null, null, this);
     }
 
     /*
