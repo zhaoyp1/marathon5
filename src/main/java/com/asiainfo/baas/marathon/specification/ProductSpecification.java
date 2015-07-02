@@ -2,8 +2,10 @@ package com.asiainfo.baas.marathon.specification;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
@@ -34,7 +36,7 @@ public abstract class ProductSpecification {
     private List<ProductSpecificationVersion> productSpecificationVersion;
     private List<CompositeProductSpecification> compositeProdSpec;
     private List<ProductSpecificationRelationship> prodSpecRelationship;
-    private List<ProductSpecCharUse> prodSpecCharUse;
+    private Set<ProductSpecCharUse> prodSpecCharUse;
     private List<ProductSpecificationType> prodSpecType;
     /**
      * The name of the product specification.
@@ -102,15 +104,17 @@ public abstract class ProductSpecification {
         this.prodSpecRelationship = prodSpecRelationship;
     }
 
-    public List<ProductSpecCharUse> getProdSpecCharUse() {
-        return this.prodSpecCharUse;
-    }
+    
 
-    public void setProdSpecCharUse(List<ProductSpecCharUse> prodSpecCharUse) {
-        this.prodSpecCharUse = prodSpecCharUse;
-    }
+    public Set<ProductSpecCharUse> getProdSpecCharUse() {
+		return prodSpecCharUse;
+	}
 
-    public List<ProductSpecificationType> getProdSpecType() {
+	public void setProdSpecCharUse(Set<ProductSpecCharUse> prodSpecCharUse) {
+		this.prodSpecCharUse = prodSpecCharUse;
+	}
+
+	public List<ProductSpecificationType> getProdSpecType() {
         return this.prodSpecType;
     }
 
@@ -431,17 +435,10 @@ public abstract class ProductSpecification {
      */
     public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean isPackage,
             TimePeriod validFor, String name) {
-        if (characteristic == null) {
-            logger.error("添加的特征不能为空！");
-            return;
-        }
+        this.isEmpty(characteristic);
         ProductSpecCharUse charUse = new ProductSpecCharUse(characteristic, canBeOveridden, isPackage, validFor, name);
-        if (this.prodSpecCharUse == null) {
-            this.prodSpecCharUse = new ArrayList<ProductSpecCharUse>();
-        }
-        if (this.prodSpecCharUse.contains(charUse)) {
-            logger.error("所添加的特征已经存在，不能重复添加！");
-            return;
+        if (null == this.prodSpecCharUse) {
+            this.prodSpecCharUse = new HashSet<ProductSpecCharUse>();
         }
         this.prodSpecCharUse.add(charUse);
     }
@@ -483,22 +480,14 @@ public abstract class ProductSpecification {
     public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean isPackage,
             TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality,
             boolean extensible, String description) {
-        if (characteristic == null) {
-            logger.error("添加的特征不能为空！");
-            return;
-        }
+        this.isEmpty(characteristic);
         ProductSpecCharUse charUse = new ProductSpecCharUse(characteristic, canBeOveridden, isPackage, validFor, name,
                 unique, minCardinality, maxCardinality, extensible, description);
-        if (this.prodSpecCharUse == null) {
-            this.prodSpecCharUse = new ArrayList<ProductSpecCharUse>();
-        }
-        if (this.prodSpecCharUse.contains(charUse)) {
-            logger.error("所添加的特征已经存在，不能重复添加！");
-            return;
+        if (null == this.prodSpecCharUse) {
+            this.prodSpecCharUse = new HashSet<ProductSpecCharUse>();
         }
         this.prodSpecCharUse.add(charUse);
     }
-
     /**
      * 
      * @param characteristic A characteristic quality or distinctive feature of
@@ -566,22 +555,15 @@ public abstract class ProductSpecification {
      */
     public boolean attachCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
-        if (characteristic == null || charValue == null) {
-            logger.error("所添加的特征和特征值不能为空！");
-            return false;
-        }
+    	this.isEmpty(characteristic);
+        this.isEmpty(charValue);
+        boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-            if (charUse == null) {
-                logger.error("该特征没有被使用！");
-                return false;
-            }
-            charUse.addValue(charValue, isDefault, validFor);
-            return true;
-        } else {
-            logger.error("没有添加特征！");
-            return false;
-        }
+            this.isEmpty(charUse);
+            flag = charUse.addValue(charValue, isDefault, validFor);
+        } 
+        return flag;
     }
 
     /**
@@ -602,79 +584,53 @@ public abstract class ProductSpecification {
      */
     public boolean specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-        if (characteristic == null || defaultValue == null) {
-            logger.error("特征和特征值不能为空！");
-            return false;
-        }
+    	this.isEmpty(characteristic);
+        this.isEmpty(defaultValue);
+        boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-            if (charUse == null) {
-                logger.error("该特征没有被使用！");
-                return false;
-            }
-            boolean flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
-            return flag;
-        } else {
-            logger.error("没有添加特征！");
-            return false;
-        }
+            this.isEmpty(charUse);
+            flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
+        } 
+        return flag;
     }
 
     public boolean clearDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-        if (characteristic == null || defaultValue == null) {
-            logger.error("特征和特征值不能为空！");
-            return false;
-        }
+       this.isEmpty(characteristic);
+       this.isEmpty(defaultValue);
+       boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-            if (charUse == null) {
-                logger.error("该特征没有被使用！");
-                return false;
-            }
-            boolean flag = charUse.clearDefaultValueUse(defaultValue);
-            return flag;
-        } else {
-            logger.error("没有添加特征！");
-            return false;
-        }
+            this.isEmpty(charUse);
+            flag = charUse.clearDefaultValueUse(defaultValue);
+        } 
+        return flag;
     }
     
     public List<ProdSpecCharValueUse> retrieveDefaultCharacteristicValue(ProductSpecCharacteristic characteristic) {
-        if (characteristic == null) {
-            logger.error("传入的特征不能为空！");
-            return null;
-        }
-        if (this.prodSpecCharUse != null) {
+        this.isEmpty(characteristic);
+        List<ProdSpecCharValueUse> defaultValues = new ArrayList<ProdSpecCharValueUse>();
+        if (null != this.prodSpecCharUse) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-            if (charUse == null) {
-                logger.error("该特征没有被使用！");
-                return null;
-            }
-            List<ProdSpecCharValueUse> defaultValues = charUse.retrieveDefaultCharacteristicValueUse();
-            return defaultValues;
-        } else {
-            logger.error("没有添加特征！");
-            return null;
-        }
+            this.isEmpty(charUse);
+            defaultValues = charUse.retrieveDefaultCharacteristicValueUse();
+        } 
+        return defaultValues;
     }
     /**
      * 
      * @param time
      */
     public List<ProductSpecCharUse> retrieveCharacteristic(Date time) {
-        List<ProductSpecCharUse> charUseList = null;
-        if (this.prodSpecCharUse != null) {
-            charUseList = new ArrayList<ProductSpecCharUse>();
-            for (int i = 0; i < this.prodSpecCharUse.size(); i++) {
-                ProductSpecCharUse charUse = this.prodSpecCharUse.get(i);
+        List<ProductSpecCharUse> charUseList = new ArrayList<ProductSpecCharUse>();
+        if (null != this.prodSpecCharUse) {
+            for (ProductSpecCharUse charUse : this.prodSpecCharUse) {
                 if (charUse.getValidFor().isInPeriod(time))
                     charUseList.add(charUse);
             }
-            return charUseList;
         }
-        logger.error("没有特征！");
-        return null;
+        return charUseList;
     }
 
     /**
@@ -683,66 +639,50 @@ public abstract class ProductSpecification {
      * @param time
      */
     public List<ProdSpecCharValueUse> retrieveCharacteristicValue(ProductSpecCharacteristic characteristic, Date time) {
-        List<ProdSpecCharValueUse> charValueUseList = null;
-        if (characteristic == null) {
-            logger.info("所查特征的值不能为空！");
-            return null;
-        }
-        charValueUseList = new ArrayList<ProdSpecCharValueUse>();
+        List<ProdSpecCharValueUse> charValueUseList = new ArrayList<ProdSpecCharValueUse>();
+        this.isEmpty(characteristic);
         ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-        if (charUse == null) {
-            logger.info("该特征没有被使用！");
-            return null;
-        }
-        List<ProdSpecCharValueUse> valueUseAllList = new ArrayList<ProdSpecCharValueUse>();
+        this.isEmpty(charUse);
+        Set<ProdSpecCharValueUse> valueUseAllList = new HashSet<ProdSpecCharValueUse>();
         valueUseAllList = charUse.getProdSpecCharValueUse();
-        if (valueUseAllList != null) {
-            for (int j = 0; j < valueUseAllList.size(); j++) {
-                ProdSpecCharValueUse valueUse = valueUseAllList.get(j);
+        if (null != valueUseAllList) {
+            for ( ProdSpecCharValueUse valueUse : valueUseAllList) {
                 if (valueUse.getValidFor().isInPeriod(time))
                     charValueUseList.add(valueUse);
             }
-            return charValueUseList;
-        } else {
-            logger.info("该特征没有值！");
-            return null;
-        }
+        } 
+        return charValueUseList;
     }
 
     private ProductSpecCharUse retrieveProdSpecCharUse(ProductSpecCharacteristic characteristic) {
-        if (this.prodSpecCharUse != null) {
-            for (int i = 0; i < this.prodSpecCharUse.size(); i++) {
-                ProductSpecCharUse charUse = this.prodSpecCharUse.get(i);
-                if (characteristic.equals(charUse.getProdSpecChar())) {
+        if (null != this.prodSpecCharUse) {
+            for (ProductSpecCharUse charUse : this.prodSpecCharUse) {
+                if (characteristic.equals(charUse.getProdSpecChar())) 
                     return charUse;
-                }
             }
         }
         return null;
     }
 
     public List<ProductSpecCharUse> retrieveRootCharacteristic() {
-        List<ProductSpecCharUse> charUseList = null;
-        if (this.prodSpecCharUse != null) {
-            charUseList = new ArrayList<ProductSpecCharUse>();
+        List<ProductSpecCharUse> charUseList = new ArrayList<ProductSpecCharUse>();
+        if (null != this.prodSpecCharUse) {
             charUseList.addAll(this.prodSpecCharUse);
-            for (int i = 0; i < this.prodSpecCharUse.size(); i++) {
-                ProductSpecCharUse charUse = this.prodSpecCharUse.get(i);
+            for (ProductSpecCharUse charUse : this.prodSpecCharUse) {
                 List<ProductSpecCharacteristic> prodSpecChar = charUse.getProdSpecChar().retrieveRelatedCharacteristic(
                         RelationshipType.AGGREGATION.getValue());
-                if (prodSpecChar != null) {
+                if (null != prodSpecChar) {
                     for (ProductSpecCharacteristic specChar : prodSpecChar) {
                         ProductSpecCharUse subCharUse = this.retrieveProdSpecCharUse(specChar);
-                        if (subCharUse != null)
+                        if (null != subCharUse)
                             charUseList.remove(subCharUse);
                     }
                 }
             }
-            return charUseList;
-        } else {
-            logger.error("没有特征！");
-            return null;
-        }
+            
+        } else 
+            logger.error(prodSpecCharUse);
+        return charUseList;
     }
 
     /**
@@ -752,23 +692,18 @@ public abstract class ProductSpecification {
      */
 
     public List<ProductSpecCharUse> retrieveLeafCharacteristic(ProductSpecCharacteristic characteristic, Date time) {
-        List<ProductSpecCharUse> charUses = null;
-        if (characteristic == null) {
-            logger.info("传入的特征不能为空！");
-            return null;
-        }
+        List<ProductSpecCharUse> charUses = new ArrayList<ProductSpecCharUse>();
+        this.isEmpty(characteristic);
         List<ProductSpecCharacteristic> prodSpecChar = characteristic.retrieveRelatedCharacteristic(
                 RelationshipType.AGGREGATION.getValue(), time);
-        if (prodSpecChar != null) {
-            charUses = new ArrayList<ProductSpecCharUse>();
-            for (int i = 0; i < prodSpecChar.size(); i++) {
-                ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(prodSpecChar.get(i));
-                if (charUse != null)
+        if (null != prodSpecChar) {
+            for (ProductSpecCharacteristic specChar : prodSpecChar) {
+                ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(specChar);
+                if (null != charUse)
                     charUses.add(charUse);
             }
-            return charUses;
         }
-        return null;
+        return charUses;
     }
 
     /**
@@ -778,19 +713,19 @@ public abstract class ProductSpecification {
      * @param maxCardinality
      */
     public boolean specifyCardinality(ProductSpecCharacteristic characteristic, int minCardinality, int maxCardinality) {
-        if (characteristic == null) {
-            logger.info("传入的特征不能为空！");
-            return false;
-        }
+        this.isEmpty(characteristic);
         ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-        if (charUse == null) {
-            logger.info("该特征没有被使用！");
-            return false;
-        }
+        this.isEmpty(charUse);
         charUse.setCardinality(minCardinality, maxCardinality);
         return true;
     }
 
+    private void isEmpty(Object obj){
+    	if(null == obj ){
+    		logger.error(obj);
+    		throw new UnsupportedOperationException();
+    	}
+    }
     /*
      * (non-Javadoc)
      * 
