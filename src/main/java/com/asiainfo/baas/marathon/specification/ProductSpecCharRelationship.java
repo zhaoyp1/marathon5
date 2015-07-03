@@ -1,9 +1,7 @@
 package com.asiainfo.baas.marathon.specification;
 
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
-import com.asiainfo.baas.marathon.baseType.*;
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
+import com.asiainfo.baas.marathon5.common.CommonUtils;
 
 /**
  * A aggregation, migration, substitution, dependency, or exclusivity
@@ -110,61 +108,52 @@ public class ProductSpecCharRelationship {
      * 
      * @see java.lang.Object#toString()
      */
-//    @Override
-//    public String toString() {
-//        return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-//    }
-    public String toString(){
-    	StringBuffer sb=new StringBuffer("\n[");
-    	sb.append("relationType:").append(charRelationshipType).append(b);
-    	sb.append("]\n");
-		return charRelationshipType;
-    	
+    // @Override
+    // public String toString() {
+    // return ReflectionToStringBuilder.reflectionToString(this,
+    // ToStringStyle.SHORT_PREFIX_STYLE);
+    // }
+    public String toString() {
+        return CommonUtils.getPropertyToJson(null, null, this);
+
     }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime
-				* result
-				+ ((charRelationshipType == null) ? 0 : charRelationshipType
-						.hashCode());
-		result = prime * result + charSpecSeq;
-		result = prime
-				* result
-				+ ((targetProdSpecChar == null) ? 0 : targetProdSpecChar
-						.hashCode());
-		result = prime * result
-				+ ((validFor == null) ? 0 : validFor.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((charRelationshipType == null) ? 0 : charRelationshipType.hashCode());
+        result = prime * result + charSpecSeq;
+        result = prime * result + ((targetProdSpecChar == null) ? 0 : targetProdSpecChar.hashCode());
+        result = prime * result + ((validFor == null) ? 0 : validFor.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductSpecCharRelationship other = (ProductSpecCharRelationship) obj;
-		if (charRelationshipType == null) {
-			if (other.charRelationshipType != null)
-				return false;
-		} else if (!charRelationshipType.equals(other.charRelationshipType))
-			return false;
-		if (targetProdSpecChar == null) {
-			if (other.targetProdSpecChar != null)
-				return false;
-		} else if (!targetProdSpecChar.equals(other.targetProdSpecChar))
-			return false;
-		if (validFor == null) {
-			if (other.validFor != null)
-				return false;
-		} else if (!validFor.equals(other.validFor))
-			return false;
-		return true;
-	}
-    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductSpecCharRelationship other = (ProductSpecCharRelationship) obj;
+        if (charRelationshipType == null) {
+            if (other.charRelationshipType != null)
+                return false;
+        } else if (!charRelationshipType.equals(other.charRelationshipType))
+            return false;
+        if (targetProdSpecChar == null) {
+            if (other.targetProdSpecChar != null)
+                return false;
+        } else if (!targetProdSpecChar.equals(other.targetProdSpecChar))
+            return false;
+        if (validFor == null) {
+            if (other.validFor != null)
+                return false;
+        } else if (!validFor.equals(other.validFor))
+            return false;
+        return true;
+    }
+
 }
