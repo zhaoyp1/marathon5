@@ -107,8 +107,7 @@ public class AppleTest {
                 TestProductSpecificationData.specParameter4, new Object[][] {});
 
         // 添加子规格
-        this.addSubspec(productSpecification4, productSpecification1, productSpecification2, productSpecification3,
-                productSpecification4);
+        this.addSubspec(productSpecification4, productSpecification1, productSpecification2, productSpecification3);
         // 打印复合规格
         logger.info("复合规格整体内容：" + productSpecification4.toString());
 
@@ -151,7 +150,8 @@ public class AppleTest {
                                 charData[i][9].toString());
 
                 if (Boolean.parseBoolean(charData[i][10].toString())) {
-                    ProductSpecCharacteristicValue[] values = this.getCharValue(prodSpecChar, (int[]) charData[i][11]);
+                    ProductSpecCharacteristicValue[] values = this.getCharValue(prodSpecChar,
+                            (String[]) charData[i][11]);
                     if (values != null) {
                         for (int j = 0; j < values.length; j++) {
                             productSpec.attachCharacteristicValue(prodSpecChar, values[j],
@@ -239,15 +239,15 @@ public class AppleTest {
 
     }
 
-    public ProductSpecCharacteristicValue[] getCharValue(ProductSpecCharacteristic characteristic, int[] ids) {
-        if (ids != null) {
-            List<ProductSpecCharacteristicValue> productValues = characteristic.getProductSpecCharacteristicValue();
+    public ProductSpecCharacteristicValue[] getCharValue(ProductSpecCharacteristic characteristic, String[] values) {
+        if (values != null) {
+            Set<ProductSpecCharacteristicValue> productValues = characteristic.getProductSpecCharacteristicValue();
             List<ProductSpecCharacteristicValue> prodSpecChars = new ArrayList<ProductSpecCharacteristicValue>();
 
-            for (int id : ids) {
-                for (int i = 0; i < productValues.size(); i++) {
-                    if (id == i) {
-                        prodSpecChars.add(productValues.get(i));
+            for (String value : values) {
+                for (ProductSpecCharacteristicValue productValue : productValues) {
+                    if (value.equals(productValue.getValue())) {
+                        prodSpecChars.add(productValue);
                         break;
                     }
                 }
