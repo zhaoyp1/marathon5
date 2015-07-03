@@ -357,7 +357,8 @@ public abstract class ProductSpecification {
      * @param validFor
      * @throws Exception
      */
-    public void addRelatedProdSpec(ProductSpecification prodSpec, String type, TimePeriod validFor) throws Exception {
+    public void addRelatedProdSpec(ProductSpecification prodSpec, String type, TimePeriod validFor)
+            throws IllegalArgumentException {
         if (null == this.prodSpecRelationship) {
             this.prodSpecRelationship = new ArrayList<ProductSpecificationRelationship>();
         }
