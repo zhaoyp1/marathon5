@@ -172,8 +172,8 @@ public class ProductSpecCharUse {
      */
     public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage,
             TimePeriod validFor,String name) {
-    	this.isEmpty(charSpec);
-    	this.isEmpty(name);
+    	this.paramIsEmpty(charSpec);
+    	this.paramIsEmpty(name);
         this.prodSpecChar = charSpec;
         this.canBeOveridden = canBeOveridden;
         this.isPackage = isPackage;
@@ -197,8 +197,8 @@ public class ProductSpecCharUse {
     public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage,
             TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality,
             boolean extensible, String description) {
-    	this.isEmpty(charSpec);
-    	this.isEmpty(name);
+    	this.paramIsEmpty(charSpec);
+    	this.paramIsEmpty(name);
         this.prodSpecChar = charSpec;
         this.canBeOveridden = canBeOveridden;
         this.isPackage = isPackage;
@@ -218,7 +218,7 @@ public class ProductSpecCharUse {
      * @param validFor
      */
     public boolean addValue(ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
-    	this.isEmpty(charValue);
+    	this.paramIsEmpty(charValue);
         ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue, isDefault, validFor);
         if (null == this.prodSpecCharValueUse) {
             this.prodSpecCharValueUse = new HashSet<ProdSpecCharValueUse>();
@@ -241,31 +241,35 @@ public class ProductSpecCharUse {
      * @param defaultValue
      */
     public boolean specifyDefaultCharacteristicValueUse(ProductSpecCharacteristicValue defaultValue) {
+    	this.paramIsEmpty(defaultValue);
         if (null != this.prodSpecCharValueUse) {
-        	this.isEmpty(defaultValue);
         	ProdSpecCharValueUse valueUse = this.retrieveProdSpecCharValueUse(defaultValue);
-        	this.isEmpty(valueUse);
-        	valueUse.setIsDefault(true);
-        	return true;
+        	if(null != valueUse){
+        		valueUse.setIsDefault(true);
+        		return true;
+        	}else{
+        		logger.warn("Parameter characteristicValue is not used");
+        		return false;
+        	}
         }else{
-        	logger.error(this.prodSpecCharValueUse);
+        	logger.warn("There is no used characteristicValue ");
         	return false;
         }
     }
     
     public boolean clearDefaultValueUse(ProductSpecCharacteristicValue defaultValue){
-    	this.isEmpty(defaultValue);
+    	this.paramIsEmpty(defaultValue);
     	ProdSpecCharValueUse oldDefaultValueUse = this.retrieveProdSpecCharValueUse(defaultValue);
     	if(null != oldDefaultValueUse){
     			if(oldDefaultValueUse.isIsDefault()){
     				oldDefaultValueUse.setIsDefault(false);
     				return true;
     			}else{
-    				logger.error(oldDefaultValueUse);
+    				logger.warn("Parameter characteristicValue is not Default");
     	    		return false;
     			}
     	}else
-    		this.isEmpty(oldDefaultValueUse);
+    		logger.warn("Parameter characteristicValue is not used characteristic");
     	return false;
 
     }
@@ -291,8 +295,10 @@ public class ProductSpecCharUse {
     	if(minCardinality <= maxCardinality){
 	        this.minCardinality = minCardinality;
 	        this.maxCardinality = maxCardinality;
-    	}else
-    		throw new UnsupportedOperationException();
+    	}else{
+    		logger.error("minCardinality is greater than maxCardinality");
+    		throw new IllegalArgumentException();
+    	}
     }
 
     private ProdSpecCharValueUse retrieveProdSpecCharValueUse(ProductSpecCharacteristicValue charValue){
@@ -303,14 +309,15 @@ public class ProductSpecCharUse {
     	return null;
     }
     
-    private void isEmpty(Object obj){
+    private void paramIsEmpty(Object obj){
     	if(null == obj ){
-    		logger.error(obj);
-    		throw new UnsupportedOperationException();
+    		logger.error(obj.getClass()+" is null");
+    		throw new IllegalArgumentException();
     	}
     }
    
 
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -318,6 +325,10 @@ public class ProductSpecCharUse {
 		result = prime * result + ((null == this.name) ? 0 : this.name.hashCode());
 		result = prime * result
 				+ ((null == this.prodSpecChar) ? 0 : this.prodSpecChar.hashCode());
+		result = prime
+				* result
+				+ ((null == this.prodSpecCharValueUse) ? 0 : this.prodSpecCharValueUse
+						.hashCode());
 		return result;
 	}
 
@@ -331,14 +342,19 @@ public class ProductSpecCharUse {
 			return false;
 		ProductSpecCharUse other = (ProductSpecCharUse) obj;
 		if (null == this.name) {
-			if (other.name != null)
+			if (null != other.name)
 				return false;
 		} else if (!this.name.equals(other.name))
 			return false;
 		if (null == this.prodSpecChar) {
-			if (other.prodSpecChar != null)
+			if (null != other.prodSpecChar)
 				return false;
 		} else if (!this.prodSpecChar.equals(other.prodSpecChar))
+			return false;
+		if (null == this.prodSpecCharValueUse) {
+			if (null != other.prodSpecCharValueUse)
+				return false;
+		} else if (!prodSpecCharValueUse.equals(other.prodSpecCharValueUse))
 			return false;
 		return true;
 	}

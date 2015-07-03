@@ -60,12 +60,17 @@ public class CompositeProductSpecification extends ProductSpecification {
             this.prodSpec = new ArrayList<ProductSpecification>();
         }
         if (null == prodSpec) {
-            logger.error("方法addSubProdSpec的参数不正确。prodSpec=" + prodSpec);
+            logger.error("Parameter [prodSpec] cannot be null.");
             return;
         }
         if (this.prodSpec.contains(prodSpec)) {
-            logger.error("已存在此子规格，不能再次关联。ProductNumber=" + prodSpec.getProductNumber());
-            return;
+            logger.error("the subProdSpec already exist, Cannot repeatedly create subProdSpec. ProductNumber="
+                    + prodSpec.getProductNumber());
+            throw new IllegalArgumentException("the subProdSpec already exist, Cannot repeatedly create subProdSpec.");
+        }
+        if (this.equals(prodSpec)) {
+            logger.error("Cannot add subProdSpec with it self!");
+            throw new IllegalArgumentException("Cannot add subProdSpec with it self!");
         }
         this.prodSpec.add(prodSpec);
     }
