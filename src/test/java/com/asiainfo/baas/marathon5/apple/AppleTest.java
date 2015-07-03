@@ -1,7 +1,9 @@
 package com.asiainfo.baas.marathon5.apple;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -15,10 +17,10 @@ import com.asiainfo.baas.marathon.specification.AtomicProductSpecification;
 import com.asiainfo.baas.marathon.specification.CompositeProductSpecification;
 import com.asiainfo.baas.marathon.specification.ConfigurableProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProdSpecCharValueUse;
+import com.asiainfo.baas.marathon.specification.ProductSpecCharUse;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 import com.asiainfo.baas.marathon.specification.ProductSpecification;
-import com.asiainfo.baas.marathon5.common.CommonUtils;
 
 public class AppleTest {
 
@@ -157,15 +159,23 @@ public class AppleTest {
                         }
                     }
                 }
-                logger.info("    特征" + (i + 1) + "（" + productSpec.getProdSpecCharUse().get(i).getName() + "）" + "：");
-                logger.info(productSpec.getProdSpecCharUse().get(i).toString());
+                Iterator<ProductSpecCharUse> productSpecCharUses = productSpec.getProdSpecCharUse().iterator();
+                ProductSpecCharUse use = null;
+                while (productSpecCharUses.hasNext()) {
+                    use = productSpecCharUses.next();
+                    if (prodSpecChar.equals(use.getProdSpecChar())) {
+                        break;
+                    }
+
+                }
+                logger.info("    特征" + (i + 1) + "（" + use.getProdSpecChar().getName() + "）" + "：");
+                logger.info(use.toString());
                 logger.info("    特征" + (i + 1) + "的所用特征值：");
-                List<ProdSpecCharValueUse> prodSpecCharValueUseList = productSpec.getProdSpecCharUse().get(i)
-                        .getProdSpecCharValueUse();
-                if (prodSpecCharValueUseList == null || prodSpecCharValueUseList.size() == 0) {
+                Set<ProdSpecCharValueUse> prodSpecCharValueUseSet = use.getProdSpecCharValueUse();
+                if (prodSpecCharValueUseSet == null || prodSpecCharValueUseSet.size() == 0) {
                     logger.info("null");
                 } else {
-                    for (ProdSpecCharValueUse prodSpecCharValueUse : prodSpecCharValueUseList) {
+                    for (ProdSpecCharValueUse prodSpecCharValueUse : prodSpecCharValueUseSet) {
                         logger.info(prodSpecCharValueUse.toString());
                     }
                 }
