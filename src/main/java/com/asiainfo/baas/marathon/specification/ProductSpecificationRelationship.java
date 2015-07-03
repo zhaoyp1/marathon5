@@ -4,6 +4,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.asiainfo.baas.marathon.baseType.*;
+import com.asiainfo.baas.marathon5.common.CommonUtils;
 
 /**
  * A migration, substitution, dependency, or exclusivity relationship
@@ -118,7 +119,7 @@ public class ProductSpecificationRelationship {
      */
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return CommonUtils.getPropertyToJson(null, null, this);
     }
 
 }
