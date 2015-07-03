@@ -593,11 +593,11 @@ public class ProductSpecCharacteristic {
     }
     
     public String basicInfoToString(){
-    	StringBuffer sb=new StringBuffer("\n[");
+    	StringBuffer sb=new StringBuffer("[");
     	sb.append("ID:").append(ID).append(",name:").append(name).append(",valueType").append(valueType);
     	sb.append(",unique").append(unique).append(",extensible").append(this.extensible).append(",minCardinality").append(minCardinality).append(",maxCardinality").append(minCardinality);
     	sb.append(",extensible").append(extensible).append(",derivationFormula").append(derivationFormula);
-    	sb.append(" ]\n");
+    	sb.append(" ]");
     	if(this.prodSpecCharRelationship!=null){
     		sb.append("prodSpecCharRelationship:");
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
@@ -615,11 +615,11 @@ public class ProductSpecCharacteristic {
     }
     public String allInfoToString(){
     	
-    	StringBuffer sb=new StringBuffer("\n[");
+    	StringBuffer sb=new StringBuffer("[");
     	sb.append("ID:").append(ID).append(",name:").append(name).append(",valueType").append(valueType);
     	sb.append(",unique").append(unique).append(",extensible").append(this.extensible).append(",minCardinality").append(minCardinality).append(",maxCardinality").append(minCardinality);
     	sb.append(",extensible").append(extensible).append(",derivationFormula").append(derivationFormula);
-    	sb.append(" ]\n");
+    	sb.append(" ]");
 		return sb.toString();
     	
     }
