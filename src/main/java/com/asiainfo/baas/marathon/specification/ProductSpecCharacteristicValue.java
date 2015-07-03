@@ -143,9 +143,15 @@ public class ProductSpecCharacteristicValue {
      */
     public ProductSpecCharacteristicValue(String valueType, boolean isDefault, String unitOfMeasure,
             TimePeriod validFor, String value) {
-    	 if(validFor==null)throw new IllegalArgumentException("validFor should not be null");
-         if(valueType==null)throw new IllegalArgumentException("valueType should not be null");
-
+    	
+        
+    	if(valueType==null)throw new IllegalArgumentException("valueType should not be null");
+    	
+    	if(StringUtils.isEmpty(value)){
+    		
+    		throw new IllegalArgumentException("value should not be null");
+    	}
+    	
         this.valueType = valueType;
         this.isDefault = isDefault;
         this.unitOfMeasure = unitOfMeasure;
@@ -167,8 +173,21 @@ public class ProductSpecCharacteristicValue {
             TimePeriod validFor, String valueFrom, String valueTo, String rangeInterval) {
     	
     	if(validFor==null)throw new IllegalArgumentException("validFor should not be null");
+    	
         if(valueType==null)throw new IllegalArgumentException("valueType should not be null");
         
+        if (StringUtils.isEmpty(valueFrom) && StringUtils.isEmpty(valueTo)) {
+        	
+        	throw new IllegalArgumentException("valueFrom and valueTo should not be null at the same time.");
+        	
+        }else if(StringUtils.isEmpty(valueFrom)){
+        	
+        	throw new IllegalArgumentException("valueFrom should not be null .");
+        
+        }else if(StringUtils.isEmpty(valueTo)){
+        
+        	valueTo=valueFrom;
+        }
         this.valueType = valueType;
         this.isDefault = isDefault;
         this.unitOfMeasure = unitOfMeasure;
@@ -185,7 +204,14 @@ public class ProductSpecCharacteristicValue {
      */
 
     public void specifyValue(String unitOfMeasure, String value) {
+    	
+    	if (StringUtils.isEmpty(value)) {
+    		
+    		throw new IllegalArgumentException("value should not be null");
+    	
+    	}
         this.unitOfMeasure = unitOfMeasure;
+        
         this.value = value;
     }
 
@@ -197,6 +223,20 @@ public class ProductSpecCharacteristicValue {
      * @param rangeInterval
      */
     public void specifyValue(String unitOfMeasure, String valueFrom, String valueTo, String rangeInterval) {
+    	 
+    	if (StringUtils.isEmpty(valueFrom) && StringUtils.isEmpty(valueTo)) {
+         	
+         	throw new IllegalArgumentException("valueFrom and valueTo should not be null at the same time.");
+         	
+         }else if(StringUtils.isEmpty(valueFrom)){
+         	
+         	throw new IllegalArgumentException("valueFrom should not be null .");
+         
+         }else if(StringUtils.isEmpty(valueTo)){
+         
+         	valueTo=valueFrom;
+         } 
+    	
         this.unitOfMeasure = unitOfMeasure;
         this.valueFrom = valueFrom;
         this.valueTo = valueTo;
@@ -211,39 +251,69 @@ public class ProductSpecCharacteristicValue {
      */
     public boolean addRelatedCharValue(ProductSpecCharacteristicValue charValue, String relationType, TimePeriod validFor) {
         
-        if(charValue==null||validFor==null||relationType==null){
-	   		logger.error("特征值、有效期和类型、不能为空");
-	   		return false;
-	   	}
+        if (null == charValue || null == relationType ) {
+        	
+        	throw new IllegalArgumentException("charValue or relationType should not be null .");
+        }
+        
         if(this.equals(charValue)){
-        	logger.error("当前特征值与指定特征值相同，不能创建关系");
+        	logger.warn("the value of SourceChar is"+this.toString());
+        	logger.warn("this value of TargetChar is"+charValue.toString());
         	return false;
         }
+        
         ProdSpecCharValueRelationship productSpecCharValueRelationShip=this.retrieveRelatedCharacteristicValue(charValue);
-	   	if(productSpecCharValueRelationShip!=null){
-	   		//比较是否有重复
+	   	
+        if(null!=productSpecCharValueRelationShip){
+	   		//compare 
 	   		if(productSpecCharValueRelationShip.getValidFor().isOverlap(validFor)){
-	   			logger.error("当前特征已与指定特征创建了指定的关系，无需在重新创建");
-	   			return false;
+	        	logger.warn("the exists relationship :"+productSpecCharValueRelationShip.toString());
+	        	logger.warn("CharacteristicValue have been created in the specified time");
+	        	return false;
+	        	
 	   		}
 	   	}
-	   	ProdSpecCharValueRelationship specCharValueRelationShip = new ProdSpecCharValueRelationship(this,
-	   			charValue, relationType, validFor);
-	   	if(prodSpecCharValueRelationship==null) prodSpecCharValueRelationship=new ArrayList<ProdSpecCharValueRelationship>();
-        this.prodSpecCharValueRelationship.add(specCharValueRelationShip);
+        
+	   	ProdSpecCharValueRelationship specCharValueRelationShip = new ProdSpecCharValueRelationship(this,charValue, relationType, validFor);
+	   	
+	   	if ( null == prodSpecCharValueRelationship ) prodSpecCharValueRelationship = new ArrayList<ProdSpecCharValueRelationship>();
+        
+	   	this.prodSpecCharValueRelationship.add( specCharValueRelationShip );
+	   	
         return true;
      
     }
     
     private ProdSpecCharValueRelationship retrieveRelatedCharacteristicValue(ProductSpecCharacteristicValue charValue ){
-    	if(this.prodSpecCharValueRelationship!=null){
+    	
+    	if (null == charValue) {
+        	
+        	throw new IllegalArgumentException("charValue or relationType should not be null .");
+        }
+    	
+    	initProdSpecCharValueRelationShip();
+    	
+    	if (null != this.prodSpecCharValueRelationship) {
+    		
     		for (ProdSpecCharValueRelationship productSpecCharRelationship : prodSpecCharValueRelationship) {
-        		if( productSpecCharRelationship.getTargetCharValue().equals(charValue)){
+    			
+        		if ( productSpecCharRelationship.getTargetCharValue().equals(charValue)) {
+        			
         			return productSpecCharRelationship;
+        		
         		}
     		}
     	}
     	return null;
+    }
+    
+    private void initProdSpecCharValueRelationShip(){
+    	
+    	if (null == this.prodSpecCharValueRelationship) {
+    		
+    		prodSpecCharValueRelationship = new ArrayList<ProdSpecCharValueRelationship>();
+    		
+    	}
     }
 
     /**
@@ -251,11 +321,30 @@ public class ProductSpecCharacteristicValue {
      * @param charValue
      */
     public void removeRelatedCharValue(ProductSpecCharacteristicValue charValue) {
-
-        if (prodSpecCharValueRelationship != null) {
-            prodSpecCharValueRelationship.remove(charValue);
-        }
-
+        //TODO
+    }
+    
+    public boolean updateRelatedCharValueValidPeriod(ProductSpecCharacteristicValue charValue,TimePeriod validFor){
+    	
+    	if(null == charValue || null == validFor){
+        	
+    		throw new IllegalArgumentException("charValue  or validFor should not be null .");
+    	}
+    	
+    	initProdSpecCharValueRelationShip();
+    	
+    	for (ProdSpecCharValueRelationship productSpecCharRelationship : prodSpecCharValueRelationship) {
+			
+    		if ( productSpecCharRelationship.getTargetCharValue().equals(charValue)) {
+    			
+    			productSpecCharRelationship.setValidFor(validFor);
+    			
+    			return true;
+    		
+    		}
+		}
+    	
+    	return false;
     }
 
     /**
@@ -263,30 +352,33 @@ public class ProductSpecCharacteristicValue {
      * @param type
      * @param time
      */
-    public List<ProductSpecCharacteristicValue> queryRelatedCharValue(String type, Date time) {
+    public List<ProductSpecCharacteristicValue> reteriveRelatedCharValue(String type, Date time) {
     	
-    	if(StringUtils.isEmpty(type)||time==null){
-    		logger.error("特征关系类型或时间点不能为空");
-    		return null;
+    	if(StringUtils.isEmpty(type) || null == time ){
+    		
+    		throw new IllegalArgumentException("relationType  or DateTime should not be null .");
+    	
     	}
-        List<ProductSpecCharacteristicValue> prodSpecCharValues = null;
+    	
+        List<ProductSpecCharacteristicValue> prodSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
+        
         if (this.prodSpecCharValueRelationship != null && prodSpecCharValueRelationship.size() > 0) {
+        	
             prodSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
+            
             for (ProdSpecCharValueRelationship relationship : prodSpecCharValueRelationship) {
+            	
                 if (relationship.getCharValueRelationshipType() != null
                         && type.equals(relationship.getCharValueRelationshipType())
-                        && relationship.getValidFor().isInPeriod(time)) {
+                        && (relationship.getValidFor() == null || relationship.getValidFor().isInPeriod(time))) {
+                	
                     prodSpecCharValues.add(relationship.getTargetCharValue());
+                    
                 }
             }
-            if(prodSpecCharValues.size()>0){
-            	logger.info("当前特征值没有指定类型的关联值");
-            }
-            return prodSpecCharValues;
-        } else {
-        	logger.warn("当前特征值没有相关系的特征值");
-            return null;
+            
         }
+        return prodSpecCharValues;
     }
 
     @Override
@@ -342,6 +434,11 @@ public class ProductSpecCharacteristicValue {
             if (other.valueType != null)
                 return false;
         } else if (!valueType.equals(other.valueType))
+            return false;
+        if (validFor == null) {
+            if (other.validFor != null)
+                return false;
+        } else if (!validFor.equals(other.validFor))
             return false;
         return true;
     }

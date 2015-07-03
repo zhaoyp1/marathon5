@@ -110,9 +110,16 @@ public class ProductSpecCharRelationship {
      * 
      * @see java.lang.Object#toString()
      */
-    @Override
-    public String toString() {
-        return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+//    @Override
+//    public String toString() {
+//        return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+//    }
+    public String toString(){
+    	StringBuffer sb=new StringBuffer("\n[");
+    	sb.append("relationType:").append(charRelationshipType).append(b);
+    	sb.append("]\n");
+		return charRelationshipType;
+    	
     }
 
 	@Override

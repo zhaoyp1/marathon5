@@ -33,6 +33,7 @@ public class ProductSpecCharacteristicTest {
 		  validFor = new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59");
 		  
 	}
+	
 	@Before
 	public void initValue(){
 		specChar = new ProductSpecCharacteristic("1", "摄像头", CharacristicValueType.TEXT.getValue(),validFor, "unique",1,1);
@@ -42,16 +43,15 @@ public class ProductSpecCharacteristicTest {
 		value=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),true,"GHz",new TimePeriod("2015-05-03 12:00:00","2015-07-21 23:59:59"),"2.9");
 		configSpecChar.addValue(value);
 	}
+	
 	@Test
 	public void testAddValue(){
 		boolean result=false;
-		logger.info("ProductSpecCharacteristic添加特征值:");
 		
-		logger.info("1:添加的特征值为null");
 		ProductSpecCharacteristicValue value  =null;
 		result=specChar.addValue(value);
-		assertEquals("添加的特征值为null",false,result);
-		
+		//assertEquals("test the method for addValue,when the value is null",false,result);
+		//assertEquals(specChar);
 		logger.info("2:添加新的特征值,特征与特征值的valueType不相同");
 		value=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),true,"GHz",validFor,"2.7");
 		result=specChar.addValue(value);

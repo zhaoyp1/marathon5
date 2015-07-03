@@ -6,7 +6,7 @@
  <!-- 控制台输出 -->
  <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
    <layout class="org.apache.log4j.PatternLayout">
-   <param name="ConversionPattern" value="%d{HH:mm:ss}(%F:%L)[%-5p] %m%n" />
+   <param name="ConversionPattern" value="%m%n" />
   </layout>
  </appender>
 <!-- 文件输出 -->

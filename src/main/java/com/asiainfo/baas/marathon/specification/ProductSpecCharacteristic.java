@@ -2,12 +2,15 @@ package com.asiainfo.baas.marathon.specification;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
+
 import com.asiainfo.baas.common.RelationshipType;
 import com.asiainfo.baas.common.ReflectionToStringBuilderBaas;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
@@ -24,7 +27,7 @@ public class ProductSpecCharacteristic {
 
     private Logger logger = Logger.getLogger(ProductSpecCharacteristic.class);
 
-    private List<ProductSpecCharacteristicValue> productSpecCharacteristicValue;
+    private Set<ProductSpecCharacteristicValue> productSpecCharacteristicValue;
     private List<ProductSpecCharUse> prodSpecCharUse;
     private List<ProductSpecCharRelationship> prodSpecCharRelationship;
     /**
@@ -185,6 +188,17 @@ public class ProductSpecCharacteristic {
      */
     public ProductSpecCharacteristic(String id, String name, String valueType, TimePeriod validFor, String unique,
             int minCardinality, int maxCardinality) {
+    	
+    	if ( StringUtils.isEmpty( id ) ) {
+    		throw new IllegalArgumentException("id should not be null");
+    	}
+    	if ( StringUtils.isEmpty(valueType) ) {
+    		throw new IllegalArgumentException("valueType should not be null");
+    	}
+    	if ( StringUtils.isEmpty(name)){
+    		
+    		throw new IllegalArgumentException("name should not be null");
+    	}
         this.ID = id;
         this.name = name;
         this.valueType = valueType;
@@ -209,7 +223,20 @@ public class ProductSpecCharacteristic {
      */
     public ProductSpecCharacteristic(String id, String name, String valueType, TimePeriod validFor, String unique,
             int minCardinality, int maxCardinality, boolean extensible, String description, String derivationFormula) {
-        this.ID = id;
+    	
+    	if (StringUtils.isEmpty(id) ){
+    		
+    		throw new IllegalArgumentException("id should not be null");
+    	}
+    	if ( StringUtils.isEmpty(name)){
+    		
+    		throw new IllegalArgumentException("name should not be null");
+    	}
+    	if ( StringUtils.isEmpty(valueType) ) {
+    		throw new IllegalArgumentException("valueType should not be null");
+    	}
+    	
+    	this.ID = id;
         this.name = name;
         this.valueType = valueType;
         this.validFor = validFor;
@@ -227,24 +254,32 @@ public class ProductSpecCharacteristic {
      */
     public boolean addValue(ProductSpecCharacteristicValue value) {
 
-        if (value == null) {
-            logger.error("特征值ProductSpecCharacteristicValue为空，不能添加");
-            return false;
+        if (null == value) {
+        	
+            throw new IllegalArgumentException("value should not be null");
         }
-        if (this.productSpecCharacteristicValue == null) {
-            this.productSpecCharacteristicValue = new ArrayList<ProductSpecCharacteristicValue>();
-        }
-        if (productSpecCharacteristicValue.contains(value)) {
-            logger.error("特征值ProductSpecCharacteristicValue已经存在");
-            return false;
-        }
+        
+        initContainValues();
+        
         if (value.getValueType() != null && !this.getValueType().equals(value.getValueType())) {
-            logger.error("特征值ProductSpecCharacteristicValue与特征ProductSpecCharacteristic的valueType不相同");
-            return false;
+          
+        	throw new IllegalArgumentException("The value type of feature and feature value is different.");
         }
+        
         productSpecCharacteristicValue.add(value);
+        
         return true;
 
+    }
+    
+    private void initContainValues(){
+    	
+    	if (this.productSpecCharacteristicValue == null) {
+    		
+            this.productSpecCharacteristicValue = new HashSet<ProductSpecCharacteristicValue>();
+        
+    	}
+    	
     }
 
     /**
@@ -260,21 +295,25 @@ public class ProductSpecCharacteristic {
      * @param time
      */
     public List<ProductSpecCharacteristicValue> retrieveValue(Date time) {
-        List<ProductSpecCharacteristicValue> productSpecCharValues = null;
-        if (time == null) {
-            logger.error("时间不能为空");
-        } else {
-            if (this.productSpecCharacteristicValue != null) {
-                productSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
-                for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-                    if (charValue.getValidFor() != null && charValue.getValidFor().isInPeriod(time)) {
+       
+    	List<ProductSpecCharacteristicValue> productSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
+        if (null == time) {
+        	
+        	throw new IllegalArgumentException("DateTime should not be null.");
+        	
+        } 
+        if (this.productSpecCharacteristicValue != null) {
+        	
+             for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+            	 
+                if (charValue.getValidFor() != null && charValue.getValidFor().isInPeriod(time)) {
+                	
                         productSpecCharValues.add(charValue);
-                    }
                 }
-            } else {
-                logger.warn("当前特征在不存在特征值");
-            }
-        }
+                
+             }
+         }
+         
 
         return productSpecCharValues;
     }
@@ -286,116 +325,73 @@ public class ProductSpecCharacteristic {
 
     public boolean specifyDefaultValue(ProductSpecCharacteristicValue charVal) {
     	
-    	if(charVal==null){
-    		 logger.error("特征值不能设置为空");
+    	if (null == charVal ) {
+    		
+    		throw new IllegalArgumentException("charVal should not be null.");
+    	}
+    	
+    	if(null == this.productSpecCharacteristicValue || !productSpecCharacteristicValue.contains(charVal)){
     		 return false;
     	}
-    	if(this.productSpecCharacteristicValue==null){
-    		 logger.error("当前特征不存在特征值");
-    		 return false;
-    	}
-    	if(!productSpecCharacteristicValue.contains(charVal)){
-    		logger.error("当前特征不包含指定特征值");
-    		return false;
-    	}
-    	List<ProductSpecCharacteristicValue> defaultValue=this.retrieveDefaultValue();
-    	if(defaultValue!=null && defaultValue.contains(charVal)){
-    		logger.warn("指定特征值已经设置为默认值，无需进行重复设置");
-    		return true;
-    	}
-
+    	
     	for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-    		 
     		if(charValue.equals(charVal)){
-    			charVal.setIsDefault(true);
+    			if(charVal.isIsDefault()){
+    				logger.warn("The current value has been set to the default value"+charValue.toString());
+    			}else{
+    				charVal.setIsDefault(true);
+    			}
+    			break;
     		} 
     	}
     	return true;
-    	
-
     }
 
 
     public List<ProductSpecCharacteristicValue> retrieveDefaultValue() {
-    	List<ProductSpecCharacteristicValue> defaultSpecCharValue=null;
-    	if(this.productSpecCharacteristicValue!=null){
-    		defaultSpecCharValue=new ArrayList<ProductSpecCharacteristicValue>();
+    	
+    	List<ProductSpecCharacteristicValue> defaultSpecCharValue=new ArrayList<ProductSpecCharacteristicValue>();
+    	
+    	if ( null != this.productSpecCharacteristicValue) {
     		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
+    			
     			if(charValue.isIsDefault()){
     				defaultSpecCharValue.add(charValue);
     			}
 			}
-    		 
-    			return defaultSpecCharValue;
     	}
-    	logger.info("\t特征没有特征值");
-    	return null;
+    	return defaultSpecCharValue;
     }
+    
     public boolean clearDefaultValue(ProductSpecCharacteristicValue value){
     	
-    	if(value==null){
-    		logger.error("特征值为空");
-    		return false;
-    	}
-    	if(productSpecCharacteristicValue==null){
-    		logger.error("当前特征没有特征值");
-    		return false;
-    	}
-    	if(!productSpecCharacteristicValue.contains(value)){
-    		logger.error("当前特征不包含指定特征值");
-    		return false;
-    	}
-    	List<ProductSpecCharacteristicValue> defaults=this.retrieveDefaultValue();
-    	if(defaults==null){
-    		return false;
-    	}else{
-    		if(!defaults.contains(value)){
-    			logger.error("指定特征值不是当前特征的默认值");
-    			return false;
-    		}
-    		for (ProductSpecCharacteristicValue productSpecCharacteristicValue : defaults) {
-				if(productSpecCharacteristicValue.equals(value)){
-					productSpecCharacteristicValue.setIsDefault(false);
-					break;
-				}
-			}
+    	if (null == value ) {
     		
+    		throw new IllegalArgumentException("charVal should not be null.");
     	}
+    	
+    	if(null == this.productSpecCharacteristicValue || !productSpecCharacteristicValue.contains(value)){
+    		 return false;
+    	}
+    	for (ProductSpecCharacteristicValue productSpecCharacteristicValue : productSpecCharacteristicValue) {
+			if(productSpecCharacteristicValue.equals(value)){
+				productSpecCharacteristicValue.setIsDefault(false);
+				break;
+			}
+		}
 		return true;
     	
  
     }
-
     /**
      * 
      * @param characteristic
      * @throws Exception 
      */
-    public boolean addLeafCharacteristic(ProductSpecCharacteristic characteristic, TimePeriod validFor){
-    	 if (this.prodSpecCharRelationship == null)
-             prodSpecCharRelationship = new ArrayList<ProductSpecCharRelationship>();
-    	 
-    	if(characteristic==null||validFor==null){
-    		logger.error("特征和有效期不能为空");
-    		return false;
-    	}
-    	if(this.equals(characteristic)){
-    		logger.error("当前特征与指定特征相同，不能创建关系");
-    		return false;
-    	}
-    	ProductSpecCharRelationship leafRelationship=this.retrieveRelatedCharacteristic(characteristic);
-    	if(leafRelationship!=null){
-    		//比较是否有重复
-    		if(leafRelationship.getValidFor().isOverlap(validFor)){
-    			logger.error("当前特征已与指定特征创建聚合关系，无需在重新创建");
-    			return false;
-    		}
-    	}
-        ProductSpecCharRelationship productSpecCharValueRelationShip = new ProductSpecCharRelationship(this,
-                characteristic, RelationshipType.AGGREGATION.getValue(), validFor);
-        if(prodSpecCharRelationship==null) prodSpecCharRelationship=new ArrayList<ProductSpecCharRelationship>();
-        this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
-        return true;
+    public boolean addLeafCharacteristic(ProductSpecCharacteristic characteristic, int charSpecSeq,TimePeriod validFor){
+    	  
+    	return this.addRelatedCharacteristic(characteristic, RelationshipType.AGGREGATION.getValue(), charSpecSeq, validFor);
+    
     }
 
     /**
@@ -407,23 +403,8 @@ public class ProductSpecCharacteristic {
     }
 
     public List<ProductSpecCharacteristic> retrieveLeafCharacteristic() {
-    	List<ProductSpecCharacteristic>  leafCharacteristic=null;
-    	if(prodSpecCharRelationship!=null){
-    		leafCharacteristic=new ArrayList<ProductSpecCharacteristic>();
-    		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-        		if(RelationshipType.AGGREGATION.getValue().equals(productSpecCharRelationship.getCharRelationshipType())){
-        			leafCharacteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
-        		}
-    		}
-    		if(leafCharacteristic.size()==0){
-    			logger.info("当前特征没有聚合关系的特征");
-    			return null;
-    		}
-    		return leafCharacteristic;
-    	}else{
-    		logger.info("当前特征没有相关联的特征");
-    	}
-    	return null;
+    	
+    	 return this.retrieveRelatedCharacteristic(RelationshipType.AGGREGATION.getValue());
 
     }
 
@@ -437,26 +418,39 @@ public class ProductSpecCharacteristic {
     public boolean  addRelatedCharacteristic(ProductSpecCharacteristic characteristic, String type, int charSpecSeq,
             TimePeriod validFor) {
            	 
-	   	if(characteristic==null||validFor==null||type==null){
-	   		logger.error("特征、有效期和类型、不能为空");
-	   		return false;
+	   	if ( null == characteristic || null == type ) {
+	   		
+	   		throw new IllegalArgumentException("characteristic or type should not be null"); 
 	   	}
+	   	
 	   	if(this.equals(characteristic)){
-	   		logger.error("当前特征与指定特征相同，不能创建关系");
-	   		return false;
-	   	}
+	   		
+	   		logger.warn("the  SourceChar is"+this.toString());
+        	
+	   		logger.warn("this TargetChar is"+characteristic.toString());
+        	
+        	return false;	   	
+        }
+	   	
 	   	ProductSpecCharRelationship relationship=this.retrieveRelatedCharacteristic(characteristic);
 	   	if(relationship!=null){
-	   		//比较是否有重复
+	   		//compare
 	   		if(relationship.getValidFor().isOverlap(validFor)){
-	   			logger.error("当前特征已与指定特征创建了指定的关系，无需在重新创建");
-	   			return false;
+	   			
+	        	logger.warn("Characteristic have been created in the specified time");
+	        	logger.warn("the exists relationship :"+relationship.toString());
+	        	return false;
+	        	
 	   		}
 	   	}
+	   	
        ProductSpecCharRelationship productSpecCharValueRelationShip = new ProductSpecCharRelationship(this,
                characteristic, type, validFor,charSpecSeq);
+       
       if(prodSpecCharRelationship==null) prodSpecCharRelationship=new ArrayList<ProductSpecCharRelationship>();
+      
        this.prodSpecCharRelationship.add(productSpecCharValueRelationShip);
+       
        return true;
     }
 
@@ -472,66 +466,64 @@ public class ProductSpecCharacteristic {
      * @param type
      */
     public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type) {
-    	List<ProductSpecCharacteristic>  characteristic=null;
+    	
     	if(StringUtils.isEmpty(type)){
-    		logger.error("指定的关系类型为空");
-    		return null;
+    		
+    		throw new IllegalArgumentException("type should not be null.");
+    		
     	}
+    	List<ProductSpecCharacteristic>  characteristic=new ArrayList<ProductSpecCharacteristic>();
+    	
     	if(prodSpecCharRelationship!=null){
-    		characteristic=new ArrayList<ProductSpecCharacteristic>();
+    		
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
         		if(type.equals(productSpecCharRelationship.getCharRelationshipType())){
         			characteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
         		}
     		}
-    		if(characteristic.size()==0){
-    			logger.info("当前特征没有指定关系的特征");
-    			return null;
-    		}
-    		return characteristic;
-    	}else{
-    		logger.info("当前特征没有相关联的特征");
-    	}
-    	return null;
+    	} 
+    	return characteristic;
  
     }
+    
     private ProductSpecCharRelationship retrieveRelatedCharacteristic(ProductSpecCharacteristic characteristic ){
+    	
+    	if ( null == characteristic ) {
+	   		
+	   		throw new IllegalArgumentException("characteristic  should not be null"); 
+	   	}
     	if(prodSpecCharRelationship!=null){
+    		
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-        		if( productSpecCharRelationship.getTargetProdSpecChar().equals(characteristic)){
+        		
+    			if( productSpecCharRelationship.getTargetProdSpecChar().equals(characteristic)){
         			return productSpecCharRelationship;
         		}
     		}
+    		
     	}
     	return null;
     }
     
     public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type,Date time) {
-    	List<ProductSpecCharacteristic>  characteristic=null;
-    	if(StringUtils.isEmpty(type)){
-    		logger.error("指定的关系类型为空");
-    		return null;
-    	}
-    	if(time==null){
-    		logger.error("查询时间点为空");
-    		return null;
-    	}
+    	
+    	if(StringUtils.isEmpty(type) || time==null ){
+    		throw new IllegalArgumentException("type or dateTime  should not be null"); 
+    	} 
+    	List<ProductSpecCharacteristic>  characteristic=new ArrayList<ProductSpecCharacteristic>();;
+
     	if(prodSpecCharRelationship!=null){
-    		characteristic=new ArrayList<ProductSpecCharacteristic>();
+    		
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
+    			
         		if(type.equals(productSpecCharRelationship.getCharRelationshipType()) && productSpecCharRelationship.getValidFor().isInPeriod(time)){
+        		
         			characteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
+        		
         		}
     		}
-    		if(characteristic.size()==0){
-    			logger.info("当前特征在指定时间点内没有指定关系的特征");
-    			return null;
-    		}
-    		return characteristic;
-    	}else{
-    		logger.info("当前特征没有相关联的特征");
-    	}
-    	return null;
+    	} 
+    	return characteristic;
     }
 
     /**
@@ -541,15 +533,22 @@ public class ProductSpecCharacteristic {
      */
 
     public void specifyCardinality(int minCardinality, int maxCardinality) {
+    	
+    	if ( maxCardinality < minCardinality ){
+    		
+    		throw new IllegalArgumentException("maxCardinality is less than minCardinality"); 
+    	
+    	}
+    	
         this.setMinCardinality(minCardinality);
         this.setMaxCardinality(maxCardinality);
     }
 
-    public List<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
+    public Set<ProductSpecCharacteristicValue> getProductSpecCharacteristicValue() {
         return productSpecCharacteristicValue;
     }
 
-    public void setProductSpecCharacteristicValue(List<ProductSpecCharacteristicValue> productSpecCharacteristicValue) {
+    public void setProductSpecCharacteristicValue(Set<ProductSpecCharacteristicValue> productSpecCharacteristicValue) {
         this.productSpecCharacteristicValue = productSpecCharacteristicValue;
     }
 
@@ -570,24 +569,20 @@ public class ProductSpecCharacteristic {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((ID == null) ? 0 : ID.hashCode());
-        result = prime * result + maxCardinality;
-        result = prime * result + minCardinality;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((unique == null) ? 0 : unique.hashCode());
-        result = prime * result + ((validFor == null) ? 0 : validFor.hashCode());
-        result = prime * result + ((valueType == null) ? 0 : valueType.hashCode());
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+    	
+        if (this == obj) return true;
+        
+        if (null == obj) return false;
+        
+        if (getClass() != obj.getClass()) return false;
+        
         ProductSpecCharacteristic other = (ProductSpecCharacteristic) obj;
+        
         if (ID == null) {
             if (other.ID != null)
                 return false;
@@ -596,5 +591,37 @@ public class ProductSpecCharacteristic {
 
         return true;
     }
-
+    
+    public String basicInfoToString(){
+    	StringBuffer sb=new StringBuffer("\n[");
+    	sb.append("ID:").append(ID).append(",name:").append(name).append(",valueType").append(valueType);
+    	sb.append(",unique").append(unique).append(",extensible").append(this.extensible).append(",minCardinality").append(minCardinality).append(",maxCardinality").append(minCardinality);
+    	sb.append(",extensible").append(extensible).append(",derivationFormula").append(derivationFormula);
+    	sb.append(" ]\n");
+    	if(this.prodSpecCharRelationship!=null){
+    		sb.append("prodSpecCharRelationship:");
+    		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
+    			productSpecCharRelationship.toString();
+			}
+    	}
+    	if(this.productSpecCharacteristicValue!=null){
+    		sb.append("productSpecCharacteristicValues:");
+    		for (ProductSpecCharacteristicValue prodSpecCharValue : productSpecCharacteristicValue) {
+    			prodSpecCharValue.toString();
+			}
+    	}
+		return sb.toString();
+    	
+    }
+    public String allInfoToString(){
+    	
+    	StringBuffer sb=new StringBuffer("\n[");
+    	sb.append("ID:").append(ID).append(",name:").append(name).append(",valueType").append(valueType);
+    	sb.append(",unique").append(unique).append(",extensible").append(this.extensible).append(",minCardinality").append(minCardinality).append(",maxCardinality").append(minCardinality);
+    	sb.append(",extensible").append(extensible).append(",derivationFormula").append(derivationFormula);
+    	sb.append(" ]\n");
+		return sb.toString();
+    	
+    }
+    
 }
