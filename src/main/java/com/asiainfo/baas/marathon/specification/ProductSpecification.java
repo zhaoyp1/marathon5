@@ -35,7 +35,7 @@ public abstract class ProductSpecification {
     private List<ProductSpecificationVersion> productSpecificationVersion;
     private List<CompositeProductSpecification> compositeProdSpec;
     private List<ProductSpecificationRelationship> prodSpecRelationship;
-    private Set<ProductSpecCharUse> prodSpecCharUse113;
+    private Set<ProductSpecCharUse> prodSpecCharUse;
     private List<ProductSpecificationType> prodSpecType;
     /**
      * The name of the product specification.
