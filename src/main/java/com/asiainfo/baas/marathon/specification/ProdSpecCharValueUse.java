@@ -64,16 +64,16 @@ public class ProdSpecCharValueUse {
      * @param validFor
      */
     public ProdSpecCharValueUse(ProductSpecCharacteristicValue prodSpecCharVal, boolean isDefault, TimePeriod validFor) {
-    	this.isEmpty(this.prodSpecCharValue);
+    	this.paramIsEmpty(prodSpecCharVal);
         this.prodSpecCharValue = prodSpecCharVal;
         this.isDefault = isDefault;
         this.validFor = validFor;
     }
     
-    private void isEmpty(Object obj){
+    private void paramIsEmpty(Object obj){
     	if(null == obj ){
-    		logger.error(obj);
-    		throw new UnsupportedOperationException();
+    		logger.error(obj.getClass()+" is null");
+    		throw new IllegalArgumentException();
     	}
     }
     /*

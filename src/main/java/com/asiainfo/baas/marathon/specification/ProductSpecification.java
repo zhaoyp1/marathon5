@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
@@ -435,7 +436,7 @@ public abstract class ProductSpecification {
      */
     public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean isPackage,
             TimePeriod validFor, String name) {
-        this.isEmpty(characteristic);
+        this.paramIsEmpty(characteristic);
         ProductSpecCharUse charUse = new ProductSpecCharUse(characteristic, canBeOveridden, isPackage, validFor, name);
         if (null == this.prodSpecCharUse) {
             this.prodSpecCharUse = new HashSet<ProductSpecCharUse>();
@@ -480,7 +481,7 @@ public abstract class ProductSpecification {
     public void addCharacteristic(ProductSpecCharacteristic characteristic, boolean canBeOveridden, boolean isPackage,
             TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality,
             boolean extensible, String description) {
-        this.isEmpty(characteristic);
+        this.paramIsEmpty(characteristic);
         ProductSpecCharUse charUse = new ProductSpecCharUse(characteristic, canBeOveridden, isPackage, validFor, name,
                 unique, minCardinality, maxCardinality, extensible, description);
         if (null == this.prodSpecCharUse) {
@@ -555,13 +556,17 @@ public abstract class ProductSpecification {
      */
     public boolean attachCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
-    	this.isEmpty(characteristic);
-        this.isEmpty(charValue);
+    	this.paramIsEmpty(characteristic);
+        this.paramIsEmpty(charValue);
         boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-            this.isEmpty(charUse);
-            flag = charUse.addValue(charValue, isDefault, validFor);
+            this.charIsUsed(charUse);
+            if(characteristic.getProductSpecCharacteristicValue().contains(charValue)){
+            	flag = charUse.addValue(charValue, isDefault, validFor);
+            }else{
+            	logger.warn("Paramter characteristicValue is not belong to this characteristic ");
+            }
         } 
         return flag;
     }
@@ -584,36 +589,40 @@ public abstract class ProductSpecification {
      */
     public boolean specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-    	this.isEmpty(characteristic);
-        this.isEmpty(defaultValue);
+    	this.paramIsEmpty(characteristic);
+        this.paramIsEmpty(defaultValue);
         boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-            this.isEmpty(charUse);
-            flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
+            this.charIsUsed(charUse);
+            if(characteristic.getProductSpecCharacteristicValue().contains(defaultValue)){
+            	flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
+            }else{
+            	logger.warn("Paramter characteristicValue is not belong to this characteristic ");
+            }
         } 
         return flag;
     }
 
     public boolean clearDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-       this.isEmpty(characteristic);
-       this.isEmpty(defaultValue);
+       this.paramIsEmpty(characteristic);
+       this.paramIsEmpty(defaultValue);
        boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-            this.isEmpty(charUse);
+            this.charIsUsed(charUse);
             flag = charUse.clearDefaultValueUse(defaultValue);
         } 
         return flag;
     }
     
     public List<ProdSpecCharValueUse> retrieveDefaultCharacteristicValue(ProductSpecCharacteristic characteristic) {
-        this.isEmpty(characteristic);
+        this.paramIsEmpty(characteristic);
         List<ProdSpecCharValueUse> defaultValues = new ArrayList<ProdSpecCharValueUse>();
         if (null != this.prodSpecCharUse) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-            this.isEmpty(charUse);
+            this.charIsUsed(charUse);
             defaultValues = charUse.retrieveDefaultCharacteristicValueUse();
         } 
         return defaultValues;
@@ -640,9 +649,9 @@ public abstract class ProductSpecification {
      */
     public List<ProdSpecCharValueUse> retrieveCharacteristicValue(ProductSpecCharacteristic characteristic, Date time) {
         List<ProdSpecCharValueUse> charValueUseList = new ArrayList<ProdSpecCharValueUse>();
-        this.isEmpty(characteristic);
+        this.paramIsEmpty(characteristic);
         ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-        this.isEmpty(charUse);
+        this.charIsUsed(charUse);
         Set<ProdSpecCharValueUse> valueUseAllList = new HashSet<ProdSpecCharValueUse>();
         valueUseAllList = charUse.getProdSpecCharValueUse();
         if (null != valueUseAllList) {
@@ -680,8 +689,7 @@ public abstract class ProductSpecification {
                 }
             }
             
-        } else 
-            logger.error(prodSpecCharUse);
+        }
         return charUseList;
     }
 
@@ -693,7 +701,7 @@ public abstract class ProductSpecification {
 
     public List<ProductSpecCharUse> retrieveLeafCharacteristic(ProductSpecCharacteristic characteristic, Date time) {
         List<ProductSpecCharUse> charUses = new ArrayList<ProductSpecCharUse>();
-        this.isEmpty(characteristic);
+        this.paramIsEmpty(characteristic);
         List<ProductSpecCharacteristic> prodSpecChar = characteristic.retrieveRelatedCharacteristic(
                 RelationshipType.AGGREGATION.getValue(), time);
         if (null != prodSpecChar) {
@@ -713,18 +721,29 @@ public abstract class ProductSpecification {
      * @param maxCardinality
      */
     public boolean specifyCardinality(ProductSpecCharacteristic characteristic, int minCardinality, int maxCardinality) {
-        this.isEmpty(characteristic);
+        this.paramIsEmpty(characteristic);
         ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-        this.isEmpty(charUse);
-        charUse.setCardinality(minCardinality, maxCardinality);
-        return true;
+        if(null != charUse){
+        	charUse.setCardinality(minCardinality, maxCardinality);
+        	return true;
+        }else{
+        	logger.warn("Paramter characteristic is not used");
+        	return false;
+        }
     }
 
-    private void isEmpty(Object obj){
+    private void paramIsEmpty(Object obj){
     	if(null == obj ){
-    		logger.error(obj);
-    		throw new UnsupportedOperationException();
+    		logger.error(obj.getClass()+" is null");
+    		throw new IllegalArgumentException();
     	}
+    }
+    
+    private void charIsUsed(ProductSpecCharUse charUse){
+    	if(null == charUse){
+        	logger.error("Paramter characteristic is not used ");
+        	throw new IllegalArgumentException();
+        }
     }
     /*
      * (non-Javadoc)
