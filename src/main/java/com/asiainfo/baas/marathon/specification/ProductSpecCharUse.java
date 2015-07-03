@@ -311,7 +311,7 @@ public class ProductSpecCharUse {
     
     private void paramIsEmpty(Object obj){
     	if(null == obj ){
-    		logger.error(obj.getClass()+" is null");
+    		logger.error("The parameter is null");
     		throw new IllegalArgumentException();
     	}
     }

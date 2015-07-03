@@ -564,7 +564,7 @@ public abstract class ProductSpecification {
             if(characteristic.getProductSpecCharacteristicValue().contains(charValue)){
             	flag = charUse.addValue(charValue, isDefault, validFor);
             }else{
-            	logger.warn("Paramter characteristicValue is not belong to this characteristic ");
+            	logger.warn("Parameter characteristicValue is not belong to this characteristic ");
             }
         } 
         return flag;
@@ -597,7 +597,7 @@ public abstract class ProductSpecification {
             if(characteristic.getProductSpecCharacteristicValue().contains(defaultValue)){
             	flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
             }else{
-            	logger.warn("Paramter characteristicValue is not belong to this characteristic ");
+            	logger.warn("Parameter characteristicValue is not belong to this characteristic ");
             }
         } 
         return flag;
@@ -726,21 +726,21 @@ public abstract class ProductSpecification {
         	charUse.setCardinality(minCardinality, maxCardinality);
         	return true;
         }else{
-        	logger.warn("Paramter characteristic is not used");
+        	logger.warn("Parameter characteristic is not used");
         	return false;
         }
     }
 
     private void paramIsEmpty(Object obj){
     	if(null == obj ){
-    		logger.error(obj.getClass()+" is null");
+    		logger.error("The parameter is null");
     		throw new IllegalArgumentException();
     	}
     }
     
     private void charIsUsed(ProductSpecCharUse charUse){
     	if(null == charUse){
-        	logger.error("Paramter characteristic is not used ");
+        	logger.error("Parameter characteristic is not used ");
         	throw new IllegalArgumentException();
         }
     }
