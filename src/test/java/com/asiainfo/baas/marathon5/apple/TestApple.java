@@ -71,7 +71,7 @@ public class TestApple {
 	        TimePeriod validFor1 = new TimePeriod("2015-01-01 00:00:00", "2015-07-01 00:00:00");
             catalog.publishOffering(bundledOffering, validFor1);
 	       
-	        //
+	        // 
 	        ProductOffering[] productOfferings = catalog.getProductOffering(OfferingStatus.ACTIVE.getValue());
 
 	        CommonUtils.printPropertyToJson(null, null, catalog);
