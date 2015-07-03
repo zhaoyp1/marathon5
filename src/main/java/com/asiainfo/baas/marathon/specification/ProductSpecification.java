@@ -110,7 +110,7 @@ public abstract class ProductSpecification {
     public void setProdSpecCharUse(Set<ProductSpecCharUse> prodSpecCharUse) {
         this.prodSpecCharUse = prodSpecCharUse;
     }
-  
+
     public List<ProductSpecificationType> getProdSpecType() {
         return this.prodSpecType;
     }
@@ -555,18 +555,19 @@ public abstract class ProductSpecification {
      */
     public boolean attachCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
-    	this.paramIsEmpty(characteristic);
+        this.paramIsEmpty(characteristic);
         this.paramIsEmpty(charValue);
         boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
             this.charIsUsed(charUse);
-            if(characteristic.getProductSpecCharacteristicValue().contains(charValue)){
-            	flag = charUse.addValue(charValue, isDefault, validFor);
-            }else{
-            	logger.warn("Parameter characteristicValue is not belong to this characteristic ");
+            if (null != characteristic.getProductSpecCharacteristicValue()
+                    && characteristic.getProductSpecCharacteristicValue().contains(charValue)) {
+                flag = charUse.addValue(charValue, isDefault, validFor);
+            } else {
+                logger.warn("Parameter characteristicValue is not belong to this characteristic ");
             }
-        } 
+        }
         return flag;
     }
 
@@ -588,26 +589,26 @@ public abstract class ProductSpecification {
      */
     public boolean specifyDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-    	this.paramIsEmpty(characteristic);
+        this.paramIsEmpty(characteristic);
         this.paramIsEmpty(defaultValue);
         boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
             this.charIsUsed(charUse);
-            if(characteristic.getProductSpecCharacteristicValue().contains(defaultValue)){
-            	flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
-            }else{
-            	logger.warn("Parameter characteristicValue is not belong to this characteristic ");
+            if (characteristic.getProductSpecCharacteristicValue().contains(defaultValue)) {
+                flag = charUse.specifyDefaultCharacteristicValueUse(defaultValue);
+            } else {
+                logger.warn("Parameter characteristicValue is not belong to this characteristic ");
             }
-        } 
+        }
         return flag;
     }
 
     public boolean clearDefaultCharacteristicValue(ProductSpecCharacteristic characteristic,
             ProductSpecCharacteristicValue defaultValue) {
-       this.paramIsEmpty(characteristic);
-       this.paramIsEmpty(defaultValue);
-       boolean flag = false;
+        this.paramIsEmpty(characteristic);
+        this.paramIsEmpty(defaultValue);
+        boolean flag = false;
         if (this.prodSpecCharUse != null) {
             ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
             this.charIsUsed(charUse);
@@ -722,28 +723,29 @@ public abstract class ProductSpecification {
     public boolean specifyCardinality(ProductSpecCharacteristic characteristic, int minCardinality, int maxCardinality) {
         this.paramIsEmpty(characteristic);
         ProductSpecCharUse charUse = this.retrieveProdSpecCharUse(characteristic);
-        if(null != charUse){
-        	charUse.setCardinality(minCardinality, maxCardinality);
-        	return true;
-        }else{
-        	logger.warn("Parameter characteristic is not used");
-        	return false;
+        if (null != charUse) {
+            charUse.setCardinality(minCardinality, maxCardinality);
+            return true;
+        } else {
+            logger.warn("Parameter characteristic is not used");
+            return false;
         }
     }
 
-    private void paramIsEmpty(Object obj){
-    	if(null == obj ){
-    		logger.error("The parameter is null");
-    		throw new IllegalArgumentException();
-    	}
-    }
-    
-    private void charIsUsed(ProductSpecCharUse charUse){
-    	if(null == charUse){
-        	logger.error("Parameter characteristic is not used ");
-        	throw new IllegalArgumentException();
+    private void paramIsEmpty(Object obj) {
+        if (null == obj) {
+            logger.error("The parameter is null");
+            throw new IllegalArgumentException();
         }
     }
+
+    private void charIsUsed(ProductSpecCharUse charUse) {
+        if (null == charUse) {
+            logger.error("Parameter characteristic is not used ");
+            throw new IllegalArgumentException();
+        }
+    }
+
     /*
      * (non-Javadoc)
      * 
