@@ -25,7 +25,7 @@ public class ProductSpecificationRelationshipTest {
     private ProductSpecification srcProdSpec = null;
 
     @Before
-    public void initSrcProdSpec() {
+    public void initSrcProdSpec1() {
         srcProdSpec = new AtomicProductSpecification("S001", "iPhone6", "Apple iPhone",
                 ProductSpecificationStatus.PLANNED.getValue());
     }
