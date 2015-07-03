@@ -110,7 +110,7 @@ public abstract class ProductSpecification {
     public void setProdSpecCharUse(Set<ProductSpecCharUse> prodSpecCharUse) {
         this.prodSpecCharUse = prodSpecCharUse;
     }
- 
+  
     public List<ProductSpecificationType> getProdSpecType() {
         return this.prodSpecType;
     }
