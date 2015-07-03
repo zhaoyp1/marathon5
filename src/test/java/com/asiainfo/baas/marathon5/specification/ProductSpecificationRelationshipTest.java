@@ -1,6 +1,7 @@
 package com.asiainfo.baas.marathon5.specification;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.internal.runners.statements.Fail;
 
 import com.asiainfo.baas.common.ProductSpecificationStatus;
 import com.asiainfo.baas.common.RelationshipType;
@@ -56,7 +58,12 @@ public class ProductSpecificationRelationshipTest {
         // 再次添加一条同样数据
         ProductSpecification targetProdSpec2 = new AtomicProductSpecification("T001", "AppleCare For iPhone2",
                 "AppleCare", ProductSpecificationStatus.PLANNED.getValue());
-        this.srcProdSpec.addRelatedProdSpec(targetProdSpec2, type, validFor);
+        try {
+            this.srcProdSpec.addRelatedProdSpec(targetProdSpec2, type, validFor);
+            fail("expected IllegalArgumentException for srcProdSpec");
+        } catch (Exception e) {
+
+        }
         assertEquals(1, this.srcProdSpec.getProdSpecRelationship().size());
         assertEquals(expectedRelatedSpecList, srcProdSpec.getProdSpecRelationship());
         logger.info("添加后src内的relationship：");
@@ -96,9 +103,14 @@ public class ProductSpecificationRelationshipTest {
         expectedRelatedSpecList.add(expectedRelatedSpec4);
         assertEquals(expectedRelatedSpecList, srcProdSpec.getProdSpecRelationship());
 
-        // *********** Case4（添加同样数据，不同关联类型） start**************
+        // *********** Case5（添加srcSpec） start**************
         // 再次添加一条不同数据,相同类型
-        this.srcProdSpec.addRelatedProdSpec(this.srcProdSpec, type4, validFor);
+        try {
+            this.srcProdSpec.addRelatedProdSpec(this.srcProdSpec, type4, validFor);
+            fail("expected IllegalArgumentException for srcProdSpec");
+        } catch (IllegalArgumentException e) {
+        }
+
         assertEquals(3, this.srcProdSpec.getProdSpecRelationship().size());
         // 构造期待数据
         assertEquals(expectedRelatedSpecList, srcProdSpec.getProdSpecRelationship());
@@ -137,8 +149,11 @@ public class ProductSpecificationRelationshipTest {
         // *********** Case2 end**************
 
         // *********** Case3（传入类型为null） start**************
-        List<ProductSpecification> productSpecificationList3 = this.srcProdSpec.retrieveRelatedProdSpec(null);
-        assertEquals(0, productSpecificationList3.size());
+        try {
+            List<ProductSpecification> productSpecificationList3 = this.srcProdSpec.retrieveRelatedProdSpec(null);
+            fail("Case 3 ： type为null时未通过。");
+        } catch (IllegalArgumentException e) {
+        }
         // *********** Case3 end**************
 
         // *********** Case4（没有关系数据，查询某类型的spec） start**************
