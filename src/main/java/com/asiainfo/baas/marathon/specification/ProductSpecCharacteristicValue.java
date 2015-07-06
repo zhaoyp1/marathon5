@@ -2,11 +2,11 @@ package com.asiainfo.baas.marathon.specification;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
@@ -145,10 +145,13 @@ public class ProductSpecCharacteristicValue {
             TimePeriod validFor, String value) {
     	
         
-    	if(valueType==null)throw new IllegalArgumentException("valueType should not be null");
+    	if ( StringUtils.isEmpty(valueType) ) {
+    		logger.error("valueType should not be null");
+    		throw new IllegalArgumentException("valueType should not be null");
+    	}
     	
     	if(StringUtils.isEmpty(value)){
-    		
+    		logger.error("value should not be null");
     		throw new IllegalArgumentException("value should not be null");
     	}
     	
@@ -172,16 +175,21 @@ public class ProductSpecCharacteristicValue {
     public ProductSpecCharacteristicValue(String valueType, boolean isDefault, String unitOfMeasure,
             TimePeriod validFor, String valueFrom, String valueTo, String rangeInterval) {
     	
-    	if(validFor==null)throw new IllegalArgumentException("validFor should not be null");
-    	
-        if(valueType==null)throw new IllegalArgumentException("valueType should not be null");
+    	if(null == validFor){
+    		logger.error("validFor should not be null");
+    		throw new IllegalArgumentException("validFor should not be null");
+    	}
+        if(StringUtils.isEmpty(valueType)){
+        	logger.error("valueType should not be null");
+        	throw new IllegalArgumentException("valueType should not be null");
+        }
         
         if (StringUtils.isEmpty(valueFrom) && StringUtils.isEmpty(valueTo)) {
-        	
+        	logger.error("valueFrom and valueTo should not be null at the same time.");
         	throw new IllegalArgumentException("valueFrom and valueTo should not be null at the same time.");
         	
         }else if(StringUtils.isEmpty(valueFrom)){
-        	
+        	logger.error("valueFrom should not be null .");
         	throw new IllegalArgumentException("valueFrom should not be null .");
         
         }else if(StringUtils.isEmpty(valueTo)){
@@ -206,7 +214,7 @@ public class ProductSpecCharacteristicValue {
     public void specifyValue(String unitOfMeasure, String value) {
     	
     	if (StringUtils.isEmpty(value)) {
-    		
+    		logger.info("value should not be null");
     		throw new IllegalArgumentException("value should not be null");
     	
     	}
@@ -225,11 +233,11 @@ public class ProductSpecCharacteristicValue {
     public void specifyValue(String unitOfMeasure, String valueFrom, String valueTo, String rangeInterval) {
     	 
     	if (StringUtils.isEmpty(valueFrom) && StringUtils.isEmpty(valueTo)) {
-         	
+         	logger.error("valueFrom and valueTo should not be null at the same time.");
          	throw new IllegalArgumentException("valueFrom and valueTo should not be null at the same time.");
          	
          }else if(StringUtils.isEmpty(valueFrom)){
-         	
+        	 logger.error("valueFrom should not be null .");
          	throw new IllegalArgumentException("valueFrom should not be null .");
          
          }else if(StringUtils.isEmpty(valueTo)){
@@ -252,13 +260,13 @@ public class ProductSpecCharacteristicValue {
     public boolean addRelatedCharValue(ProductSpecCharacteristicValue charValue, String relationType, TimePeriod validFor) {
         
         if (null == charValue || null == relationType ) {
-        	
+        	logger.error("charValue or relationType should not be null .");
         	throw new IllegalArgumentException("charValue or relationType should not be null .");
         }
         
         if(this.equals(charValue)){
-        	logger.warn("the value of SourceChar is"+this.toString());
-        	logger.warn("this value of TargetChar is"+charValue.toString());
+        	logger.warn("the value of SourceChar is"+this.basicInfoToString());
+        	logger.warn("this value of TargetChar is"+charValue.basicInfoToString());
         	return false;
         }
         
@@ -287,7 +295,7 @@ public class ProductSpecCharacteristicValue {
     private ProdSpecCharValueRelationship retrieveRelatedCharacteristicValue(ProductSpecCharacteristicValue charValue ){
     	
     	if (null == charValue) {
-        	
+        	logger.error("charValue or relationType should not be null .");
         	throw new IllegalArgumentException("charValue or relationType should not be null .");
         }
     	
@@ -326,9 +334,13 @@ public class ProductSpecCharacteristicValue {
     
     public boolean updateRelatedCharValueValidPeriod(ProductSpecCharacteristicValue charValue,TimePeriod validFor){
     	
-    	if(null == charValue || null == validFor){
-        	
-    		throw new IllegalArgumentException("charValue  or validFor should not be null .");
+    	if(null == charValue){
+        	logger.error("charValue   should not be null .");
+    		throw new IllegalArgumentException("charValue   should not be null .");
+    	}
+    	if ( null == validFor ) {
+    		logger.error(" validFor should not be null .");
+    		throw new IllegalArgumentException(" validFor should not be null .");
     	}
     	
     	initProdSpecCharValueRelationShip();
@@ -343,7 +355,6 @@ public class ProductSpecCharacteristicValue {
     		
     		}
 		}
-    	
     	return false;
     }
 
@@ -354,15 +365,20 @@ public class ProductSpecCharacteristicValue {
      */
     public List<ProductSpecCharacteristicValue> reteriveRelatedCharValue(String type, Date time) {
     	
-    	if(StringUtils.isEmpty(type) || null == time ){
+    	if(StringUtils.isEmpty(type)){
     		
-    		throw new IllegalArgumentException("relationType  or DateTime should not be null .");
+    		throw new IllegalArgumentException(" relationType  should not be null .");
     	
+    	}
+    	if( null == time ){
+    		
+    		throw new IllegalArgumentException(" DateTime should not be null .");
+
     	}
     	
         List<ProductSpecCharacteristicValue> prodSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
         
-        if (this.prodSpecCharValueRelationship != null && prodSpecCharValueRelationship.size() > 0) {
+        if ( null != prodSpecCharValueRelationship  && prodSpecCharValueRelationship.size() > 0) {
         	
             prodSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
             
@@ -458,7 +474,31 @@ public class ProductSpecCharacteristicValue {
      */
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    	
+    	Map<String,Object> charValue=getBasicInfoToMap();
+    	charValue.put("charValueRelationShip", this.prodSpecCharValueRelationship);
+    	return charValue.toString();
+    }
+    
+    public String basicInfoToString() {
+    	 
+    	return getBasicInfoToMap().toString();
+    }
+    
+    private Map<String,Object> getBasicInfoToMap(){
+    	Map<String,Object> charValue=new HashMap<String,Object>();
+    	charValue.put("valueType", this.valueType);
+    	charValue.put("valueType", this.unitOfMeasure);
+    	if(this.value!=null){
+    		charValue.put("value", this.value);
+    	}else{
+    		charValue.put("valueFrom", this.valueFrom);
+    		charValue.put("valueTo", this.valueTo);
+    		charValue.put("rangeInterval", this.rangeInterval);
+    	}
+    	charValue.put("isDefault", this.isDefault);
+    	charValue.put("validFor", this.validFor);
+    	return charValue;
     }
 
 }

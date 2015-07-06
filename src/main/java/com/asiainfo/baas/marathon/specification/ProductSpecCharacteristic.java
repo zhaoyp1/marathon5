@@ -2,17 +2,18 @@ package com.asiainfo.baas.marathon.specification;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 
-import com.asiainfo.baas.common.RelationshipType;
 import com.asiainfo.baas.common.ReflectionToStringBuilderBaas;
+import com.asiainfo.baas.common.RelationshipType;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 
 /**
@@ -190,13 +191,15 @@ public class ProductSpecCharacteristic {
             int minCardinality, int maxCardinality) {
     	
     	if ( StringUtils.isEmpty( id ) ) {
+    		logger.error("id should not be null");
     		throw new IllegalArgumentException("id should not be null");
     	}
     	if ( StringUtils.isEmpty(valueType) ) {
+    		logger.error("valueType should not be null");
     		throw new IllegalArgumentException("valueType should not be null");
     	}
     	if ( StringUtils.isEmpty(name)){
-    		
+    		logger.error("name should not be null");
     		throw new IllegalArgumentException("name should not be null");
     	}
         this.ID = id;
@@ -225,14 +228,15 @@ public class ProductSpecCharacteristic {
             int minCardinality, int maxCardinality, boolean extensible, String description, String derivationFormula) {
     	
     	if (StringUtils.isEmpty(id) ){
-    		
+    		logger.error("id should not be null");
     		throw new IllegalArgumentException("id should not be null");
     	}
     	if ( StringUtils.isEmpty(name)){
-    		
+    		logger.error("name should not be null");
     		throw new IllegalArgumentException("name should not be null");
     	}
     	if ( StringUtils.isEmpty(valueType) ) {
+    		logger.error("valueType should not be null");
     		throw new IllegalArgumentException("valueType should not be null");
     	}
     	
@@ -255,31 +259,24 @@ public class ProductSpecCharacteristic {
     public boolean addValue(ProductSpecCharacteristicValue value) {
 
         if (null == value) {
-        	
+        	logger.error("value should not be null");
             throw new IllegalArgumentException("value should not be null");
         }
-        
         initContainValues();
-        
         if (value.getValueType() != null && !this.getValueType().equals(value.getValueType())) {
-          
-        	throw new IllegalArgumentException("The value type of feature and feature value is different.");
+        	logger.error("The value type of Character and CharacterValue value is different.");
+        	throw new IllegalArgumentException("The value type of Character and CharacterValue value is different.");
         }
-        
+      
         productSpecCharacteristicValue.add(value);
-        
         return true;
 
     }
     
     private void initContainValues(){
-    	
     	if (this.productSpecCharacteristicValue == null) {
-    		
             this.productSpecCharacteristicValue = new HashSet<ProductSpecCharacteristicValue>();
-        
     	}
-    	
     }
 
     /**
@@ -287,7 +284,7 @@ public class ProductSpecCharacteristic {
      * @param value
      */
     public void removeValue(ProductSpecCharacteristicValue value) {
-
+    	//TODO
     }
 
     /**
@@ -295,25 +292,19 @@ public class ProductSpecCharacteristic {
      * @param time
      */
     public List<ProductSpecCharacteristicValue> retrieveValue(Date time) {
-       
+    	
     	List<ProductSpecCharacteristicValue> productSpecCharValues = new ArrayList<ProductSpecCharacteristicValue>();
         if (null == time) {
-        	
+        	logger.error("DateTime should not be null.");
         	throw new IllegalArgumentException("DateTime should not be null.");
-        	
         } 
-        if (this.productSpecCharacteristicValue != null) {
-        	
+        if ( null != this.productSpecCharacteristicValue ) {
              for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-            	 
-                if (charValue.getValidFor() != null && charValue.getValidFor().isInPeriod(time)) {
-                	
+                if (null != charValue.getValidFor() && charValue.getValidFor().isInPeriod(time)) {
                         productSpecCharValues.add(charValue);
                 }
-                
              }
          }
-         
 
         return productSpecCharValues;
     }
@@ -326,14 +317,12 @@ public class ProductSpecCharacteristic {
     public boolean specifyDefaultValue(ProductSpecCharacteristicValue charVal) {
     	
     	if (null == charVal ) {
-    		
+    		logger.error("charVal should not be null.");
     		throw new IllegalArgumentException("charVal should not be null.");
     	}
-    	
     	if(null == this.productSpecCharacteristicValue || !productSpecCharacteristicValue.contains(charVal)){
     		 return false;
     	}
-    	
     	for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
     		if(charValue.equals(charVal)){
     			if(charVal.isIsDefault()){
@@ -354,7 +343,6 @@ public class ProductSpecCharacteristic {
     	
     	if ( null != this.productSpecCharacteristicValue) {
     		for (ProductSpecCharacteristicValue charValue : productSpecCharacteristicValue) {
-    			
     			if(charValue.isIsDefault()){
     				defaultSpecCharValue.add(charValue);
     			}
@@ -366,7 +354,7 @@ public class ProductSpecCharacteristic {
     public boolean clearDefaultValue(ProductSpecCharacteristicValue value){
     	
     	if (null == value ) {
-    		
+    		logger.error("charVal should not be null.");
     		throw new IllegalArgumentException("charVal should not be null.");
     	}
     	
@@ -418,16 +406,20 @@ public class ProductSpecCharacteristic {
     public boolean  addRelatedCharacteristic(ProductSpecCharacteristic characteristic, String type, int charSpecSeq,
             TimePeriod validFor) {
            	 
-	   	if ( null == characteristic || null == type ) {
-	   		
-	   		throw new IllegalArgumentException("characteristic or type should not be null"); 
+	   	if ( null == characteristic ) {
+	   		logger.error("characteristic  should not be null");
+	   		throw new IllegalArgumentException("characteristic  should not be null"); 
+	   	}
+	   	if( null == type){
+	   		logger.error("type should not be null");
+	   		throw new IllegalArgumentException("type should not be null"); 
 	   	}
 	   	
 	   	if(this.equals(characteristic)){
 	   		
-	   		logger.warn("the  SourceChar is"+this.toString());
+	   		logger.warn("the  SourceChar is"+this.basicInfoToString());
         	
-	   		logger.warn("this TargetChar is"+characteristic.toString());
+	   		logger.warn("this TargetChar is"+characteristic.basicInfoToString());
         	
         	return false;	   	
         }
@@ -453,6 +445,28 @@ public class ProductSpecCharacteristic {
        
        return true;
     }
+    
+    public boolean updateRelatedCharValidPeriod(ProductSpecCharacteristic prodSpecChar,TimePeriod validFor){
+    	
+    	if (null == prodSpecChar ) {
+    		logger.error("prodSpecChar should not be null .");
+    		throw new IllegalArgumentException("prodSpecChar should not be null .");
+    	}
+    	if (null == validFor ){
+    		logger.error("validFor should not be null .");
+    		throw new IllegalArgumentException("validFor should not be null .");
+    	}
+    	
+    	if ( null!=prodSpecCharRelationship ) {
+	    	for (ProductSpecCharRelationship productSpecRelationship : prodSpecCharRelationship) {
+	    		if ( productSpecRelationship.getTargetProdSpecChar().equals(prodSpecChar)) {
+	    			productSpecRelationship.setValidFor(validFor);
+	    			return true;
+	    		}
+			}
+    	}
+    	return false;
+    }
 
     /**
      * 
@@ -468,14 +482,13 @@ public class ProductSpecCharacteristic {
     public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type) {
     	
     	if(StringUtils.isEmpty(type)){
-    		
+    		logger.error("type should not be null.");
     		throw new IllegalArgumentException("type should not be null.");
     		
     	}
     	List<ProductSpecCharacteristic>  characteristic=new ArrayList<ProductSpecCharacteristic>();
     	
-    	if(prodSpecCharRelationship!=null){
-    		
+    	if ( null != prodSpecCharRelationship ) {
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
         		if(type.equals(productSpecCharRelationship.getCharRelationshipType())){
         			characteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
@@ -489,37 +502,35 @@ public class ProductSpecCharacteristic {
     private ProductSpecCharRelationship retrieveRelatedCharacteristic(ProductSpecCharacteristic characteristic ){
     	
     	if ( null == characteristic ) {
-	   		
+    		logger.error("characteristic  should not be null");
 	   		throw new IllegalArgumentException("characteristic  should not be null"); 
 	   	}
-    	if(prodSpecCharRelationship!=null){
-    		
+    	if (null !=prodSpecCharRelationship) {
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-        		
     			if( productSpecCharRelationship.getTargetProdSpecChar().equals(characteristic)){
         			return productSpecCharRelationship;
         		}
     		}
-    		
     	}
     	return null;
     }
     
     public List<ProductSpecCharacteristic> retrieveRelatedCharacteristic(String type,Date time) {
     	
-    	if(StringUtils.isEmpty(type) || time==null ){
+    	if (StringUtils.isEmpty(type) ) {
+    		logger.error("type   should not be null");
     		throw new IllegalArgumentException("type or dateTime  should not be null"); 
     	} 
+    	if ( null == time) {
+    		logger.error(" dateTime  should not be null");
+    		throw new IllegalArgumentException(" dateTime  should not be null");
+    	}
     	List<ProductSpecCharacteristic>  characteristic=new ArrayList<ProductSpecCharacteristic>();;
 
-    	if(prodSpecCharRelationship!=null){
-    		
+    	if (null !=prodSpecCharRelationship ) {
     		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-    			
         		if(type.equals(productSpecCharRelationship.getCharRelationshipType()) && productSpecCharRelationship.getValidFor().isInPeriod(time)){
-        		
         			characteristic.add(productSpecCharRelationship.getTargetProdSpecChar());
-        		
         		}
     		}
     	} 
@@ -535,9 +546,8 @@ public class ProductSpecCharacteristic {
     public void specifyCardinality(int minCardinality, int maxCardinality) {
     	
     	if ( maxCardinality < minCardinality ){
-    		
+    		logger.error("maxCardinality is less than minCardinality");
     		throw new IllegalArgumentException("maxCardinality is less than minCardinality"); 
-    	
     	}
     	
         this.setMinCardinality(minCardinality);
@@ -559,9 +569,28 @@ public class ProductSpecCharacteristic {
      */
     @Override
     public String toString() {
-        ReflectionToStringBuilderBaas stringBuilder = new ReflectionToStringBuilderBaas(this,
-                ToStringStyle.SHORT_PREFIX_STYLE);
-        return stringBuilder.toString();
+    	Map <String,Object> result=getBasicInfoToMap();
+    	result.put("prodSpecCharValue", productSpecCharacteristicValue);
+    	result.put("charRelationShip", prodSpecCharRelationship);
+    	return result.toString();
+    }
+    
+    public String basicInfoToString(){
+    	return getBasicInfoToMap().toString();
+    }
+    private Map<String,Object> getBasicInfoToMap(){
+    	Map <String,Object> result=new HashMap<String,Object>();
+    	result.put("name",name);
+    	result.put("id", ID);
+    	result.put("unique", unique);
+    	result.put("valueType",valueType);
+    	result.put("extensible",extensible);
+    	result.put("derivationFormula",derivationFormula);
+    	result.put("maxCardinality",maxCardinality);
+    	result.put("minCardinality",minCardinality);
+    	result.put("validFor",validFor);
+    	result.put("description",description);
+    	return result;
     }
 
     @Override
@@ -592,36 +621,6 @@ public class ProductSpecCharacteristic {
         return true;
     }
     
-    public String basicInfoToString(){
-    	StringBuffer sb=new StringBuffer("[");
-    	sb.append("ID:").append(ID).append(",name:").append(name).append(",valueType").append(valueType);
-    	sb.append(",unique").append(unique).append(",extensible").append(this.extensible).append(",minCardinality").append(minCardinality).append(",maxCardinality").append(minCardinality);
-    	sb.append(",extensible").append(extensible).append(",derivationFormula").append(derivationFormula);
-    	sb.append(" ]");
-    	if(this.prodSpecCharRelationship!=null){
-    		sb.append("prodSpecCharRelationship:");
-    		for (ProductSpecCharRelationship productSpecCharRelationship : prodSpecCharRelationship) {
-    			productSpecCharRelationship.toString();
-			}
-    	}
-    	if(this.productSpecCharacteristicValue!=null){
-    		sb.append("productSpecCharacteristicValues:");
-    		for (ProductSpecCharacteristicValue prodSpecCharValue : productSpecCharacteristicValue) {
-    			prodSpecCharValue.toString();
-			}
-    	}
-		return sb.toString();
-    	
-    }
-    public String allInfoToString(){
-    	
-    	StringBuffer sb=new StringBuffer("[");
-    	sb.append("ID:").append(ID).append(",name:").append(name).append(",valueType").append(valueType);
-    	sb.append(",unique").append(unique).append(",extensible").append(this.extensible).append(",minCardinality").append(minCardinality).append(",maxCardinality").append(minCardinality);
-    	sb.append(",extensible").append(extensible).append(",derivationFormula").append(derivationFormula);
-    	sb.append(" ]");
-		return sb.toString();
-    	
-    }
+    
     
 }

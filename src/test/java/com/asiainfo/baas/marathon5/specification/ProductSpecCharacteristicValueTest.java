@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,17 +11,14 @@ import org.junit.Test;
 import com.asiainfo.baas.common.CharacristicValueType;
 import com.asiainfo.baas.common.RelationshipType;
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
-import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristic;
 import com.asiainfo.baas.marathon.specification.ProductSpecCharacteristicValue;
 
 public class ProductSpecCharacteristicValueTest {
 	
 
-	private ProductSpecCharacteristic specChar;
 	private ProductSpecCharacteristicValue memoryCharValue;
 	private ProductSpecCharacteristicValue charValue;
 	private static TimePeriod validFor;
-	private Logger logger=Logger.getLogger(ProductSpecCharacteristicValueTest.class);
 
 	@BeforeClass
 	public static void setUpBeforeClass(){
@@ -31,15 +26,12 @@ public class ProductSpecCharacteristicValueTest {
 	}
 	@Before
 	public void initValue(){
-		specChar = new ProductSpecCharacteristic("1", "摄像头", CharacristicValueType.NUMBER.getValue(),validFor, "unique",1,1);
 		memoryCharValue=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",validFor,"2.7");
 		charValue=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",validFor,"2.9");
 
 	}
 	@Test
 	public void testProductSpecCharacteristicValue(){
-		logger.info("ProductSpecCharacteristicValue构造函数：");
-		logger.info("1.validType为空");
 		try{
 			memoryCharValue=new ProductSpecCharacteristicValue(null,false,"GHz",validFor,"2.7");
 			fail("expected IllegalArgumentException for validType");
@@ -48,61 +40,47 @@ public class ProductSpecCharacteristicValueTest {
 	    }
 		
 		
-		logger.info("2.validFor为空");
 		try{
 			memoryCharValue=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",null,"2.9");
 			fail("expected IllegalArgumentException for validFor"); 
 		} catch (IllegalArgumentException ex) {
 	    	
 	    }
-		logger.info("3.正常情况");
 		memoryCharValue=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",validFor,"2.9");
 		assertNotNull(memoryCharValue);
 		
 	}
 	@Test
 	public void testAddRelatedCharacteristic(){
-		logger.info("ProductSpecCharacteristicValue添加相关联的特征值：");
 		
-		logger.info("1.ProductSpecCharacteristicValue添加相关联的特征值,指定特征值为null");
 		boolean result=memoryCharValue.addRelatedCharValue(null, RelationshipType.EXCLUSIVITY.getValue(), validFor);
-		assertEquals("添加相关联的特征值,指定特征值为null",false, result);
+		assertEquals("add a related charValue,charValue is null",false, result);
 		
-		logger.info("2.ProductSpecCharacteristicValue添加相关联的特征值,指定特征值与当前特征值相同");
 		 result=memoryCharValue.addRelatedCharValue(memoryCharValue, RelationshipType.EXCLUSIVITY.getValue(), validFor);
-		assertEquals("添加相关联的特征值,指定特征值与当前特征值相同",false, result);
+		assertEquals("add a related charValue,the specify value is same with currentCharValue",false, result);
 		
-		logger.info("3.ProductSpecCharacteristicValue添加相关联的特征值,指定特征值与当前特征值不相同");
 		result=memoryCharValue.addRelatedCharValue(charValue, RelationshipType.EXCLUSIVITY.getValue(), validFor);
-		assertEquals("添加相关联的特征值,指定特征值与当前特征值不相同",true, result);
-		logger.info("添加成功");
+		assertEquals("add a related charValue",true, result);
 		
-		logger.info("4.ProductSpecCharacteristicValue添加相关联的特征值,指定特征值已经建立互斥关系");
 		result=memoryCharValue.addRelatedCharValue(charValue, RelationshipType.EXCLUSIVITY.getValue(), validFor);		
-		assertEquals("添加相关联的特征值,指定特征值已经建立互斥关系",false, result);
+		assertEquals("add a related charValue,have created a exclusive relationship",false, result);
 		
-		logger.info("5.ProductSpecCharacteristicValue添加相关联的特征值,指定特征值已经建立互斥关系,是否可以建立其他关系");
 		result=memoryCharValue.addRelatedCharValue(charValue, RelationshipType.DEPENDENCY.getValue(), validFor);	
-		assertEquals("添加相关联的特征值,指定特征值已经建立互斥关系,是否可以建立其他关系",false, result);
+		assertEquals("add a related charValue,have created a exclusive relationship",false, result);
 	}
 	@Test
-	public void testQueryRelatedCharValue(){
-		logger.info("ProductSpecCharacteristicValue查询相关联的特征值：");
+	public void testReteriveRelatedCharValue(){
 		
-		logger.info("\t1.ProductSpecCharacteristicValue查询相关联的特征,指定类型和时间为null");
-		List<ProductSpecCharacteristicValue> charValues=memoryCharValue.queryRelatedCharValue(null,null);
-		assertNull("查询相关联的特征,指定类型和时间为null",charValues);
+		List<ProductSpecCharacteristicValue> charValues=memoryCharValue.reteriveRelatedCharValue(null,null);
+		assertNull("Reterive the related CharValue",charValues);
 		
-		logger.info("\t2.ProductSpecCharacteristicValue查询相关联的特征,当前特征值没有指定关系的特征");
-		 charValues=memoryCharValue.queryRelatedCharValue(RelationshipType.EXCLUSIVITY.getValue(),new Date());
-		assertNull("查询相关联的特征,当前特征值没有指定关系的特征",charValues);
+		 charValues=memoryCharValue.reteriveRelatedCharValue(RelationshipType.EXCLUSIVITY.getValue(),new Date());
+		assertEquals("Reterive the related CharValue,The current charValue and the specified charValue have no  created an exclusivity relationship",0,charValues.size());
 		
-		logger.info("\t3.ProductSpecCharacteristicValue查询相关联的特征,当前特征值存在互斥关系特征");
 		memoryCharValue.addRelatedCharValue(charValue, RelationshipType.EXCLUSIVITY.getValue(), validFor);
-		charValues=memoryCharValue.queryRelatedCharValue(RelationshipType.EXCLUSIVITY.getValue(),new Date());
-		assertNotNull("查询相关联的特征,当前特征值存在互斥关系特征",charValues);
-		logger.info("\t4.ProductSpecCharacteristicValue查询相关联的特征值,当前特征值存在互斥关系特征,不存在依赖关系");
-		charValues=memoryCharValue.queryRelatedCharValue(RelationshipType.DEPENDENCY.getValue(),new Date());
-		assertNull("查询相关联的特征值,当前特征值存在互斥关系特征,不存在依赖关系",charValues);
+		charValues=memoryCharValue.reteriveRelatedCharValue(RelationshipType.EXCLUSIVITY.getValue(),new Date());
+		assertEquals("Reterive the related CharValue,The current charValue and the specified charValue have  created an exclusivity relationship",1,charValues.size());
+		charValues=memoryCharValue.reteriveRelatedCharValue(RelationshipType.DEPENDENCY.getValue(),new Date());
+		assertEquals("Reterive the related CharValue,The current charValue and the specified charValue have created an exclusivity relationship",0,charValues.size());
 	}
 }

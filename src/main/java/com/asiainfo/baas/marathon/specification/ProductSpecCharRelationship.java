@@ -1,9 +1,11 @@
 package com.asiainfo.baas.marathon.specification;
 
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.asiainfo.baas.marathon.baseType.*;
+import org.apache.log4j.Logger;
+
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
 
 /**
  * A aggregation, migration, substitution, dependency, or exclusivity
@@ -13,6 +15,7 @@ public class ProductSpecCharRelationship {
 
     private ProductSpecCharacteristic targetProdSpecChar;
     private ProductSpecCharacteristic srcProdSpecChar;
+    private Logger logger=Logger.getLogger(ProductSpecCharRelationship.class);
     /**
      * A categorization of the relationship, such as aggregation, migration,
      * substitution, dependency, exclusivity.
@@ -82,6 +85,14 @@ public class ProductSpecCharRelationship {
      */
     public ProductSpecCharRelationship(ProductSpecCharacteristic srcProdSpecChar,
             ProductSpecCharacteristic targetProdSpecChar, String relationType, TimePeriod validFor) {
+    	if (null == srcProdSpecChar) {
+    		logger.error("srcProdSpecChar should not be null");
+    		throw new IllegalArgumentException("srcProdSpecChar should not be null"); 
+    	}
+    	if (null == targetProdSpecChar) {
+    		logger.error("targetProdSpecChar should not be null");
+    		throw new IllegalArgumentException("targetProdSpecChar should not be null"); 
+    	}
         this.srcProdSpecChar = srcProdSpecChar;
         this.targetProdSpecChar = targetProdSpecChar;
         this.charRelationshipType = relationType;
@@ -98,29 +109,22 @@ public class ProductSpecCharRelationship {
      */
     public ProductSpecCharRelationship(ProductSpecCharacteristic srcProdSpecChar,
             ProductSpecCharacteristic targetProdSpecChar, String relationType, TimePeriod validFor, int specSeq) {
-        this.srcProdSpecChar = srcProdSpecChar;
+        
+    	if (null == srcProdSpecChar) {
+    		logger.error("srcProdSpecChar should not be null");
+    		throw new IllegalArgumentException("srcProdSpecChar should not be null"); 
+    	}
+    	if (null == targetProdSpecChar) {
+    		logger.error("targetProdSpecChar should not be null");
+    		throw new IllegalArgumentException("targetProdSpecChar should not be null"); 
+    	}
+    	this.srcProdSpecChar = srcProdSpecChar;
         this.targetProdSpecChar = targetProdSpecChar;
         this.charRelationshipType = relationType;
         this.validFor = validFor;
         this.charSpecSeq = specSeq;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-//    @Override
-//    public String toString() {
-//        return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-//    }
-    public String toString(){
-    	StringBuffer sb=new StringBuffer("\n[");
-    	sb.append("relationType:").append(charRelationshipType).append(b);
-    	sb.append("]\n");
-		return charRelationshipType;
-    	
-    }
+ 
 
 	@Override
 	public int hashCode() {
@@ -138,6 +142,17 @@ public class ProductSpecCharRelationship {
 		result = prime * result
 				+ ((validFor == null) ? 0 : validFor.hashCode());
 		return result;
+	}
+	
+	@Override
+	public String toString(){
+		
+		Map<String,Object> targetChar=new HashMap<String,Object>();
+		targetChar.put("targetChar",targetProdSpecChar.basicInfoToString() );
+		targetChar.put("type",charRelationshipType);
+		targetChar.put("validFor",validFor);
+		targetChar.put("charSpecSeq", charSpecSeq);
+		return targetChar.toString();
 	}
 
 	@Override
