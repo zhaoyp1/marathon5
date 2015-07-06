@@ -129,6 +129,8 @@ public class ProductSpecCharacteristicTest {
 		result=specChar.specifyDefaultValue(value);
 		assertEquals("Specify the DefaultValue of characterist£ºNo value of the Characteristic",false,result);
 		assertEquals("Specify the DefaultValue of characterist£ºNo value of the Characteristic",0,specChar.retrieveDefaultValue().size());
+		assertEquals("Specify the DefaultValue of characterist£ºNo value of the Characteristic",true,specChar.retrieveDefaultValue().contains(value));
+
 		assertEquals("Specify the DefaultValue of characterist£ºNo value of the Characteristic",exceptChar.toString(),specChar.toString());
 		
 		value=new ProductSpecCharacteristicValue(CharacristicValueType.TEXT.getValue(),false,"",validFor,"2.9");
@@ -189,8 +191,6 @@ public class ProductSpecCharacteristicTest {
 			assertEquals("clear the default Value of Char:value is null",exceptChar.toString(),specChar.toString());
 		}
 		
-		assertEquals("clear the Default value of char£ºvalue is null",false,result);
-		assertEquals("clear the Default value of char£ºvalue is null",exceptChar.toString(),specChar.toString());
 		
 		 value =new ProductSpecCharacteristicValue(CharacristicValueType.TEXT.getValue(),false,"",validFor,"2.7");
 		 result=specChar.clearDefaultValue(value);
@@ -210,6 +210,8 @@ public class ProductSpecCharacteristicTest {
 		value=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),false,"GHz",validFor,"2.7");
 		result=configSpecChar.clearDefaultValue(value);
 		assertEquals("clear default value: Value is not the default value",true,result);
+		assertEquals("clear default value: Value is not the default value",false,specChar.retrieveDefaultValue().contains(value));
+
 		assertEquals("clear default value: Value is not the default value",exceptChar.toString(),specChar.toString());
 
 		value=new ProductSpecCharacteristicValue(CharacristicValueType.NUMBER.getValue(),true,"GHz",validFor,"2.9");
