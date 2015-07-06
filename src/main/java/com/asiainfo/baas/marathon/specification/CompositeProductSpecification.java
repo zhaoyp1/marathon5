@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
-import com.asiainfo.baas.marathon5.specification.TestProductCreateSpecification;
 
 /**
  * A type of ProductSpecification that is formed by aggregating other

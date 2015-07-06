@@ -110,6 +110,8 @@ public class AppleTest {
         this.addSubspec(productSpecification4, productSpecification1, productSpecification2, productSpecification3);
         // 打印复合规格
         logger.info("复合规格整体内容：" + productSpecification4.toString());
+        
+        
 
     }
 
@@ -154,7 +156,8 @@ public class AppleTest {
                             (String[]) charData[i][11]);
                     if (values != null) {
                         for (int j = 0; j < values.length; j++) {
-                            productSpec.attachCharacteristicValue(prodSpecChar, values[j],
+                            //TODO name未指定
+                            productSpec.attachCharacteristicValue(prodSpecChar, "",values[j],
                                     ((boolean[]) charData[i][12])[j], (TimePeriod) specParameter[4]);
                         }
                     }

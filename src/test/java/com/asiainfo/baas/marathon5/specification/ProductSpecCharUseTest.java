@@ -1,11 +1,10 @@
 package com.asiainfo.baas.marathon5.specification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -21,111 +20,130 @@ public class ProductSpecCharUseTest {
 	private Logger logger = Logger.getLogger(ProductSpecCharUseTest.class);
 	private  ProductSpecCharUse specCharUse = null;
 	private  TimePeriod validFor = null;
+	private ProductSpecCharacteristic specChar = null;
 	@Before
 	public void initSpecCharAndValue(){
 		validFor = new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59");
-		ProductSpecCharacteristic specChar = new ProductSpecCharacteristic("1", "processor(处理器)", "Number",validFor, "unique",1,1);
 		specCharUse = new ProductSpecCharUse(specChar,false,false,validFor,"处理器");
 	}
 	@Test
 	public void testAddValue(){
-		logger.info("添加一个值");
+		//添加一个值
 		ProductSpecCharacteristicValue charValue = new ProductSpecCharacteristicValue("number", true, "GB", new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"), "8");
 		boolean retFlag = specCharUse.addValue(charValue,false,validFor);
-		 assertTrue("添加成功",retFlag);
-		 logger.info("添加成功");
-		logger.info("添加一个已经存在的值");
+		ProductSpecCharUse exceptSpecCharUse = new ProductSpecCharUse(specChar,false,false,validFor,"处理器");
+		Set<ProdSpecCharValueUse> expectCharValueUse = new HashSet<ProdSpecCharValueUse>();
+        ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue,false,validFor);
+        expectCharValueUse.add(charValueUse);
+		exceptSpecCharUse.setProdSpecCharValueUse(expectCharValueUse);
+		assertEquals("添加一个值", exceptSpecCharUse,specCharUse);
+		 
+		//添加一个已经存在的值
 		retFlag = specCharUse.addValue(charValue,false,validFor);
-		assertFalse("添加失败",retFlag);
-		logger.info("添加一个空值");
-		retFlag = specCharUse.addValue(null, false, validFor);
-		assertFalse("添加失败",retFlag);
+		assertEquals("添加一个已经存在的值", exceptSpecCharUse,specCharUse);
+		
+		//添加一个空值
+		try{
+			specCharUse.addValue(null, false, validFor);
+			fail("添加一个空值");
+		}catch(Exception e){}
 	}
 	
 	@Test
 	public void testSpecifyDefaultCharacteristicValueUse(){
 		ProductSpecCharacteristicValue defaultValue = new ProductSpecCharacteristicValue("number", true, "GB", new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59"), "8");
 		ProductSpecCharacteristicValue charValue = new ProductSpecCharacteristicValue("number", true, "GB", new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59"), "16");
-		logger.info("添加值");
+		//添加值
 		specCharUse.addValue(defaultValue,false,validFor);
 		specCharUse.addValue(charValue,true,validFor);
 		
-		logger.info("设置默认值");
+		ProductSpecCharUse exceptSpecCharUse = new ProductSpecCharUse(specChar,false,false,validFor,"处理器");
+		Set<ProdSpecCharValueUse> expectCharValueUse = new HashSet<ProdSpecCharValueUse>();
+        ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue,false,validFor);
+        ProdSpecCharValueUse defcharValueUse = new ProdSpecCharValueUse(defaultValue,true,validFor);
+        expectCharValueUse.add(charValueUse);
+        expectCharValueUse.add(defcharValueUse);
+		exceptSpecCharUse.setProdSpecCharValueUse(expectCharValueUse);
+		
+		//设置默认值
 		boolean retFlag = specCharUse.specifyDefaultCharacteristicValueUse(defaultValue);
-		assertTrue("默认值设置成功",retFlag);
-		logger.info("默认值设置成功！");
+		assertEquals("设置默认值", exceptSpecCharUse,specCharUse);
 		
-		logger.info("设置默认值，传入的值对象为null");
+		//设置默认值，传入的值对象为null
 		defaultValue = null;
-		retFlag = specCharUse.specifyDefaultCharacteristicValueUse(defaultValue);
-		assertFalse("默认值设置失败",retFlag);
-		logger.info("默认值设置失败");
+		try{
+			specCharUse.specifyDefaultCharacteristicValueUse(defaultValue);
+			fail("设置默认值，传入的值对象为null");
+		}catch(Exception e){
+		}
 		
-		logger.info("设置默认值，传入的值对象为不是该特征所有的");
+		//设置默认值，传入的值对象为不是该特征所有的
 		ProductSpecCharacteristicValue defaultValue2 = new ProductSpecCharacteristicValue("number", false, "GB", new TimePeriod("2015-02-03 12:00:00", "2015-07-21 23:59:59"), "32" );
-		retFlag = specCharUse.specifyDefaultCharacteristicValueUse(defaultValue2);
-		assertFalse("默认值设置失败",retFlag);
-		logger.info("默认值设置失败");
+		specCharUse.specifyDefaultCharacteristicValueUse(defaultValue2);
+		assertEquals("设置默认值，传入的值对象为不是该特征所有的", exceptSpecCharUse,specCharUse);
 	}
 	
 	@Test
 	public void testRetrieveDefaultCharacteristicValueUse(){
 		ProductSpecCharacteristicValue charValue1 = new ProductSpecCharacteristicValue("number", true, "GB", new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59"), "8");
 		ProductSpecCharacteristicValue charValue2 = new ProductSpecCharacteristicValue("number", true, "GB", new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59"), "16");
-		logger.info("添加值");
+		//添加值
 		specCharUse.addValue(charValue1,false,validFor);
 		specCharUse.addValue(charValue2,true,validFor);
 		
-		logger.info("查询默认值");
+		 ProdSpecCharValueUse exceptSDfcharValueUse = new ProdSpecCharValueUse(charValue2,true,validFor);
+		
+		//查询默认值
 		List<ProdSpecCharValueUse> charValue = specCharUse.retrieveDefaultCharacteristicValueUse();
 		assertNotNull("查询到值了", charValue);
-		assertEquals(1, charValue.size());
-		logger.info("默认值查询成功！");
+		assertEquals("查询默认值",exceptSDfcharValueUse, charValue);
 	}
 	
 	@Test
 	public void testSetCardinality(){
 		ProductSpecCharacteristicValue charValue1 = new ProductSpecCharacteristicValue("number", true, "GB", new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59"), "8");
 		ProductSpecCharacteristicValue charValue2 = new ProductSpecCharacteristicValue("number", true, "GB", new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59"), "16");
-		logger.info("添加值");
+		//添加值
 		specCharUse.addValue(charValue1,false,validFor);
 		specCharUse.addValue(charValue2,true,validFor);
 		
-		logger.info("设置Cardinality");
+		ProductSpecCharUse exceptSpecCharUse = new ProductSpecCharUse(specChar,false,false,validFor,"处理器");
+		Set<ProdSpecCharValueUse> expectCharValueUse = new HashSet<ProdSpecCharValueUse>();
+        ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue1,false,validFor);
+        ProdSpecCharValueUse defcharValueUse = new ProdSpecCharValueUse(charValue2,true,validFor);
+        expectCharValueUse.add(charValueUse);
+        expectCharValueUse.add(defcharValueUse);
+		exceptSpecCharUse.setProdSpecCharValueUse(expectCharValueUse);
+		//设置Cardinality
 		specCharUse.setCardinality(1, 5);
-		assertEquals(1, specCharUse.getMinCardinality());
-		logger.info("MinCardinality设置成功！");
-		assertEquals(5, specCharUse.getMaxCardinality());
-		logger.info("MaxCardinality设置成功！");
+		//assertEquals(1, specCharUse.getMinCardinality());
+		//assertEquals(5, specCharUse.getMaxCardinality());
+		assertEquals("查询默认值",exceptSpecCharUse, specCharUse);
 	}
 	@Test
 	public void testClearDefaultValue(){
 		ProductSpecCharacteristicValue charValue1 = new ProductSpecCharacteristicValue("number", true, "GB", new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59"), "8");
 		ProductSpecCharacteristicValue charValue2 = new ProductSpecCharacteristicValue("number", true, "GB", new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59"), "16");
 		ProductSpecCharacteristicValue charValue3 = new ProductSpecCharacteristicValue("number", true, "GB", new TimePeriod("2015-02-03 12:00:00","2015-07-21 23:59:59"), "32");
-		logger.info("添加值");
+		//添加值
 		specCharUse.addValue(charValue1,false,validFor);
 		specCharUse.addValue(charValue2,true,validFor);
 		
-		logger.info("清除默认值，传入一个不是默认值的值");
+		//清除默认值，传入一个不是默认值的值
 		boolean retFlag = specCharUse.clearDefaultValueUse(charValue1);
 		assertFalse("清除默认值返回", retFlag);
-		logger.info("清除默认值失败！");
 		
-		logger.info("清除默认值，传入一个没有被使用的值");
+		//清除默认值，传入一个没有被使用的值
 		retFlag = specCharUse.clearDefaultValueUse(charValue3);
 		assertFalse("清除默认值返回", retFlag);
-		logger.info("清除默认值失败！");
 		
-		logger.info("清除默认值，传入一个null");
+		//清除默认值，传入一个null
 		retFlag = specCharUse.clearDefaultValueUse(null);
 		assertFalse("清除默认值返回", retFlag);
-		logger.info("清除默认值失败！");
 		
-		logger.info("清除默认值");
+		//清除默认值
 		retFlag = specCharUse.clearDefaultValueUse(charValue2);
 		assertTrue("清除默认值返回", retFlag);
-		logger.info("清除默认值成功！");
 		
 		
 	}
