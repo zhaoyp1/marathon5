@@ -1,11 +1,10 @@
 package com.asiainfo.baas.marathon.specification;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
+import com.asiainfo.baas.marathon5.common.CommonUtils;
 
 /**
  * A aggregation, migration, substitution, dependency, or exclusivity
@@ -124,8 +123,6 @@ public class ProductSpecCharRelationship {
         this.validFor = validFor;
         this.charSpecSeq = specSeq;
     }
- 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -154,32 +151,31 @@ public class ProductSpecCharRelationship {
 		targetChar.put("charSpecSeq", charSpecSeq);
 		return targetChar.toString();
 	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductSpecCharRelationship other = (ProductSpecCharRelationship) obj;
+        if (charRelationshipType == null) {
+            if (other.charRelationshipType != null)
+                return false;
+        } else if (!charRelationshipType.equals(other.charRelationshipType))
+            return false;
+        if (targetProdSpecChar == null) {
+            if (other.targetProdSpecChar != null)
+                return false;
+        } else if (!targetProdSpecChar.equals(other.targetProdSpecChar))
+            return false;
+        if (validFor == null) {
+            if (other.validFor != null)
+                return false;
+        } else if (!validFor.equals(other.validFor))
+            return false;
+        return true;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductSpecCharRelationship other = (ProductSpecCharRelationship) obj;
-		if (charRelationshipType == null) {
-			if (other.charRelationshipType != null)
-				return false;
-		} else if (!charRelationshipType.equals(other.charRelationshipType))
-			return false;
-		if (targetProdSpecChar == null) {
-			if (other.targetProdSpecChar != null)
-				return false;
-		} else if (!targetProdSpecChar.equals(other.targetProdSpecChar))
-			return false;
-		if (validFor == null) {
-			if (other.validFor != null)
-				return false;
-		} else if (!validFor.equals(other.validFor))
-			return false;
-		return true;
-	}
-    
 }
