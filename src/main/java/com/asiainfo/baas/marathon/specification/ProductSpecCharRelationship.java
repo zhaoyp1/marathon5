@@ -1,4 +1,7 @@
 package com.asiainfo.baas.marathon.specification;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.log4j.Logger;
 
 import com.asiainfo.baas.marathon.baseType.TimePeriod;
 import com.asiainfo.baas.marathon5.common.CommonUtils;
@@ -11,6 +14,7 @@ public class ProductSpecCharRelationship {
 
     private ProductSpecCharacteristic targetProdSpecChar;
     private ProductSpecCharacteristic srcProdSpecChar;
+    private Logger logger=Logger.getLogger(ProductSpecCharRelationship.class);
     /**
      * A categorization of the relationship, such as aggregation, migration,
      * substitution, dependency, exclusivity.
@@ -80,6 +84,14 @@ public class ProductSpecCharRelationship {
      */
     public ProductSpecCharRelationship(ProductSpecCharacteristic srcProdSpecChar,
             ProductSpecCharacteristic targetProdSpecChar, String relationType, TimePeriod validFor) {
+    	if (null == srcProdSpecChar) {
+    		logger.error("srcProdSpecChar should not be null");
+    		throw new IllegalArgumentException("srcProdSpecChar should not be null"); 
+    	}
+    	if (null == targetProdSpecChar) {
+    		logger.error("targetProdSpecChar should not be null");
+    		throw new IllegalArgumentException("targetProdSpecChar should not be null"); 
+    	}
         this.srcProdSpecChar = srcProdSpecChar;
         this.targetProdSpecChar = targetProdSpecChar;
         this.charRelationshipType = relationType;
@@ -96,39 +108,49 @@ public class ProductSpecCharRelationship {
      */
     public ProductSpecCharRelationship(ProductSpecCharacteristic srcProdSpecChar,
             ProductSpecCharacteristic targetProdSpecChar, String relationType, TimePeriod validFor, int specSeq) {
-        this.srcProdSpecChar = srcProdSpecChar;
+        
+    	if (null == srcProdSpecChar) {
+    		logger.error("srcProdSpecChar should not be null");
+    		throw new IllegalArgumentException("srcProdSpecChar should not be null"); 
+    	}
+    	if (null == targetProdSpecChar) {
+    		logger.error("targetProdSpecChar should not be null");
+    		throw new IllegalArgumentException("targetProdSpecChar should not be null"); 
+    	}
+    	this.srcProdSpecChar = srcProdSpecChar;
         this.targetProdSpecChar = targetProdSpecChar;
         this.charRelationshipType = relationType;
         this.validFor = validFor;
         this.charSpecSeq = specSeq;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    // @Override
-    // public String toString() {
-    // return ReflectionToStringBuilder.reflectionToString(this,
-    // ToStringStyle.SHORT_PREFIX_STYLE);
-    // }
-    public String toString() {
-        return CommonUtils.getPropertyToJson(null, null, this);
-
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((charRelationshipType == null) ? 0 : charRelationshipType.hashCode());
-        result = prime * result + charSpecSeq;
-        result = prime * result + ((targetProdSpecChar == null) ? 0 : targetProdSpecChar.hashCode());
-        result = prime * result + ((validFor == null) ? 0 : validFor.hashCode());
-        return result;
-    }
-
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((charRelationshipType == null) ? 0 : charRelationshipType
+						.hashCode());
+		result = prime * result + charSpecSeq;
+		result = prime
+				* result
+				+ ((targetProdSpecChar == null) ? 0 : targetProdSpecChar
+						.hashCode());
+		result = prime * result
+				+ ((validFor == null) ? 0 : validFor.hashCode());
+		return result;
+	}
+	
+	@Override
+	public String toString(){
+		
+		Map<String,Object> targetChar=new HashMap<String,Object>();
+		targetChar.put("targetChar",targetProdSpecChar.basicInfoToString() );
+		targetChar.put("type",charRelationshipType);
+		targetChar.put("validFor",validFor);
+		targetChar.put("charSpecSeq", charSpecSeq);
+		return targetChar.toString();
+	}
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

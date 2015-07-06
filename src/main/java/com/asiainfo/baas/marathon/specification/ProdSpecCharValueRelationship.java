@@ -1,6 +1,9 @@
 package com.asiainfo.baas.marathon.specification;
 
-import com.asiainfo.baas.marathon.baseType.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.asiainfo.baas.marathon.baseType.TimePeriod;
 
 public class ProdSpecCharValueRelationship {
 
@@ -59,6 +62,14 @@ public class ProdSpecCharValueRelationship {
     	this.targetCharValue=targetProdSpecCharValue;
     	this.charValueRelationshipType=relationType;
     	this.validFor=validFor;
+    }
+    
+    public String toString(){
+    	Map<String,Object> charValue=new HashMap<String,Object>();
+    	charValue.put("charValue", this.targetCharValue.basicInfoToString());
+    	charValue.put("charValueRelationshipType", charValueRelationshipType);
+    	charValue.put("validFor", validFor);
+    	return charValue.toString();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.asiainfo.baas.marathon.specification;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -172,8 +173,8 @@ public class ProductSpecCharUse {
      */
     public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage,
             TimePeriod validFor,String name) {
-    	this.paramIsEmpty(charSpec);
-    	this.paramIsEmpty(name);
+    	this.paramIsEmpty(charSpec,"characteristic");
+    	this.paramIsEmpty(name,"characteristicName");
         this.prodSpecChar = charSpec;
         this.canBeOveridden = canBeOveridden;
         this.isPackage = isPackage;
@@ -197,8 +198,8 @@ public class ProductSpecCharUse {
     public ProductSpecCharUse(ProductSpecCharacteristic charSpec, boolean canBeOveridden, boolean isPackage,
             TimePeriod validFor, String name, String unique, int minCardinality, int maxCardinality,
             boolean extensible, String description) {
-    	this.paramIsEmpty(charSpec);
-    	this.paramIsEmpty(name);
+    	this.paramIsEmpty(charSpec,"characteristic");
+    	this.paramIsEmpty(name,"characteristicName");
         this.prodSpecChar = charSpec;
         this.canBeOveridden = canBeOveridden;
         this.isPackage = isPackage;
@@ -218,7 +219,7 @@ public class ProductSpecCharUse {
      * @param validFor
      */
     public boolean addValue(ProductSpecCharacteristicValue charValue, boolean isDefault, TimePeriod validFor) {
-    	this.paramIsEmpty(charValue);
+    	this.paramIsEmpty(charValue,"characteristicValue");
         ProdSpecCharValueUse charValueUse = new ProdSpecCharValueUse(charValue, isDefault, validFor);
         if (null == this.prodSpecCharValueUse) {
             this.prodSpecCharValueUse = new HashSet<ProdSpecCharValueUse>();
@@ -241,7 +242,7 @@ public class ProductSpecCharUse {
      * @param defaultValue
      */
     public boolean specifyDefaultCharacteristicValueUse(ProductSpecCharacteristicValue defaultValue) {
-    	this.paramIsEmpty(defaultValue);
+    	this.paramIsEmpty(defaultValue,"characteristicValue");
         if (null != this.prodSpecCharValueUse) {
         	ProdSpecCharValueUse valueUse = this.retrieveProdSpecCharValueUse(defaultValue);
         	if(null != valueUse){
@@ -258,7 +259,7 @@ public class ProductSpecCharUse {
     }
     
     public boolean clearDefaultValueUse(ProductSpecCharacteristicValue defaultValue){
-    	this.paramIsEmpty(defaultValue);
+    	this.paramIsEmpty(defaultValue,"characteristicValue");
     	ProdSpecCharValueUse oldDefaultValueUse = this.retrieveProdSpecCharValueUse(defaultValue);
     	if(null != oldDefaultValueUse){
     			if(oldDefaultValueUse.isIsDefault()){
@@ -309,12 +310,12 @@ public class ProductSpecCharUse {
     	return null;
     }
     
-    private void paramIsEmpty(Object obj){
-    	if(null == obj ){
-    		logger.error("The parameter is null");
-    		throw new IllegalArgumentException();
-    	}
-    }
+    private void paramIsEmpty(Object obj,String objName){
+   	 if (null == obj || "".equals(obj)) {
+            logger.error("The parameter "+objName+" is null");
+            throw new IllegalArgumentException();
+        }
+   }
    
 
 	
@@ -325,10 +326,6 @@ public class ProductSpecCharUse {
 		result = prime * result + ((null == this.name) ? 0 : this.name.hashCode());
 		result = prime * result
 				+ ((null == this.prodSpecChar) ? 0 : this.prodSpecChar.hashCode());
-		result = prime
-				* result
-				+ ((null == this.prodSpecCharValueUse) ? 0 : this.prodSpecCharValueUse
-						.hashCode());
 		return result;
 	}
 
@@ -350,11 +347,6 @@ public class ProductSpecCharUse {
 			if (null != other.prodSpecChar)
 				return false;
 		} else if (!this.prodSpecChar.equals(other.prodSpecChar))
-			return false;
-		if (null == this.prodSpecCharValueUse) {
-			if (null != other.prodSpecCharValueUse)
-				return false;
-		} else if (!prodSpecCharValueUse.equals(other.prodSpecCharValueUse))
 			return false;
 		return true;
 	}
