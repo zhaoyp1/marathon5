@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.constraints.AssertTrue;
+
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,6 +89,7 @@ public class ProductSpecificationTest {
         ProductSpecCharacteristicValue charValue3 = this.createValue(TestProductSpecificationData.specCharValue[10]);
         ProductSpecCharacteristicValue charValue4 = this.createValue(TestProductSpecificationData.specCharValue[10]);
 
+        
         characteristic.addValue(charValue);
         characteristic.addValue(charValue3);
 
@@ -153,20 +156,30 @@ public class ProductSpecificationTest {
 
     @Test
     public void testRetrieveDefaultCharacteristicValue() {
+        // 处理器
         ProductSpecCharacteristic characteristic = this.createChar(TestProductSpecificationData.specChar[4]);
         ProductSpecCharacteristic characteristic2 = this.createChar(TestProductSpecificationData.specChar[4]);
-        ProductSpecCharacteristic characteristic3 = this.createChar(TestProductSpecificationData.specChar[5]);
-        ProductSpecCharacteristic characteristic4 = this.createChar(TestProductSpecificationData.specChar[5]);
-        ProductSpecCharacteristic characteristic5 = this.createChar(TestProductSpecificationData.specChar[6]);
-        ProductSpecCharacteristic characteristic6 = this.createChar(TestProductSpecificationData.specChar[6]);
+        // 重量
+        ProductSpecCharacteristic characteristic3 = this.createChar(TestProductSpecificationData.specChar[9]);
+        ProductSpecCharacteristic characteristic4 = this.createChar(TestProductSpecificationData.specChar[9]);
+        // 扩展分辨率
+        ProductSpecCharacteristic characteristic5 = this.createChar(TestProductSpecificationData.specChar[3]);
+        ProductSpecCharacteristic characteristic6 = this.createChar(TestProductSpecificationData.specChar[3]);
+
+        // CPU: 2.7G
+        ProductSpecCharacteristicValue charValue1 = this.createValue(TestProductSpecificationData.specCharValue[9]);
+        // 2.9GHz
+        ProductSpecCharacteristicValue charValue2 = this.createValue(TestProductSpecificationData.specCharValue[10]);
+        // 分辨率 1920 x 1200
+        ProductSpecCharacteristicValue charValue3 = this.createValue(TestProductSpecificationData.specCharValue[7]);
+        characteristic.addValue(charValue1);
+        characteristic.addValue(charValue2);
+
         // 添加特征
         prodSpec.addCharacteristic(characteristic, false, false, validFor, "CPU");
-        prodSpec.addCharacteristic(characteristic3, false, false, validFor, "颜色");
+        prodSpec.addCharacteristic(characteristic3, false, false, validFor, "重量");
         prodSpec.addCharacteristic(characteristic5, false, false, validFor, "分辨率");
 
-        ProductSpecCharacteristicValue charValue1 = this.createValue(TestProductSpecificationData.specCharValue[9]);
-        ProductSpecCharacteristicValue charValue2 = this.createValue(TestProductSpecificationData.specCharValue[10]);
-        ProductSpecCharacteristicValue charValue3 = this.createValue(TestProductSpecificationData.specCharValue[7]);
         // 添加特征值
         prodSpec.attachCharacteristicValue(characteristic, charValue1, true, validFor);
         prodSpec.attachCharacteristicValue(characteristic, charValue2, false, validFor);
@@ -176,6 +189,10 @@ public class ProductSpecificationTest {
         List<ProdSpecCharValueUse> defaultCharValues = prodSpec.retrieveDefaultCharacteristicValue(characteristic2);
         assertNotNull("查询默认值", defaultCharValues);
         assertEquals("查询默认值", 1, defaultCharValues.size());
+        //预期的CharUse
+        ProdSpecCharValueUse expectedValueUse = new ProdSpecCharValueUse(prodSpecCharVal, true, validFor);
+        assertEquals("查询默认值", 1, defaultCharValues.get(0));
+        assert
 
         // 查询某一特征的默认值，传入的特征没有值
         defaultCharValues = prodSpec.retrieveDefaultCharacteristicValue(characteristic4);
