@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.runners.statements.Fail;
 
 import com.asiainfo.baas.common.ProductSpecificationStatus;
 import com.asiainfo.baas.common.RelationshipType;
