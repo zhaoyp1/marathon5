@@ -89,7 +89,6 @@ public class ProductSpecificationTest {
         ProductSpecCharacteristicValue charValue3 = this.createValue(TestProductSpecificationData.specCharValue[10]);
         ProductSpecCharacteristicValue charValue4 = this.createValue(TestProductSpecificationData.specCharValue[10]);
 
-        
         characteristic.addValue(charValue);
         characteristic.addValue(charValue3);
 
@@ -189,10 +188,9 @@ public class ProductSpecificationTest {
         List<ProdSpecCharValueUse> defaultCharValues = prodSpec.retrieveDefaultCharacteristicValue(characteristic2);
         assertNotNull("查询默认值", defaultCharValues);
         assertEquals("查询默认值", 1, defaultCharValues.size());
-        //预期的CharUse
+        // 预期的CharUse
         ProdSpecCharValueUse expectedValueUse = new ProdSpecCharValueUse(prodSpecCharVal, true, validFor);
         assertEquals("查询默认值", 1, defaultCharValues.get(0));
-        assert
 
         // 查询某一特征的默认值，传入的特征没有值
         defaultCharValues = prodSpec.retrieveDefaultCharacteristicValue(characteristic4);
@@ -390,10 +388,6 @@ public class ProductSpecificationTest {
         expectedRelatedSpecList.add(expectedRelatedSpec3);
         assertEquals("再次添加一条不同数据,相同类型", 2, this.srcProdSpec.getProdSpecRelationship().size());
         assertEquals("再次添加一条不同数据,相同类型", expectedRelatedSpecList, srcProdSpec.getProdSpecRelationship());
-        logger.info("添加后src内的relationship：");
-        for (int i = 0; i < this.srcProdSpec.getProdSpecRelationship().size(); i++) {
-            logger.info(this.srcProdSpec.getProdSpecRelationship().get(i).toString());
-        }
 
         // *********** Case4（添加同样数据，不同关联类型） **************
         // 再次添加一条不同数据,相同类型
